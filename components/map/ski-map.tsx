@@ -1,7 +1,9 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import type mapboxgl from 'mapbox-gl';
+import type { ResortWithConditions } from '@/lib/types/database';
+import { ResortMarkers } from './resort-markers';
 
 // French Alps center coordinates
 const FRENCH_ALPS_CENTER = {
@@ -20,17 +22,25 @@ const MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v12';
 
 interface SkiMapProps {
   className?: string;
+  resorts?: ResortWithConditions[];
   onMapLoad?: () => void;
   onUserLocationChange?: (coords: { latitude: number; longitude: number } | null) => void;
+  onResortClick?: (resort: ResortWithConditions) => void;
 }
 
-export function SkiMap({ className, onMapLoad, onUserLocationChange }: SkiMapProps) {
+export function SkiMap({
+  className,
+  resorts = [],
+  onMapLoad,
+  onUserLocationChange,
+  onResortClick,
+}: SkiMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const geolocateControlRef = useRef<mapboxgl.GeolocateControl | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [mapInstance, setMapInstance] = useState<mapboxgl.Map | null>(null);
 
   // Get token from environment
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -71,7 +81,6 @@ export function SkiMap({ className, onMapLoad, onUserLocationChange }: SkiMapPro
           latitude: e.coords.latitude,
           longitude: e.coords.longitude,
         };
-        setUserLocation(coords);
         onUserLocationChange?.(coords);
 
         // Fly to user location with smooth animation
@@ -85,18 +94,15 @@ export function SkiMap({ className, onMapLoad, onUserLocationChange }: SkiMapPro
 
       // Handle geolocation errors gracefully
       geolocateControl.on('error', () => {
-        // User denied permission or geolocation unavailable
-        // No error message - just keep default view
-        setUserLocation(null);
         onUserLocationChange?.(null);
       });
 
       map.on('load', () => {
         setIsLoaded(true);
+        setMapInstance(map);
         onMapLoad?.();
 
         // Auto-trigger geolocation request after map loads
-        // Small delay to ensure control is ready
         setTimeout(() => {
           geolocateControl.trigger();
         }, 500);
@@ -117,8 +123,13 @@ export function SkiMap({ className, onMapLoad, onUserLocationChange }: SkiMapPro
       mapRef.current?.remove();
       mapRef.current = null;
       geolocateControlRef.current = null;
+      setMapInstance(null);
     };
   }, [mapboxToken, onMapLoad, onUserLocationChange]);
+
+  const handleResortHover = useCallback((resort: ResortWithConditions | null) => {
+    // Can be extended to show additional UI feedback
+  }, []);
 
   if (!mapboxToken) {
     return (
@@ -141,6 +152,16 @@ export function SkiMap({ className, onMapLoad, onUserLocationChange }: SkiMapPro
   return (
     <div className={`relative ${className}`}>
       <div ref={mapContainerRef} className="h-full w-full" />
+
+      {/* Resort markers */}
+      {mapInstance && resorts.length > 0 && (
+        <ResortMarkers
+          map={mapInstance}
+          resorts={resorts}
+          onResortClick={onResortClick}
+          onResortHover={handleResortHover}
+        />
+      )}
 
       {/* Loading indicator */}
       {!isLoaded && (

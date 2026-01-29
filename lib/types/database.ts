@@ -87,16 +87,28 @@ export interface Database {
         Row: Resort;
         Insert: ResortInsert & { id?: string; created_at?: string; updated_at?: string };
         Update: ResortUpdate & { updated_at?: string };
+        Relationships: [];
       };
       resort_conditions: {
         Row: ResortConditions;
         Insert: ResortConditionsInsert & { id?: string; updated_at?: string };
         Update: ResortConditionsUpdate & { updated_at?: string };
+        Relationships: [
+          {
+            foreignKeyName: 'resort_conditions_resort_id_fkey';
+            columns: ['resort_id'];
+            referencedRelation: 'resorts';
+            referencedColumns: ['id'];
+          }
+        ];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
     Enums: {
       crowd_level: CrowdLevel;
       parking_status: ParkingStatus;
     };
+    CompositeTypes: Record<string, never>;
   };
 }
