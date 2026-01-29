@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useCallback, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import type mapboxgl from 'mapbox-gl';
 
 // French Alps center coordinates
 const FRENCH_ALPS_CENTER = {
@@ -11,19 +12,25 @@ const FRENCH_ALPS_CENTER = {
 // Default zoom level to show French Alps overview
 const DEFAULT_ZOOM = 8;
 
+// Zoom level when centered on user location
+const USER_LOCATION_ZOOM = 9;
+
 // Mapbox style - outdoors style works well for ski areas
 const MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v12';
 
 interface SkiMapProps {
   className?: string;
   onMapLoad?: () => void;
+  onUserLocationChange?: (coords: { latitude: number; longitude: number } | null) => void;
 }
 
-export function SkiMap({ className, onMapLoad }: SkiMapProps) {
+export function SkiMap({ className, onMapLoad, onUserLocationChange }: SkiMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
+  const geolocateControlRef = useRef<mapboxgl.GeolocateControl | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
 
   // Get token from environment
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -46,19 +53,53 @@ export function SkiMap({ className, onMapLoad }: SkiMapProps) {
       // Add navigation controls (zoom +/-)
       map.addControl(new mapboxglModule.NavigationControl({ showCompass: false }), 'top-right');
 
+      // Create geolocation control with auto-trigger behavior
+      const geolocateControl = new mapboxglModule.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        trackUserLocation: true,
+        showUserHeading: true,
+        showAccuracyCircle: true,
+      });
+
       // Add geolocation control
-      map.addControl(
-        new mapboxglModule.GeolocateControl({
-          positionOptions: { enableHighAccuracy: true },
-          trackUserLocation: true,
-          showUserHeading: true,
-        }),
-        'top-right'
-      );
+      map.addControl(geolocateControl, 'top-right');
+      geolocateControlRef.current = geolocateControl;
+
+      // Handle successful geolocation
+      geolocateControl.on('geolocate', (e: GeolocationPosition) => {
+        const coords = {
+          latitude: e.coords.latitude,
+          longitude: e.coords.longitude,
+        };
+        setUserLocation(coords);
+        onUserLocationChange?.(coords);
+
+        // Fly to user location with smooth animation
+        map.flyTo({
+          center: [coords.longitude, coords.latitude],
+          zoom: USER_LOCATION_ZOOM,
+          duration: 2000,
+          essential: true,
+        });
+      });
+
+      // Handle geolocation errors gracefully
+      geolocateControl.on('error', () => {
+        // User denied permission or geolocation unavailable
+        // No error message - just keep default view
+        setUserLocation(null);
+        onUserLocationChange?.(null);
+      });
 
       map.on('load', () => {
         setIsLoaded(true);
         onMapLoad?.();
+
+        // Auto-trigger geolocation request after map loads
+        // Small delay to ensure control is ready
+        setTimeout(() => {
+          geolocateControl.trigger();
+        }, 500);
       });
 
       map.on('error', (e) => {
@@ -75,8 +116,9 @@ export function SkiMap({ className, onMapLoad }: SkiMapProps) {
     return () => {
       mapRef.current?.remove();
       mapRef.current = null;
+      geolocateControlRef.current = null;
     };
-  }, [mapboxToken, onMapLoad]);
+  }, [mapboxToken, onMapLoad, onUserLocationChange]);
 
   if (!mapboxToken) {
     return (
@@ -110,4 +152,4 @@ export function SkiMap({ className, onMapLoad }: SkiMapProps) {
   );
 }
 
-export { FRENCH_ALPS_CENTER, DEFAULT_ZOOM };
+export { FRENCH_ALPS_CENTER, DEFAULT_ZOOM, USER_LOCATION_ZOOM };
