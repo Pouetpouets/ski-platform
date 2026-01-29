@@ -1,17 +1,20 @@
+import { SkiMap } from '@/components/map/ski-map';
+
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-slate-800 mb-4">
-          Ski Platform
-        </h1>
-        <p className="text-xl text-slate-600 mb-8">
-          Perfect Day Score - Find your ideal ski resort today
-        </p>
-        <div className="text-sm text-slate-500">
-          <p>Coming soon: Interactive map with personalized resort recommendations</p>
+    <main className="h-screen w-screen relative">
+      {/* Header overlay */}
+      <header className="absolute top-0 left-0 right-0 z-10 p-4 bg-gradient-to-b from-background/90 to-transparent">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <h1 className="text-xl font-bold text-foreground">Ski Platform</h1>
+          <p className="text-sm text-muted-foreground hidden sm:block">
+            Find your perfect ski day
+          </p>
         </div>
-      </div>
+      </header>
+
+      {/* Full-screen map */}
+      <SkiMap className="h-full w-full" />
     </main>
   );
 }
