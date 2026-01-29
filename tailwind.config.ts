@@ -51,6 +51,13 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        // Perfect Day Score colors
+        score: {
+          excellent: "hsl(var(--score-excellent))", // Green #22C55E (80-100%)
+          good: "hsl(var(--score-good))",           // Amber #F59E0B (60-79%)
+          fair: "hsl(var(--score-fair))",           // Orange #F97316 (40-59%)
+          poor: "hsl(var(--score-poor))",           // Red #EF4444 (0-39%)
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
