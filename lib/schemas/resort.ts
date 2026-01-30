@@ -67,7 +67,8 @@ export type ResortUpdate = z.infer<typeof ResortUpdateSchema>;
 // RESORT CONDITIONS SCHEMA
 // =============================================================================
 
-export const ResortConditionsSchema = z.object({
+// Base object schema (without refinements, used for deriving Insert/Update)
+const ResortConditionsBaseSchema = z.object({
   id: z.string().uuid(),
   resort_id: z.string().uuid(),
 
@@ -101,10 +102,32 @@ export const ResortConditionsSchema = z.object({
   updated_at: z.string().datetime(),
 });
 
-export type ResortConditions = z.infer<typeof ResortConditionsSchema>;
+// Cross-field refinements for validation
+function addConditionsRefinements<T extends z.ZodTypeAny>(schema: T) {
+  return schema.refine(
+    (data: z.infer<typeof ResortConditionsBaseSchema>) => data.runs_open <= data.runs_total,
+    { message: 'runs_open cannot exceed runs_total', path: ['runs_open'] }
+  ).refine(
+    (data: z.infer<typeof ResortConditionsBaseSchema>) => data.lifts_open <= data.lifts_total,
+    { message: 'lifts_open cannot exceed lifts_total', path: ['lifts_open'] }
+  ).refine(
+    (data: z.infer<typeof ResortConditionsBaseSchema>) => {
+      if (data.temperature_min !== null && data.temperature_max !== null) {
+        return data.temperature_min <= data.temperature_max;
+      }
+      return true;
+    },
+    { message: 'temperature_min cannot exceed temperature_max', path: ['temperature_min'] }
+  );
+}
 
-// Insert schema
-export const ResortConditionsInsertSchema = ResortConditionsSchema.omit({
+// Full schema with cross-field validation
+export const ResortConditionsSchema = addConditionsRefinements(ResortConditionsBaseSchema);
+
+export type ResortConditions = z.infer<typeof ResortConditionsBaseSchema>;
+
+// Insert schema (derived from base, no refinements needed for partial inserts)
+export const ResortConditionsInsertSchema = ResortConditionsBaseSchema.omit({
   id: true,
   updated_at: true,
 });

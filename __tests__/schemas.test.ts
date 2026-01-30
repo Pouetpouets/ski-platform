@@ -208,6 +208,51 @@ describe('Zod Schemas', () => {
     });
   });
 
+  describe('ResortConditions cross-field validation', () => {
+    const baseConditions = {
+      id: '550e8400-e29b-41d4-a716-446655440099',
+      resort_id: '550e8400-e29b-41d4-a716-446655440001',
+      snow_depth_base: 120,
+      snow_depth_summit: 180,
+      fresh_snow_24h: 15,
+      runs_open: 98,
+      runs_total: 106,
+      lifts_open: 45,
+      lifts_total: 51,
+      crowd_level: 'low',
+      weather_condition: 'sunny',
+      temperature_min: -8,
+      temperature_max: -2,
+      adult_ticket_price: 59.0,
+      parking_status: 'available',
+      parking_price: 15.0,
+      updated_at: '2024-01-01T00:00:00.000Z',
+    };
+
+    it('should reject runs_open > runs_total', () => {
+      expect(() =>
+        ResortConditionsSchema.parse({ ...baseConditions, runs_open: 200, runs_total: 100 })
+      ).toThrow(/runs_open/);
+    });
+
+    it('should reject lifts_open > lifts_total', () => {
+      expect(() =>
+        ResortConditionsSchema.parse({ ...baseConditions, lifts_open: 60, lifts_total: 50 })
+      ).toThrow(/lifts_open/);
+    });
+
+    it('should reject temperature_min > temperature_max', () => {
+      expect(() =>
+        ResortConditionsSchema.parse({ ...baseConditions, temperature_min: 10, temperature_max: -5 })
+      ).toThrow(/temperature_min/);
+    });
+
+    it('should allow equal runs_open and runs_total', () => {
+      const result = ResortConditionsSchema.parse({ ...baseConditions, runs_open: 50, runs_total: 50 });
+      expect(result.runs_open).toBe(50);
+    });
+  });
+
   describe('ResortConditionsInsertSchema', () => {
     it('should not require id and updated_at', () => {
       const insertData = {

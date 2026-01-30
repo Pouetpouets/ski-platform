@@ -4,6 +4,7 @@
  */
 
 import type { ResortInsert, ResortConditionsInsert } from '@/lib/types/database';
+import { FRENCH_ALPS_BOUNDS } from '@/lib/schemas/resort';
 
 /**
  * Resort data with fixed UUIDs for consistent seeding
@@ -409,13 +410,6 @@ export function getConditions(key: ResortKey) {
  * Validate all coordinates are within French Alps bounds
  */
 export function validateCoordinates(): boolean {
-  const FRENCH_ALPS_BOUNDS = {
-    latMin: 44.5,
-    latMax: 46.5,
-    lonMin: 5.5,
-    lonMax: 7.5,
-  };
-
   return SEED_RESORTS.every(
     (r) =>
       r.latitude >= FRENCH_ALPS_BOUNDS.latMin &&
