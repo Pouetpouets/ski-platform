@@ -96,7 +96,7 @@ export function getDistanceInfo(
   userLocation: { latitude: number; longitude: number } | null,
   targetLat: number,
   targetLon: number
-): DistanceInfo | null {
+): DistanceInfo {
   const location = userLocation ?? DEFAULT_REFERENCE_LOCATION;
   const isUserLocation = userLocation !== null;
 

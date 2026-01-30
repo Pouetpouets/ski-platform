@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import type mapboxgl from 'mapbox-gl';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { ResortMarkers } from './resort-markers';
@@ -42,6 +42,12 @@ export function SkiMap({
   const [error, setError] = useState<string | null>(null);
   const [mapInstance, setMapInstance] = useState<mapboxgl.Map | null>(null);
 
+  // Store callbacks in refs to avoid re-initializing the map when they change
+  const onMapLoadRef = useRef(onMapLoad);
+  const onUserLocationChangeRef = useRef(onUserLocationChange);
+  onMapLoadRef.current = onMapLoad;
+  onUserLocationChangeRef.current = onUserLocationChange;
+
   // Get token from environment
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -50,11 +56,14 @@ export function SkiMap({
 
     // Dynamically import mapbox-gl to avoid SSR issues
     import('mapbox-gl').then((mapboxglModule) => {
+      // Re-check ref after async import — component may have unmounted
+      if (!mapContainerRef.current) return;
+
       const mapboxgl = mapboxglModule.default;
       mapboxgl.accessToken = mapboxToken;
 
       const map = new mapboxgl.Map({
-        container: mapContainerRef.current!,
+        container: mapContainerRef.current,
         style: MAP_STYLE,
         center: [FRENCH_ALPS_CENTER.longitude, FRENCH_ALPS_CENTER.latitude],
         zoom: DEFAULT_ZOOM,
@@ -81,7 +90,7 @@ export function SkiMap({
           latitude: e.coords.latitude,
           longitude: e.coords.longitude,
         };
-        onUserLocationChange?.(coords);
+        onUserLocationChangeRef.current?.(coords);
 
         // Fly to user location with smooth animation
         map.flyTo({
@@ -94,13 +103,13 @@ export function SkiMap({
 
       // Handle geolocation errors gracefully
       geolocateControl.on('error', () => {
-        onUserLocationChange?.(null);
+        onUserLocationChangeRef.current?.(null);
       });
 
       map.on('load', () => {
         setIsLoaded(true);
         setMapInstance(map);
-        onMapLoad?.();
+        onMapLoadRef.current?.();
 
         // Auto-trigger geolocation request after map loads
         setTimeout(() => {
@@ -125,11 +134,7 @@ export function SkiMap({
       geolocateControlRef.current = null;
       setMapInstance(null);
     };
-  }, [mapboxToken, onMapLoad, onUserLocationChange]);
-
-  const handleResortHover = useCallback((resort: ResortWithConditions | null) => {
-    // Can be extended to show additional UI feedback
-  }, []);
+  }, [mapboxToken]);
 
   if (!mapboxToken) {
     return (
@@ -159,7 +164,6 @@ export function SkiMap({
           map={mapInstance}
           resorts={resorts}
           onResortClick={onResortClick}
-          onResortHover={handleResortHover}
         />
       )}
 

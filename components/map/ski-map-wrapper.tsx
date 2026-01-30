@@ -22,7 +22,7 @@ export function SkiMapWrapper({ resorts }: SkiMapWrapperProps) {
     setUserLocation(coords);
   }, []);
 
-  // Calculate distance for selected resort
+  // Calculate distance for selected resort (non-null when selectedResort is set)
   const distanceInfo = useMemo(() => {
     if (!selectedResort) return null;
     return getDistanceInfo(userLocation, selectedResort.latitude, selectedResort.longitude);
@@ -71,19 +71,17 @@ export function SkiMapWrapper({ resorts }: SkiMapWrapperProps) {
           </div>
 
           {/* Distance */}
-          <div className="mt-3 flex items-center gap-2 text-sm">
-            <span className="text-muted-foreground">📍</span>
-            {distanceInfo ? (
+          {distanceInfo && (
+            <div className="mt-3 flex items-center gap-2 text-sm">
+              <span className="text-muted-foreground">📍</span>
               <span className="text-foreground">
                 <strong>{distanceInfo.formattedDistance}</strong>
                 <span className="text-muted-foreground">
                   {' '}from {distanceInfo.fromLocation} ({distanceInfo.drivingTime})
                 </span>
               </span>
-            ) : (
-              <span className="text-muted-foreground">Grant location to see distance</span>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Conditions */}
           {selectedResort.conditions ? (
