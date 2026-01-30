@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import fs from 'fs';
+import path from 'path';
 import {
   SEED_RESORTS,
   SEED_CONDITIONS,
@@ -148,6 +150,35 @@ describe('Seed Data: French Alps Resorts', () => {
       const resortIds = SEED_RESORTS.map((r) => r.id);
       SEED_CONDITIONS.forEach((cond) => {
         expect(resortIds).toContain(cond.resort_id);
+      });
+    });
+  });
+
+  describe('SQL/TypeScript Data Sync', () => {
+    const seedSql = fs.readFileSync(
+      path.resolve(__dirname, '../supabase/seed.sql'),
+      'utf-8'
+    );
+
+    it('SQL and TS should have the same number of resorts', () => {
+      // Count unique resort UUIDs in SQL file
+      const sqlResortIds = seedSql.match(/550e8400-e29b-41d4-a716-\d+/g) || [];
+      const uniqueSqlIds = new Set(sqlResortIds);
+      // Each ID appears in both resorts and conditions inserts
+      expect(uniqueSqlIds.size).toBe(SEED_RESORTS.length);
+    });
+
+    it('SQL and TS should reference the same resort IDs', () => {
+      SEED_RESORTS.forEach((resort) => {
+        expect(seedSql).toContain(resort.id);
+      });
+    });
+
+    it('SQL and TS should have the same resort names', () => {
+      SEED_RESORTS.forEach((resort) => {
+        // SQL escapes single quotes as ''
+        const sqlName = resort.name.replace(/'/g, "''");
+        expect(seedSql).toContain(sqlName);
       });
     });
   });
