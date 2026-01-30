@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { SkiMapWrapper } from '@/components/map/ski-map-wrapper';
 import type { ResortWithConditions } from '@/lib/types/database';
+import fs from 'fs';
+import path from 'path';
 
 // Mock resorts data for testing
 const mockResorts: ResortWithConditions[] = [
@@ -21,18 +23,41 @@ const mockResorts: ResortWithConditions[] = [
   },
 ];
 
-describe('Smoke Tests', () => {
-  describe('SkiMapWrapper Component', () => {
-    it('renders without crashing', () => {
-      // Note: SkiMap shows Mapbox error since token isn't set in tests
-      render(<SkiMapWrapper resorts={[]} />);
-      // Should render the component without throwing
-      expect(document.body).toBeDefined();
-    });
+describe('App Initialization (Story 1-1)', () => {
+  it('App Router directory structure exists', () => {
+    const appDir = path.resolve(__dirname, '../app');
+    expect(fs.existsSync(path.join(appDir, 'layout.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(appDir, 'page.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(appDir, 'globals.css'))).toBe(true);
+  });
 
-    it('shows mapbox token error when token not configured', () => {
-      render(<SkiMapWrapper resorts={mockResorts} />);
-      expect(screen.getByText(/Mapbox token not configured/i)).toBeDefined();
-    });
+  it('.env.example contains required variables', () => {
+    const envExample = fs.readFileSync(
+      path.resolve(__dirname, '../.env.example'),
+      'utf-8'
+    );
+    expect(envExample).toContain('NEXT_PUBLIC_SUPABASE_URL=');
+    expect(envExample).toContain('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=');
+    expect(envExample).toContain('NEXT_PUBLIC_MAPBOX_TOKEN=');
+  });
+
+  it('.gitignore excludes .env.local', () => {
+    const gitignore = fs.readFileSync(
+      path.resolve(__dirname, '../.gitignore'),
+      'utf-8'
+    );
+    expect(gitignore).toContain('.env*.local');
+  });
+});
+
+describe('SkiMapWrapper Component', () => {
+  it('renders without crashing', () => {
+    render(<SkiMapWrapper resorts={[]} />);
+    expect(document.body).toBeDefined();
+  });
+
+  it('shows mapbox token error when token not configured', () => {
+    render(<SkiMapWrapper resorts={mockResorts} />);
+    expect(screen.getByText(/Mapbox token not configured/i)).toBeDefined();
   });
 });
