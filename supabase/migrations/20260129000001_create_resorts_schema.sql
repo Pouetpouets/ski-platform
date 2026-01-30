@@ -58,9 +58,6 @@ CREATE TABLE resort_conditions (
 -- INDEXES
 -- =============================================================================
 
--- Index for slug lookups (SEO URLs)
-CREATE INDEX idx_resorts_slug ON resorts(slug);
-
 -- Index for geographic queries
 CREATE INDEX idx_resorts_coordinates ON resorts(latitude, longitude);
 
@@ -117,22 +114,9 @@ CREATE POLICY "Anyone can view resort conditions"
   TO anon, authenticated
   USING (true);
 
--- Policy: Only service role can insert/update/delete resorts
--- (Admin operations via server-side with service role key)
-CREATE POLICY "Service role can manage resorts"
-  ON resorts
-  FOR ALL
-  TO service_role
-  USING (true)
-  WITH CHECK (true);
-
--- Policy: Only service role can insert/update/delete resort conditions
-CREATE POLICY "Service role can manage resort conditions"
-  ON resort_conditions
-  FOR ALL
-  TO service_role
-  USING (true)
-  WITH CHECK (true);
+-- Note: INSERT/UPDATE/DELETE are implicitly denied for anon/authenticated
+-- since no write policies exist for those roles.
+-- Admin operations use service_role key which bypasses RLS entirely.
 
 -- =============================================================================
 -- COMMENTS

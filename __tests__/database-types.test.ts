@@ -1,7 +1,10 @@
 import { describe, it, expect } from 'vitest';
+import fs from 'fs';
+import path from 'path';
 import type {
   Resort,
   ResortConditions,
+  ResortWithConditions,
   CrowdLevel,
   ParkingStatus,
   Database,
@@ -9,7 +12,7 @@ import type {
 
 describe('Database Types', () => {
   describe('Resort type', () => {
-    it('has correct structure', () => {
+    it('has correct required fields', () => {
       const resort: Resort = {
         id: '123e4567-e89b-12d3-a456-426614174000',
         name: 'Les Arcs',
@@ -28,10 +31,29 @@ describe('Database Types', () => {
       expect(resort.slug).toBe('les-arcs');
       expect(resort.latitude).toBeGreaterThan(0);
     });
+
+    it('allows nullable optional fields', () => {
+      const resort: Resort = {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'Test',
+        slug: 'test',
+        latitude: 45.0,
+        longitude: 6.0,
+        altitude_min: null,
+        altitude_max: null,
+        website_url: null,
+        webcam_url: null,
+        created_at: '2026-01-29T10:00:00Z',
+        updated_at: '2026-01-29T10:00:00Z',
+      };
+
+      expect(resort.altitude_min).toBeNull();
+      expect(resort.website_url).toBeNull();
+    });
   });
 
   describe('ResortConditions type', () => {
-    it('has correct structure', () => {
+    it('has correct structure with all fields', () => {
       const conditions: ResortConditions = {
         id: '123e4567-e89b-12d3-a456-426614174001',
         resort_id: '123e4567-e89b-12d3-a456-426614174000',
@@ -52,37 +74,56 @@ describe('Database Types', () => {
         updated_at: '2026-01-29T08:00:00Z',
       };
 
+      expect(conditions.resort_id).toBe('123e4567-e89b-12d3-a456-426614174000');
       expect(conditions.snow_depth_base).toBe(85);
-      expect(conditions.crowd_level).toBe('moderate');
-      expect(conditions.parking_status).toBe('available');
     });
   });
 
   describe('CrowdLevel enum', () => {
-    it('only allows valid values', () => {
-      const validLevels: CrowdLevel[] = ['low', 'moderate', 'high', 'very_high'];
-      validLevels.forEach((level) => {
-        expect(['low', 'moderate', 'high', 'very_high']).toContain(level);
-      });
+    it('matches the SQL enum values exactly', () => {
+      const sqlMigration = fs.readFileSync(
+        path.resolve(__dirname, '../supabase/migrations/20260129000001_create_resorts_schema.sql'),
+        'utf-8'
+      );
+
+      // Extract enum values from SQL
+      const match = sqlMigration.match(/CREATE TYPE crowd_level AS ENUM \(([^)]+)\)/);
+      expect(match).not.toBeNull();
+
+      const sqlValues = match![1]
+        .split(',')
+        .map((v) => v.trim().replace(/'/g, ''));
+
+      // Verify TypeScript type matches SQL
+      const tsValues: CrowdLevel[] = ['low', 'moderate', 'high', 'very_high'];
+      expect(tsValues).toEqual(sqlValues);
     });
   });
 
   describe('ParkingStatus enum', () => {
-    it('only allows valid values', () => {
-      const validStatuses: ParkingStatus[] = ['available', 'limited', 'full'];
-      validStatuses.forEach((status) => {
-        expect(['available', 'limited', 'full']).toContain(status);
-      });
+    it('matches the SQL enum values exactly', () => {
+      const sqlMigration = fs.readFileSync(
+        path.resolve(__dirname, '../supabase/migrations/20260129000001_create_resorts_schema.sql'),
+        'utf-8'
+      );
+
+      const match = sqlMigration.match(/CREATE TYPE parking_status AS ENUM \(([^)]+)\)/);
+      expect(match).not.toBeNull();
+
+      const sqlValues = match![1]
+        .split(',')
+        .map((v) => v.trim().replace(/'/g, ''));
+
+      const tsValues: ParkingStatus[] = ['available', 'limited', 'full'];
+      expect(tsValues).toEqual(sqlValues);
     });
   });
 
   describe('Database type', () => {
     it('exports correctly structured type', () => {
-      // Type-level test - just verify the types compile
       type ResortsTable = Database['public']['Tables']['resorts'];
       type ConditionsTable = Database['public']['Tables']['resort_conditions'];
 
-      // These assertions verify the type structure exists
       const _rowType: keyof ResortsTable = 'Row';
       const _insertType: keyof ResortsTable = 'Insert';
       const _updateType: keyof ResortsTable = 'Update';
@@ -90,6 +131,32 @@ describe('Database Types', () => {
       expect(_rowType).toBe('Row');
       expect(_insertType).toBe('Insert');
       expect(_updateType).toBe('Update');
+    });
+  });
+
+  describe('SQL Migration', () => {
+    it('migration file exists and contains required tables', () => {
+      const migrationPath = path.resolve(
+        __dirname,
+        '../supabase/migrations/20260129000001_create_resorts_schema.sql'
+      );
+      expect(fs.existsSync(migrationPath)).toBe(true);
+
+      const sql = fs.readFileSync(migrationPath, 'utf-8');
+      expect(sql).toContain('CREATE TABLE resorts');
+      expect(sql).toContain('CREATE TABLE resort_conditions');
+      expect(sql).toContain('REFERENCES resorts(id) ON DELETE CASCADE');
+      expect(sql).toContain('ENABLE ROW LEVEL SECURITY');
+    });
+
+    it('RLS policies allow public read access', () => {
+      const sql = fs.readFileSync(
+        path.resolve(__dirname, '../supabase/migrations/20260129000001_create_resorts_schema.sql'),
+        'utf-8'
+      );
+      expect(sql).toContain('Anyone can view resorts');
+      expect(sql).toContain('Anyone can view resort conditions');
+      expect(sql).toContain('TO anon, authenticated');
     });
   });
 });
