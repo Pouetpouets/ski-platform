@@ -12,14 +12,17 @@ interface ResortMarkersProps {
   onResortHover?: (resort: ResortWithConditions | null) => void;
 }
 
-// Create marker HTML element
+/** Zoom threshold: below this, markers show only color (no number) */
+const ZOOM_HIDE_NUMBERS = 8;
+
+// Create marker HTML element with score display
 function createMarkerElement(score: number, color: string): HTMLElement {
   const el = document.createElement('div');
   el.className = 'resort-marker';
   el.innerHTML = `
     <div class="marker-container" style="
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
       background: ${color};
       border-radius: 50%;
       border: 3px solid white;
@@ -30,11 +33,12 @@ function createMarkerElement(score: number, color: string): HTMLElement {
       cursor: pointer;
       transition: transform 0.2s ease;
     ">
-      <span style="
+      <span class="marker-score" style="
         color: white;
-        font-size: 12px;
-        font-weight: bold;
+        font-size: 14px;
+        font-weight: 700;
         text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        line-height: 1;
       ">${score}</span>
     </div>
   `;
@@ -51,6 +55,22 @@ function createMarkerElement(score: number, color: string): HTMLElement {
   });
 
   return el;
+}
+
+/** Update marker score visibility based on zoom level */
+function updateMarkersForZoom(markers: HTMLElement[], zoom: number): void {
+  const showNumbers = zoom >= ZOOM_HIDE_NUMBERS;
+  for (const el of markers) {
+    const scoreSpan = el.querySelector('.marker-score') as HTMLElement;
+    if (scoreSpan) {
+      scoreSpan.style.display = showNumbers ? '' : 'none';
+    }
+    const container = el.querySelector('.marker-container') as HTMLElement;
+    if (container) {
+      container.style.width = showNumbers ? '44px' : '20px';
+      container.style.height = showNumbers ? '44px' : '20px';
+    }
+  }
 }
 
 // Create popup HTML content
@@ -167,6 +187,22 @@ export function ResortMarkers({
 
         markersRef.current.push(marker);
       });
+
+      // Apply initial zoom state
+      const markerElements = markersRef.current.map((m) => m.getElement());
+      updateMarkersForZoom(markerElements, map.getZoom());
+
+      // Listen for zoom changes
+      const onZoom = () => {
+        const elements = markersRef.current.map((m) => m.getElement());
+        updateMarkersForZoom(elements, map.getZoom());
+      };
+      map.on('zoom', onZoom);
+
+      // Store cleanup for zoom listener
+      return () => {
+        map.off('zoom', onZoom);
+      };
     });
 
     return () => {
