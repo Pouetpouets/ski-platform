@@ -3,10 +3,13 @@
 import { useState, useCallback, useMemo } from 'react';
 import { SkiMap } from './ski-map';
 import { ResortDetailPanel } from './resort-detail-panel';
+import { PrioritySettingsPanel } from './priority-settings-panel';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { getDistanceInfo } from '@/lib/utils/distance';
 import { calculatePerfectDayScore } from '@/lib/utils/score';
 import { PrioritiesProvider, usePriorities } from '@/lib/contexts/priorities-context';
+import { Settings } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface SkiMapWrapperProps {
   resorts: ResortWithConditions[];
@@ -24,6 +27,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
   const { weights } = usePriorities();
   const [selectedResort, setSelectedResort] = useState<ResortWithConditions | null>(null);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleResortClick = useCallback((resort: ResortWithConditions) => {
     setSelectedResort(resort);
@@ -58,6 +62,22 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
         weights={weights}
         onResortClick={handleResortClick}
         onUserLocationChange={handleUserLocationChange}
+      />
+
+      {/* Settings trigger button */}
+      <Button
+        variant="outline"
+        size="icon"
+        className="absolute top-4 right-4 z-20 bg-background/90 backdrop-blur-sm shadow-md"
+        onClick={() => setSettingsOpen(true)}
+        aria-label="Open priority settings"
+      >
+        <Settings className="size-4" />
+      </Button>
+
+      <PrioritySettingsPanel
+        isOpen={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
       />
 
       <ResortDetailPanel

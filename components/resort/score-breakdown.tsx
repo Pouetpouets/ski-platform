@@ -1,30 +1,12 @@
 'use client';
 
 import type { FactorScores, FactorName } from '@/lib/utils/score';
-import { DEFAULT_WEIGHTS, FACTOR_NAMES } from '@/lib/utils/score';
+import { DEFAULT_WEIGHTS, FACTOR_NAMES, FACTOR_LABELS, FACTOR_EMOJI } from '@/lib/utils/score';
 
 interface ScoreBreakdownProps {
   factors: FactorScores;
   weights?: Record<FactorName, number>;
 }
-
-const FACTOR_LABELS: Record<FactorName, string> = {
-  snow: 'Snow',
-  crowd: 'Crowd',
-  weather: 'Weather',
-  price: 'Price',
-  distance: 'Distance',
-  parking: 'Parking',
-};
-
-const FACTOR_EMOJI: Record<FactorName, string> = {
-  snow: '❄️',
-  crowd: '👥',
-  weather: '☀️',
-  price: '🎟️',
-  distance: '📍',
-  parking: '🅿️',
-};
 
 function getBarColor(score: number): string {
   if (score >= 80) return 'bg-green-500';

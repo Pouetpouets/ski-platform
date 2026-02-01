@@ -63,6 +63,37 @@ export function priorityOrderToWeights(priorityOrder: FactorName[]): Record<Fact
 export const DEFAULT_WEIGHTS: Record<FactorName, number> = priorityOrderToWeights(DEFAULT_PRIORITY_ORDER);
 
 // =============================================================================
+// FACTOR DISPLAY LABELS & EMOJI
+// =============================================================================
+
+export const FACTOR_LABELS: Record<FactorName, string> = {
+  snow: 'Snow',
+  crowd: 'Crowd',
+  weather: 'Weather',
+  price: 'Price',
+  distance: 'Distance',
+  parking: 'Parking',
+};
+
+export const FACTOR_EMOJI: Record<FactorName, string> = {
+  snow: '❄️',
+  crowd: '👥',
+  weather: '☀️',
+  price: '🎟️',
+  distance: '📍',
+  parking: '🅿️',
+};
+
+export const FACTOR_DESCRIPTIONS: Record<FactorName, string> = {
+  snow: 'Base depth & fresh snow',
+  crowd: 'Expected crowd level',
+  weather: 'Weather conditions',
+  price: 'Lift ticket pricing',
+  distance: 'Distance from you',
+  parking: 'Parking availability',
+};
+
+// =============================================================================
 // INDIVIDUAL FACTOR SCORING FUNCTIONS (each returns 0-100)
 // =============================================================================
 
