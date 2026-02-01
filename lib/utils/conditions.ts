@@ -138,6 +138,44 @@ export function formatParkingStatus(status: string): string {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+/**
+ * Compute all factor quality levels for a resort's conditions.
+ * Returns an array of QualityLevel values for: snow, runs/lifts, crowd, weather, price, parking.
+ */
+export function getAllFactorLevels(conditions: {
+  snow_depth_base: number | null;
+  fresh_snow_24h: number;
+  runs_open: number;
+  runs_total: number;
+  lifts_open: number;
+  lifts_total: number;
+  crowd_level: 'low' | 'moderate' | 'high' | 'very_high';
+  weather_condition: string | null;
+  adult_ticket_price: number | null;
+  parking_status: 'available' | 'limited' | 'full';
+  parking_price: number | null;
+}): QualityLevel[] {
+  return [
+    getSnowQualityLevel(conditions.snow_depth_base, conditions.fresh_snow_24h),
+    getRunsLiftsQualityLevel(conditions.runs_open, conditions.runs_total, conditions.lifts_open, conditions.lifts_total),
+    getCrowdQualityLevel(conditions.crowd_level),
+    getWeatherQualityLevel(conditions.weather_condition),
+    getPriceQualityLevel(conditions.adult_ticket_price),
+    getParkingQualityLevel(conditions.parking_status, conditions.parking_price),
+  ];
+}
+
+/** Count quality levels from an array */
+export function countQualityLevels(levels: QualityLevel[]): { good: number; moderate: number; poor: number } {
+  return levels.reduce(
+    (acc, level) => {
+      acc[level]++;
+      return acc;
+    },
+    { good: 0, moderate: 0, poor: 0 }
+  );
+}
+
 /** Price quality thresholds (adult day pass in EUR) */
 export const PRICE_THRESHOLDS = {
   BUDGET: 45,

@@ -21,6 +21,8 @@ import { CrowdLevelDisplay } from '@/components/resort/crowd-level-display';
 import { WeatherDisplay } from '@/components/resort/weather-display';
 import { TicketPriceDisplay } from '@/components/resort/ticket-price-display';
 import { ParkingDisplay } from '@/components/resort/parking-display';
+import { FactorSummary } from '@/components/resort/factor-summary';
+import { getAllFactorLevels } from '@/lib/utils/conditions';
 
 interface ResortDetailPanelProps {
   resort: ResortWithConditions | null;
@@ -68,6 +70,9 @@ export function ResortDetailPanel({
               </div>
             )}
           </div>
+          {conditions && (
+            <FactorSummary levels={getAllFactorLevels(conditions)} />
+          )}
         </SheetHeader>
 
         <div className="flex flex-col gap-6 p-6">
