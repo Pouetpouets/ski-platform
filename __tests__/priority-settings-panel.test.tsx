@@ -1,9 +1,13 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PrioritySettingsPanel } from '@/components/map/priority-settings-panel';
 import { PrioritiesProvider } from '@/lib/contexts/priorities-context';
 import { DEFAULT_PRIORITY_ORDER, FACTOR_LABELS, PRIORITY_WEIGHT_DISTRIBUTION } from '@/lib/utils/score';
+
+beforeEach(() => {
+  localStorage.clear();
+});
 
 function renderPanel(isOpen = true) {
   const onClose = vi.fn();
