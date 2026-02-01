@@ -186,6 +186,7 @@ describe('ResortDetailPanel', () => {
     const webcamLink = screen.getByText('Webcams');
     expect(webcamLink).toBeInTheDocument();
     expect(webcamLink.closest('a')).toHaveAttribute('href', 'https://www.lesarcs.com/webcams.html');
+    expect(webcamLink.closest('a')).toHaveAttribute('target', '_blank');
   });
 
   it('hides links when URLs are null', () => {
