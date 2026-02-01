@@ -1,5 +1,5 @@
 /**
- * Database types for Ski Platform
+ * Database types for PeakPick
  * These types match the Supabase schema defined in migrations
  */
 

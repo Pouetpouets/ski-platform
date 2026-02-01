@@ -5,7 +5,7 @@ import type { FactorName } from '@/lib/utils/score';
 import { DEFAULT_PRIORITY_ORDER, FACTOR_NAMES, priorityOrderToWeights } from '@/lib/utils/score';
 import { fetchUserPriorities, saveUserPriorities } from '@/lib/data/preferences';
 
-const STORAGE_KEY = 'ski-platform-priorities';
+const STORAGE_KEY = 'peakpick-priorities';
 
 interface PrioritiesContextValue {
   priorityOrder: FactorName[];
