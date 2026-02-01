@@ -20,7 +20,7 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     expect(screen.getByText('Your Priorities')).toBeInTheDocument();
-    expect(screen.getByText(/Reorder factors to personalize/)).toBeInTheDocument();
+    expect(screen.getByText(/Drag to reorder or use arrow buttons/)).toBeInTheDocument();
   });
 
   it('renders nothing visible when closed', () => {
@@ -61,6 +61,14 @@ describe('PrioritySettingsPanel', () => {
 
     expect(screen.getByText('Base depth & fresh snow')).toBeInTheDocument();
     expect(screen.getByText('Expected crowd level')).toBeInTheDocument();
+  });
+
+  it('has drag handles for each factor', () => {
+    renderPanel();
+
+    for (const name of DEFAULT_PRIORITY_ORDER) {
+      expect(screen.getByLabelText(`Drag ${FACTOR_LABELS[name]} to reorder`)).toBeInTheDocument();
+    }
   });
 
   it('has up/down buttons for each factor', () => {

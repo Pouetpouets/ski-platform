@@ -9,7 +9,7 @@ import {
   SheetFooter,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { ChevronUp, ChevronDown, RotateCcw } from 'lucide-react';
+import { ChevronUp, ChevronDown, RotateCcw, GripVertical } from 'lucide-react';
 import { usePriorities } from '@/lib/contexts/priorities-context';
 import {
   FACTOR_LABELS,
@@ -19,6 +19,22 @@ import {
   DEFAULT_PRIORITY_ORDER,
 } from '@/lib/utils/score';
 import type { FactorName } from '@/lib/utils/score';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface PrioritySettingsPanelProps {
   isOpen: boolean;
@@ -27,6 +43,11 @@ interface PrioritySettingsPanelProps {
 
 export function PrioritySettingsPanel({ isOpen, onClose }: PrioritySettingsPanelProps) {
   const { priorityOrder, setPriorityOrder } = usePriorities();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
 
   const moveUp = (index: number) => {
     if (index === 0) return;
@@ -39,6 +60,19 @@ export function PrioritySettingsPanel({ isOpen, onClose }: PrioritySettingsPanel
     if (index === priorityOrder.length - 1) return;
     const newOrder = [...priorityOrder];
     [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
+    setPriorityOrder(newOrder);
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = priorityOrder.indexOf(active.id as FactorName);
+    const newIndex = priorityOrder.indexOf(over.id as FactorName);
+
+    const newOrder = [...priorityOrder];
+    newOrder.splice(oldIndex, 1);
+    newOrder.splice(newIndex, 0, active.id as FactorName);
     setPriorityOrder(newOrder);
   };
 
@@ -60,23 +94,31 @@ export function PrioritySettingsPanel({ isOpen, onClose }: PrioritySettingsPanel
             Your Priorities
           </SheetTitle>
           <SheetDescription>
-            Reorder factors to personalize your Perfect Day Score. The top factor has the most influence.
+            Drag to reorder or use arrow buttons. The top factor has the most influence on your Perfect Day Score.
           </SheetDescription>
         </SheetHeader>
 
         <div className="flex flex-col gap-2 p-6">
-          {priorityOrder.map((factor, index) => (
-            <PriorityItem
-              key={factor}
-              factor={factor}
-              rank={index + 1}
-              weight={PRIORITY_WEIGHT_DISTRIBUTION[index]}
-              isFirst={index === 0}
-              isLast={index === priorityOrder.length - 1}
-              onMoveUp={() => moveUp(index)}
-              onMoveDown={() => moveDown(index)}
-            />
-          ))}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext items={priorityOrder} strategy={verticalListSortingStrategy}>
+              {priorityOrder.map((factor, index) => (
+                <SortablePriorityItem
+                  key={factor}
+                  factor={factor}
+                  rank={index + 1}
+                  weight={PRIORITY_WEIGHT_DISTRIBUTION[index]}
+                  isFirst={index === 0}
+                  isLast={index === priorityOrder.length - 1}
+                  onMoveUp={() => moveUp(index)}
+                  onMoveDown={() => moveDown(index)}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
         </div>
 
         <SheetFooter className="p-6 pt-0">
@@ -96,7 +138,7 @@ export function PrioritySettingsPanel({ isOpen, onClose }: PrioritySettingsPanel
   );
 }
 
-interface PriorityItemProps {
+interface SortablePriorityItemProps {
   factor: FactorName;
   rank: number;
   weight: number;
@@ -106,7 +148,7 @@ interface PriorityItemProps {
   onMoveDown: () => void;
 }
 
-function PriorityItem({
+function SortablePriorityItem({
   factor,
   rank,
   weight,
@@ -114,12 +156,40 @@ function PriorityItem({
   isLast,
   onMoveUp,
   onMoveDown,
-}: PriorityItemProps) {
+}: SortablePriorityItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: factor });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   return (
     <div
-      className="flex items-center gap-3 rounded-lg border bg-card p-3"
+      ref={setNodeRef}
+      style={style}
+      className={`flex items-center gap-2 rounded-lg border bg-card p-3 ${
+        isDragging ? 'opacity-50 shadow-lg z-50' : ''
+      }`}
       data-testid={`priority-item-${factor}`}
     >
+      {/* Drag handle */}
+      <button
+        className="touch-none cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground shrink-0"
+        aria-label={`Drag ${FACTOR_LABELS[factor]} to reorder`}
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="size-4" />
+      </button>
+
       {/* Rank number */}
       <span className="text-sm font-bold text-muted-foreground w-5 text-center shrink-0">
         {rank}
