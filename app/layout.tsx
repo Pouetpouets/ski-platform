@@ -5,6 +5,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 
+// All pages need cookie-based locale detection, so force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";

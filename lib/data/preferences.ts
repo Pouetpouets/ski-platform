@@ -11,16 +11,17 @@ export async function fetchUserPriorities(): Promise<FactorName[] | null> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const { data, error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any)
     .from('user_preferences')
     .select('priorities')
     .eq('user_id', user.id)
-    .single();
+    .single() as { data: { priorities: unknown } | null; error: unknown };
 
   if (error || !data) return null;
 
   // Validate the stored priorities
-  const priorities = data.priorities as unknown as string[];
+  const priorities = data.priorities as string[];
   if (!isValidPriorityOrder(priorities)) return null;
 
   return priorities as FactorName[];
@@ -35,10 +36,11 @@ export async function saveUserPriorities(priorities: FactorName[]): Promise<bool
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return false;
 
-  const { error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase as any)
     .from('user_preferences')
     .upsert(
-      { user_id: user.id, priorities: priorities as unknown as string[] },
+      { user_id: user.id, priorities },
       { onConflict: 'user_id' }
     );
 

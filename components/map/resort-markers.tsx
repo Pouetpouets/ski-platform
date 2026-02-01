@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import type mapboxgl from 'mapbox-gl';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { calculatePerfectDayScore, getScoreColorHex } from '@/lib/utils/score';
@@ -75,8 +76,14 @@ function updateMarkersForZoom(markers: HTMLElement[], zoom: number): void {
   }
 }
 
+interface PopupLabels {
+  perfectDayScore: string;
+  base: string;
+  noConditions: string;
+}
+
 // Create popup HTML content
-function createPopupContent(resort: ResortWithConditions, score: number): string {
+function createPopupContent(resort: ResortWithConditions, score: number, labels: PopupLabels): string {
   const conditions = resort.conditions;
   return `
     <div class="resort-popup" style="
@@ -103,7 +110,7 @@ function createPopupContent(resort: ResortWithConditions, score: number): string
         <span style="
           font-size: 11px;
           color: #64748b;
-        ">Perfect Day Score</span>
+        ">${labels.perfectDayScore}</span>
       </div>
       ${conditions ? `
         <div style="
@@ -113,10 +120,10 @@ function createPopupContent(resort: ResortWithConditions, score: number): string
           flex-direction: column;
           gap: 2px;
         ">
-          <span>❄️ ${conditions.snow_depth_base ?? '?'}cm base</span>
+          <span>❄️ ${conditions.snow_depth_base ?? '?'}cm ${labels.base}</span>
           <span>🎿 ${conditions.runs_open}/${conditions.runs_total} runs open</span>
         </div>
-      ` : '<span style="font-size: 11px; color: #94a3b8;">No conditions data</span>'}
+      ` : `<span style="font-size: 11px; color: #94a3b8;">${labels.noConditions}</span>`}
     </div>
   `;
 }
@@ -128,6 +135,7 @@ export function ResortMarkers({
   onResortClick,
   onResortHover,
 }: ResortMarkersProps) {
+  const t = useTranslations('map');
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
 
@@ -172,7 +180,11 @@ export function ResortMarkers({
             className: 'resort-preview-popup',
           })
             .setLngLat([resort.longitude, resort.latitude])
-            .setHTML(createPopupContent(resort, score))
+            .setHTML(createPopupContent(resort, score, {
+              perfectDayScore: t('perfectDayScore'),
+              base: t('base'),
+              noConditions: t('noConditions'),
+            }))
             .addTo(map);
         });
 

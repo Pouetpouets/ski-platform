@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import type { ResortWithConditions } from '@/lib/types/database';
 import type { DistanceInfo } from '@/lib/utils/distance';
 import { getScoreColor } from '@/lib/utils/score';
@@ -45,6 +46,9 @@ export function ResortDetailPanel({
   weights,
   distanceInfo,
 }: ResortDetailPanelProps) {
+  const t = useTranslations('resort');
+  const tCommon = useTranslations('common');
+
   if (!resort) return null;
 
   const conditions = resort.conditions;
@@ -65,7 +69,7 @@ export function ResortDetailPanel({
               <SheetDescription>
                 {resort.altitude_min !== null || resort.altitude_max !== null
                   ? `${resort.altitude_min ?? '?'}m - ${resort.altitude_max ?? '?'}m`
-                  : `Resort details for ${resort.name}`}
+                  : t('detailsFor', { name: resort.name })}
               </SheetDescription>
             </div>
             {score !== null && (
@@ -133,7 +137,7 @@ export function ResortDetailPanel({
               />
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">No conditions data available</p>
+            <p className="text-sm text-muted-foreground">{t('noConditions')}</p>
           )}
 
           {/* Score Breakdown */}
@@ -153,7 +157,7 @@ export function ResortDetailPanel({
                 className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
               >
                 <ExternalLink className="size-3.5" />
-                Website
+                {tCommon('website')}
               </a>
             )}
             {resort.webcam_url && (
@@ -164,7 +168,7 @@ export function ResortDetailPanel({
                 className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
               >
                 <ExternalLink className="size-3.5" />
-                Webcams
+                {tCommon('webcams')}
               </a>
             )}
           </SheetFooter>

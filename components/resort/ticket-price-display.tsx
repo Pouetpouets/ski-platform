@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Ticket } from 'lucide-react';
 import { FactorIndicator } from '@/components/resort/factor-indicator';
 import { getPriceQualityLevel } from '@/lib/utils/conditions';
@@ -9,6 +10,8 @@ interface TicketPriceDisplayProps {
 }
 
 export function TicketPriceDisplay({ adultTicketPrice }: TicketPriceDisplayProps) {
+  const t = useTranslations('resort');
+
   if (adultTicketPrice === null) return null;
 
   const qualityLevel = getPriceQualityLevel(adultTicketPrice);
@@ -18,13 +21,13 @@ export function TicketPriceDisplay({ adultTicketPrice }: TicketPriceDisplayProps
       {/* Section header */}
       <div className="flex items-center gap-2">
         <Ticket className="size-4 text-muted-foreground" />
-        <p className="text-sm font-semibold">Lift Ticket</p>
-        <FactorIndicator level={qualityLevel} label="Lift ticket price" />
+        <p className="text-sm font-semibold">{t('liftTicket')}</p>
+        <FactorIndicator level={qualityLevel} label={t('liftTicketPrice')} />
       </div>
 
       {/* Price data */}
       <div className="text-sm">
-        <p className="font-medium">&euro;{adultTicketPrice} adult day pass</p>
+        <p className="font-medium">&euro;{adultTicketPrice} {t('adultDayPass')}</p>
       </div>
     </div>
   );

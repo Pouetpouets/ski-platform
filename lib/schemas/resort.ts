@@ -103,15 +103,17 @@ const ResortConditionsBaseSchema = z.object({
 });
 
 // Cross-field refinements for validation
-function addConditionsRefinements<T extends z.ZodTypeAny>(schema: T) {
+type ConditionsBase = z.infer<typeof ResortConditionsBaseSchema>;
+
+function addConditionsRefinements<T extends z.ZodType<ConditionsBase>>(schema: T) {
   return schema.refine(
-    (data: z.infer<typeof ResortConditionsBaseSchema>) => data.runs_open <= data.runs_total,
+    (data) => data.runs_open <= data.runs_total,
     { message: 'runs_open cannot exceed runs_total', path: ['runs_open'] }
   ).refine(
-    (data: z.infer<typeof ResortConditionsBaseSchema>) => data.lifts_open <= data.lifts_total,
+    (data) => data.lifts_open <= data.lifts_total,
     { message: 'lifts_open cannot exceed lifts_total', path: ['lifts_open'] }
   ).refine(
-    (data: z.infer<typeof ResortConditionsBaseSchema>) => {
+    (data) => {
       if (data.temperature_min !== null && data.temperature_max !== null) {
         return data.temperature_min <= data.temperature_max;
       }

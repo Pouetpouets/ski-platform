@@ -50,8 +50,8 @@ describe('RunsLiftsStatus', () => {
 
     expect(screen.getByText('45/52')).toBeInTheDocument();
     expect(screen.getByText('18/22')).toBeInTheDocument();
-    expect(screen.getByText('Runs')).toBeInTheDocument();
-    expect(screen.getByText('Lifts')).toBeInTheDocument();
+    expect(screen.getByText('runs')).toBeInTheDocument();
+    expect(screen.getByText('lifts')).toBeInTheDocument();
   });
 
   it('shows open percentages', () => {
@@ -70,7 +70,7 @@ describe('RunsLiftsStatus', () => {
       <RunsLiftsStatus runsOpen={45} runsTotal={52} liftsOpen={18} liftsTotal={22} />
     );
 
-    expect(screen.getByText('Runs & Lifts')).toBeInTheDocument();
+    expect(screen.getByText('runsLifts')).toBeInTheDocument();
   });
 
   it('shows green indicator when > 80% open', () => {
@@ -79,7 +79,7 @@ describe('RunsLiftsStatus', () => {
     );
 
     expect(container.querySelector('.bg-green-500')).toBeInTheDocument();
-    expect(screen.getByText('Runs and lifts availability: good')).toBeInTheDocument();
+    expect(screen.getByText('runsLiftsAvailability: good')).toBeInTheDocument();
   });
 
   it('shows yellow indicator when 50-80% open', () => {
@@ -88,7 +88,7 @@ describe('RunsLiftsStatus', () => {
     );
 
     expect(container.querySelector('.bg-yellow-500')).toBeInTheDocument();
-    expect(screen.getByText('Runs and lifts availability: moderate')).toBeInTheDocument();
+    expect(screen.getByText('runsLiftsAvailability: moderate')).toBeInTheDocument();
   });
 
   it('shows red indicator when < 50% open', () => {
@@ -97,7 +97,7 @@ describe('RunsLiftsStatus', () => {
     );
 
     expect(container.querySelector('.bg-red-500')).toBeInTheDocument();
-    expect(screen.getByText('Runs and lifts availability: poor')).toBeInTheDocument();
+    expect(screen.getByText('runsLiftsAvailability: poor')).toBeInTheDocument();
   });
 
   it('handles division by zero gracefully (total = 0)', () => {
@@ -107,7 +107,7 @@ describe('RunsLiftsStatus', () => {
 
     expect(screen.getAllByText('0/0')).toHaveLength(2);
     expect(screen.getAllByText('0%')).toHaveLength(2);
-    expect(screen.getByText('Runs and lifts availability: poor')).toBeInTheDocument();
+    expect(screen.getByText('runsLiftsAvailability: poor')).toBeInTheDocument();
   });
 
   it('shows factor indicator with sr-only accessible label', () => {
@@ -115,7 +115,7 @@ describe('RunsLiftsStatus', () => {
       <RunsLiftsStatus runsOpen={45} runsTotal={52} liftsOpen={18} liftsTotal={22} />
     );
 
-    const srText = screen.getByText(/Runs and lifts availability:/);
+    const srText = screen.getByText(/runsLiftsAvailability:/);
     expect(srText).toHaveClass('sr-only');
   });
 });

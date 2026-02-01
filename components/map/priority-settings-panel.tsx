@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { ChevronUp, ChevronDown, RotateCcw, GripVertical } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { usePriorities } from '@/lib/contexts/priorities-context';
 import {
   FACTOR_LABELS,
@@ -42,6 +43,9 @@ interface PrioritySettingsPanelProps {
 }
 
 export function PrioritySettingsPanel({ isOpen, onClose }: PrioritySettingsPanelProps) {
+  const t = useTranslations('priorities');
+  const tFactors = useTranslations('factors');
+  const tCommon = useTranslations('common');
   const { priorityOrder, setPriorityOrder } = usePriorities();
 
   const sensors = useSensors(
@@ -91,10 +95,10 @@ export function PrioritySettingsPanel({ isOpen, onClose }: PrioritySettingsPanel
       >
         <SheetHeader className="p-6 pb-0">
           <SheetTitle className="text-lg font-semibold">
-            Your Priorities
+            {t('title')}
           </SheetTitle>
           <SheetDescription>
-            Drag to reorder or use arrow buttons. The top factor has the most influence on your Perfect Day Score.
+            {t('description')}
           </SheetDescription>
         </SheetHeader>
 
@@ -130,7 +134,7 @@ export function PrioritySettingsPanel({ isOpen, onClose }: PrioritySettingsPanel
             className="w-full"
           >
             <RotateCcw className="size-3.5 mr-1.5" />
-            Reset to Default
+            {tCommon('resetToDefault')}
           </Button>
         </SheetFooter>
       </SheetContent>
@@ -157,6 +161,8 @@ function SortablePriorityItem({
   onMoveUp,
   onMoveDown,
 }: SortablePriorityItemProps) {
+  const t = useTranslations('priorities');
+  const tFactors = useTranslations('factors');
   const {
     attributes,
     listeners,
@@ -183,7 +189,7 @@ function SortablePriorityItem({
       {/* Drag handle */}
       <button
         className="touch-none cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground shrink-0"
-        aria-label={`Drag ${FACTOR_LABELS[factor]} to reorder`}
+        aria-label={t('dragLabel', { factor: tFactors(factor) })}
         {...attributes}
         {...listeners}
       >
@@ -199,13 +205,13 @@ function SortablePriorityItem({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
           <span className="text-sm">{FACTOR_EMOJI[factor]}</span>
-          <span className="text-sm font-medium">{FACTOR_LABELS[factor]}</span>
+          <span className="text-sm font-medium">{tFactors(factor)}</span>
           <span className="text-xs text-muted-foreground ml-auto tabular-nums">
             {Math.round(weight * 100)}%
           </span>
         </div>
         <p className="text-xs text-muted-foreground truncate">
-          {FACTOR_DESCRIPTIONS[factor]}
+          {tFactors(`${factor}Desc`)}
         </p>
       </div>
 
@@ -217,7 +223,7 @@ function SortablePriorityItem({
           className="h-6 w-6"
           onClick={onMoveUp}
           disabled={isFirst}
-          aria-label={`Move ${FACTOR_LABELS[factor]} up`}
+          aria-label={t('moveUp', { factor: tFactors(factor) })}
         >
           <ChevronUp className="size-3.5" />
         </Button>
@@ -227,7 +233,7 @@ function SortablePriorityItem({
           className="h-6 w-6"
           onClick={onMoveDown}
           disabled={isLast}
-          aria-label={`Move ${FACTOR_LABELS[factor]} down`}
+          aria-label={t('moveDown', { factor: tFactors(factor) })}
         >
           <ChevronDown className="size-3.5" />
         </Button>

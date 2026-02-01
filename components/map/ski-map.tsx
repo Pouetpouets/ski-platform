@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import type mapboxgl from 'mapbox-gl';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { ResortMarkers } from './resort-markers';
@@ -37,6 +38,7 @@ export function SkiMap({
   onUserLocationChange,
   onResortClick,
 }: SkiMapProps) {
+  const t = useTranslations('map');
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const geolocateControlRef = useRef<mapboxgl.GeolocateControl | null>(null);
@@ -173,7 +175,7 @@ export function SkiMap({
       {/* Loading indicator */}
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-background/80">
-          <div className="animate-pulse text-muted-foreground">Loading map...</div>
+          <div className="animate-pulse text-muted-foreground">{t('loadingMap')}</div>
         </div>
       )}
     </div>

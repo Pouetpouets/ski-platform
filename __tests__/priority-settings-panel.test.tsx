@@ -3,7 +3,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PrioritySettingsPanel } from '@/components/map/priority-settings-panel';
 import { PrioritiesProvider } from '@/lib/contexts/priorities-context';
-import { DEFAULT_PRIORITY_ORDER, FACTOR_LABELS, PRIORITY_WEIGHT_DISTRIBUTION } from '@/lib/utils/score';
+import { DEFAULT_PRIORITY_ORDER, PRIORITY_WEIGHT_DISTRIBUTION } from '@/lib/utils/score';
 
 // Mock the DB preferences module
 vi.mock('@/lib/data/preferences', () => ({
@@ -29,21 +29,22 @@ describe('PrioritySettingsPanel', () => {
   it('renders title and description when open', () => {
     renderPanel();
 
-    expect(screen.getByText('Your Priorities')).toBeInTheDocument();
-    expect(screen.getByText(/Drag to reorder or use arrow buttons/)).toBeInTheDocument();
+    expect(screen.getByText('title')).toBeInTheDocument();
+    expect(screen.getByText('description')).toBeInTheDocument();
   });
 
   it('renders nothing visible when closed', () => {
     renderPanel(false);
 
-    expect(screen.queryByText('Your Priorities')).not.toBeInTheDocument();
+    expect(screen.queryByText('title')).not.toBeInTheDocument();
   });
 
   it('displays all 6 factors', () => {
     renderPanel();
 
+    // Mock useTranslations returns the key, so factor names are their keys
     for (const name of DEFAULT_PRIORITY_ORDER) {
-      expect(screen.getByText(FACTOR_LABELS[name])).toBeInTheDocument();
+      expect(screen.getByTestId(`priority-item-${name}`)).toBeInTheDocument();
     }
   });
 
@@ -69,15 +70,16 @@ describe('PrioritySettingsPanel', () => {
   it('displays factor descriptions', () => {
     renderPanel();
 
-    expect(screen.getByText('Base depth & fresh snow')).toBeInTheDocument();
-    expect(screen.getByText('Expected crowd level')).toBeInTheDocument();
+    expect(screen.getByText('snowDesc')).toBeInTheDocument();
+    expect(screen.getByText('crowdDesc')).toBeInTheDocument();
   });
 
   it('has drag handles for each factor', () => {
     renderPanel();
 
+    // Mock returns "dragLabel {factorKey}" for parameterized translations
     for (const name of DEFAULT_PRIORITY_ORDER) {
-      expect(screen.getByLabelText(`Drag ${FACTOR_LABELS[name]} to reorder`)).toBeInTheDocument();
+      expect(screen.getByLabelText(`dragLabel ${name}`)).toBeInTheDocument();
     }
   });
 
@@ -85,8 +87,8 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     for (const name of DEFAULT_PRIORITY_ORDER) {
-      expect(screen.getByLabelText(`Move ${FACTOR_LABELS[name]} up`)).toBeInTheDocument();
-      expect(screen.getByLabelText(`Move ${FACTOR_LABELS[name]} down`)).toBeInTheDocument();
+      expect(screen.getByLabelText(`moveUp ${name}`)).toBeInTheDocument();
+      expect(screen.getByLabelText(`moveDown ${name}`)).toBeInTheDocument();
     }
   });
 
@@ -94,7 +96,7 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     const firstFactor = DEFAULT_PRIORITY_ORDER[0];
-    const upButton = screen.getByLabelText(`Move ${FACTOR_LABELS[firstFactor]} up`);
+    const upButton = screen.getByLabelText(`moveUp ${firstFactor}`);
     expect(upButton).toBeDisabled();
   });
 
@@ -102,7 +104,7 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     const lastFactor = DEFAULT_PRIORITY_ORDER[5];
-    const downButton = screen.getByLabelText(`Move ${FACTOR_LABELS[lastFactor]} down`);
+    const downButton = screen.getByLabelText(`moveDown ${lastFactor}`);
     expect(downButton).toBeDisabled();
   });
 
@@ -111,7 +113,7 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     // Second factor is 'crowd' by default - move it up
-    const upButton = screen.getByLabelText('Move Crowd up');
+    const upButton = screen.getByLabelText('moveUp crowd');
     await user.click(upButton);
 
     // Now crowd should be first (rank 1)
@@ -125,7 +127,7 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     // First factor is 'snow' by default - move it down
-    const downButton = screen.getByLabelText('Move Snow down');
+    const downButton = screen.getByLabelText('moveDown snow');
     await user.click(downButton);
 
     const items = screen.getAllByTestId(/priority-item-/);
@@ -136,13 +138,13 @@ describe('PrioritySettingsPanel', () => {
   it('has a Reset to Default button', () => {
     renderPanel();
 
-    expect(screen.getByText('Reset to Default')).toBeInTheDocument();
+    expect(screen.getByText('resetToDefault')).toBeInTheDocument();
   });
 
   it('disables Reset to Default when order is default', () => {
     renderPanel();
 
-    const resetButton = screen.getByText('Reset to Default');
+    const resetButton = screen.getByText('resetToDefault');
     expect(resetButton.closest('button')).toBeDisabled();
   });
 
@@ -151,9 +153,9 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     // Move crowd up to change order
-    await user.click(screen.getByLabelText('Move Crowd up'));
+    await user.click(screen.getByLabelText('moveUp crowd'));
 
-    const resetButton = screen.getByText('Reset to Default');
+    const resetButton = screen.getByText('resetToDefault');
     expect(resetButton.closest('button')).not.toBeDisabled();
   });
 
@@ -162,14 +164,14 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     // Change order
-    await user.click(screen.getByLabelText('Move Crowd up'));
+    await user.click(screen.getByLabelText('moveUp crowd'));
 
     // Verify changed
     let items = screen.getAllByTestId(/priority-item-/);
     expect(items[0]).toHaveAttribute('data-testid', 'priority-item-crowd');
 
     // Reset
-    await user.click(screen.getByText('Reset to Default'));
+    await user.click(screen.getByText('resetToDefault'));
 
     // Verify back to default
     items = screen.getAllByTestId(/priority-item-/);
@@ -186,7 +188,7 @@ describe('PrioritySettingsPanel', () => {
     expect(within(snowItem).getByText('30%')).toBeInTheDocument();
 
     // Move snow down
-    await user.click(screen.getByLabelText('Move Snow down'));
+    await user.click(screen.getByLabelText('moveDown snow'));
 
     // Snow is now second, should have 25%
     const snowItemAfter = screen.getByTestId('priority-item-snow');

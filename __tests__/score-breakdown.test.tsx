@@ -16,18 +16,18 @@ describe('ScoreBreakdown', () => {
   it('renders "Score Breakdown" heading', () => {
     render(<ScoreBreakdown factors={mockFactors} />);
 
-    expect(screen.getByText('Score Breakdown')).toBeInTheDocument();
+    expect(screen.getByText('scoreBreakdown')).toBeInTheDocument();
   });
 
   it('displays all 6 factor names', () => {
     render(<ScoreBreakdown factors={mockFactors} />);
 
-    expect(screen.getByText(/Snow/)).toBeInTheDocument();
-    expect(screen.getByText(/Crowd/)).toBeInTheDocument();
-    expect(screen.getByText(/Weather/)).toBeInTheDocument();
-    expect(screen.getByText(/Price/)).toBeInTheDocument();
-    expect(screen.getByText(/Distance/)).toBeInTheDocument();
-    expect(screen.getByText(/Parking/)).toBeInTheDocument();
+    expect(screen.getByText(/snow/)).toBeInTheDocument();
+    expect(screen.getByText(/crowd/)).toBeInTheDocument();
+    expect(screen.getByText(/weather/)).toBeInTheDocument();
+    expect(screen.getByText(/price/)).toBeInTheDocument();
+    expect(screen.getByText(/distance/)).toBeInTheDocument();
+    expect(screen.getByText(/parking/)).toBeInTheDocument();
   });
 
   it('displays individual scores as X/100', () => {
@@ -48,7 +48,7 @@ describe('ScoreBreakdown', () => {
   it('progress bars have correct aria values', () => {
     const { container } = render(<ScoreBreakdown factors={{ ...mockFactors, snow: 85 }} />);
 
-    const snowBar = container.querySelector('[aria-label="Snow score"]');
+    const snowBar = container.querySelector('[aria-label="snow score"]');
     expect(snowBar).toBeInTheDocument();
     expect(snowBar).toHaveAttribute('aria-valuenow', '85');
     expect(snowBar).toHaveAttribute('aria-valuemin', '0');
@@ -78,7 +78,7 @@ describe('ScoreBreakdown', () => {
     const factors: FactorScores = { snow: 85, crowd: 0, weather: 0, price: 0, distance: 0, parking: 0 };
     const { container } = render(<ScoreBreakdown factors={factors} />);
 
-    const snowBar = container.querySelector('[aria-label="Snow score"]');
+    const snowBar = container.querySelector('[aria-label="snow score"]');
     expect(snowBar).toHaveClass('bg-green-500');
   });
 
@@ -86,7 +86,7 @@ describe('ScoreBreakdown', () => {
     const factors: FactorScores = { snow: 20, crowd: 100, weather: 100, price: 100, distance: 100, parking: 100 };
     const { container } = render(<ScoreBreakdown factors={factors} />);
 
-    const snowBar = container.querySelector('[aria-label="Snow score"]');
+    const snowBar = container.querySelector('[aria-label="snow score"]');
     expect(snowBar).toHaveClass('bg-red-500');
   });
 });

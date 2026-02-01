@@ -8,6 +8,7 @@ import type { ResortWithConditions } from '@/lib/types/database';
 import { getDistanceInfo } from '@/lib/utils/distance';
 import { calculatePerfectDayScore } from '@/lib/utils/score';
 import { PrioritiesProvider, usePriorities } from '@/lib/contexts/priorities-context';
+import { useTranslations } from 'next-intl';
 import { Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -24,6 +25,7 @@ export function SkiMapWrapper({ resorts }: SkiMapWrapperProps) {
 }
 
 function SkiMapContent({ resorts }: SkiMapWrapperProps) {
+  const t = useTranslations('priorities');
   const { weights } = usePriorities();
   const [selectedResort, setSelectedResort] = useState<ResortWithConditions | null>(null);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
@@ -70,7 +72,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
         size="icon"
         className="absolute bottom-6 left-4 z-20 bg-background/90 backdrop-blur-sm shadow-md"
         onClick={() => setSettingsOpen(true)}
-        aria-label="Open priority settings"
+        aria-label={t('openSettings')}
       >
         <Settings className="size-4" />
       </Button>

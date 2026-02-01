@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   Sun,
   CloudSun,
@@ -11,7 +12,7 @@ import {
   Thermometer,
 } from 'lucide-react';
 import { FactorIndicator } from '@/components/resort/factor-indicator';
-import { getWeatherQualityLevel, formatWeatherCondition } from '@/lib/utils/conditions';
+import { getWeatherQualityLevel } from '@/lib/utils/conditions';
 
 interface WeatherDisplayProps {
   weatherCondition: string | null;
@@ -35,6 +36,9 @@ export function WeatherDisplay({
   temperatureMin,
   temperatureMax,
 }: WeatherDisplayProps) {
+  const t = useTranslations('resort');
+  const tWeather = useTranslations('weatherConditions');
+
   if (!weatherCondition && temperatureMin === null && temperatureMax === null) {
     return null;
   }
@@ -46,8 +50,8 @@ export function WeatherDisplay({
       {/* Section header */}
       <div className="flex items-center gap-2">
         <Thermometer className="size-4 text-muted-foreground" />
-        <p className="text-sm font-semibold">Weather</p>
-        <FactorIndicator level={qualityLevel} label="Weather" />
+        <p className="text-sm font-semibold">{t('weather')}</p>
+        <FactorIndicator level={qualityLevel} label={t('weather')} />
       </div>
 
       {/* Weather data */}
@@ -57,7 +61,7 @@ export function WeatherDisplay({
             <span className="text-muted-foreground">
               {WEATHER_ICONS[weatherCondition] ?? <Cloud className="size-4" />}
             </span>
-            <span className="font-medium">{formatWeatherCondition(weatherCondition)}</span>
+            <span className="font-medium">{tWeather(weatherCondition)}</span>
           </div>
         )}
         {temperatureMin !== null && temperatureMax !== null && (

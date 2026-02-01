@@ -37,34 +37,34 @@ describe('TicketPriceDisplay', () => {
   it('renders section header with "Lift Ticket" title', () => {
     render(<TicketPriceDisplay adultTicketPrice={54} />);
 
-    expect(screen.getByText('Lift Ticket')).toBeInTheDocument();
+    expect(screen.getByText('liftTicket')).toBeInTheDocument();
   });
 
   it('displays price with euro sign and label', () => {
     render(<TicketPriceDisplay adultTicketPrice={54} />);
 
-    expect(screen.getByText('€54 adult day pass')).toBeInTheDocument();
+    expect(screen.getByText(/€54.*adultDayPass/)).toBeInTheDocument();
   });
 
   it('shows green indicator for budget price (< €45)', () => {
     const { container } = render(<TicketPriceDisplay adultTicketPrice={42} />);
 
     expect(container.querySelector('.bg-green-500')).toBeInTheDocument();
-    expect(screen.getByText('Lift ticket price: good')).toBeInTheDocument();
+    expect(screen.getByText('liftTicketPrice: good')).toBeInTheDocument();
   });
 
   it('shows yellow indicator for average price (€45-€55)', () => {
     const { container } = render(<TicketPriceDisplay adultTicketPrice={50} />);
 
     expect(container.querySelector('.bg-yellow-500')).toBeInTheDocument();
-    expect(screen.getByText('Lift ticket price: moderate')).toBeInTheDocument();
+    expect(screen.getByText('liftTicketPrice: moderate')).toBeInTheDocument();
   });
 
   it('shows red indicator for premium price (> €55)', () => {
     const { container } = render(<TicketPriceDisplay adultTicketPrice={68} />);
 
     expect(container.querySelector('.bg-red-500')).toBeInTheDocument();
-    expect(screen.getByText('Lift ticket price: poor')).toBeInTheDocument();
+    expect(screen.getByText('liftTicketPrice: poor')).toBeInTheDocument();
   });
 
   it('returns null when price is null', () => {
@@ -76,7 +76,7 @@ describe('TicketPriceDisplay', () => {
   it('shows factor indicator with sr-only accessible label', () => {
     render(<TicketPriceDisplay adultTicketPrice={54} />);
 
-    const srText = screen.getByText(/Lift ticket price:/);
+    const srText = screen.getByText(/liftTicketPrice:/);
     expect(srText).toHaveClass('sr-only');
   });
 });
