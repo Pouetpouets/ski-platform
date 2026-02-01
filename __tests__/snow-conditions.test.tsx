@@ -163,6 +163,17 @@ describe('SnowConditions', () => {
     expect(screen.getByText('Snow quality: poor')).toBeInTheDocument();
   });
 
+  it('renders fresh snow row even when both depths are null', () => {
+    render(
+      <SnowConditions snowDepthBase={null} snowDepthSummit={null} freshSnow24h={10} />
+    );
+
+    const questionMarks = screen.getAllByText('?cm');
+    expect(questionMarks).toHaveLength(2);
+    expect(screen.getByText('+10cm')).toBeInTheDocument();
+    expect(screen.getByText('Fresh (24h)')).toBeInTheDocument();
+  });
+
   it('exports POWDER_ALERT_THRESHOLD_CM as 20', () => {
     expect(POWDER_ALERT_THRESHOLD_CM).toBe(20);
   });

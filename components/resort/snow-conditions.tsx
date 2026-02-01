@@ -1,3 +1,5 @@
+'use client';
+
 import { Snowflake, Mountain, CloudSnow } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { FactorIndicator } from '@/components/resort/factor-indicator';
@@ -25,7 +27,7 @@ export function SnowConditions({
       {/* Section header */}
       <div className="flex items-center gap-2">
         <Snowflake className="size-4 text-muted-foreground" />
-        <h3 className="text-sm font-semibold">Snow Conditions</h3>
+        <p className="text-sm font-semibold">Snow Conditions</p>
         <FactorIndicator level={qualityLevel} label="Snow quality" />
       </div>
 
