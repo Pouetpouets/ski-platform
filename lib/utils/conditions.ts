@@ -79,3 +79,37 @@ export function formatCrowdLevel(crowdLevel: string): string {
     .replace(/_/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
+
+/**
+ * Assess weather quality level for skiing.
+ * - Good: sunny, partly_cloudy (best visibility and comfort)
+ * - Moderate: cloudy, overcast (dry but reduced visibility)
+ * - Poor: snowing, rain, storm, high_winds (challenging conditions)
+ */
+export function getWeatherQualityLevel(
+  weatherCondition: string | null
+): QualityLevel {
+  if (!weatherCondition) return 'moderate';
+  switch (weatherCondition) {
+    case 'sunny':
+    case 'partly_cloudy':
+      return 'good';
+    case 'cloudy':
+    case 'overcast':
+      return 'moderate';
+    case 'snowing':
+    case 'rain':
+    case 'storm':
+    case 'high_winds':
+      return 'poor';
+    default:
+      return 'moderate';
+  }
+}
+
+/** Format weather condition for display: replace underscores, capitalize each word */
+export function formatWeatherCondition(condition: string): string {
+  return condition
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}

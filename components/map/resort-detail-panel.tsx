@@ -16,11 +16,11 @@ import {
   Car,
   ExternalLink,
   MapPin,
-  Thermometer,
 } from 'lucide-react';
 import { SnowConditions } from '@/components/resort/snow-conditions';
 import { RunsLiftsStatus } from '@/components/resort/runs-lifts-status';
 import { CrowdLevelDisplay } from '@/components/resort/crowd-level-display';
+import { WeatherDisplay } from '@/components/resort/weather-display';
 
 interface ResortDetailPanelProps {
   resort: ResortWithConditions | null;
@@ -105,23 +105,15 @@ export function ResortDetailPanel({
               {/* Crowd Level Section */}
               <CrowdLevelDisplay crowdLevel={conditions.crowd_level} />
 
+              {/* Weather Section */}
+              <WeatherDisplay
+                weatherCondition={conditions.weather_condition}
+                temperatureMin={conditions.temperature_min}
+                temperatureMax={conditions.temperature_max}
+              />
+
               {/* Other conditions grid */}
               <div className="grid grid-cols-2 gap-4 text-sm">
-                {conditions.weather_condition && (
-                  <ConditionItem
-                    icon={<Thermometer className="size-4" />}
-                    label="Weather"
-                    value={conditions.weather_condition.replace('_', ' ')}
-                    className="capitalize"
-                  />
-                )}
-                {conditions.temperature_min !== null && conditions.temperature_max !== null && (
-                  <ConditionItem
-                    icon={<Thermometer className="size-4" />}
-                    label="Temp"
-                    value={`${conditions.temperature_min}° / ${conditions.temperature_max}°C`}
-                  />
-                )}
                 {conditions.adult_ticket_price !== null && (
                   <ConditionItem
                     icon={<Ticket className="size-4" />}
