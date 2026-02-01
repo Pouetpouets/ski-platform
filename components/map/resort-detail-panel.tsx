@@ -3,7 +3,7 @@
 import type { ResortWithConditions } from '@/lib/types/database';
 import type { DistanceInfo } from '@/lib/utils/distance';
 import { getScoreColor } from '@/lib/utils/score';
-import type { FactorScores } from '@/lib/utils/score';
+import type { FactorScores, FactorName } from '@/lib/utils/score';
 import {
   Sheet,
   SheetContent,
@@ -32,6 +32,7 @@ interface ResortDetailPanelProps {
   onClose: () => void;
   score: number | null;
   factors: FactorScores | null;
+  weights?: Record<FactorName, number>;
   distanceInfo: DistanceInfo | null;
 }
 
@@ -41,6 +42,7 @@ export function ResortDetailPanel({
   onClose,
   score,
   factors,
+  weights,
   distanceInfo,
 }: ResortDetailPanelProps) {
   if (!resort) return null;
@@ -136,7 +138,7 @@ export function ResortDetailPanel({
 
           {/* Score Breakdown */}
           {factors && (
-            <ScoreBreakdown factors={factors} />
+            <ScoreBreakdown factors={factors} weights={weights} />
           )}
         </div>
 

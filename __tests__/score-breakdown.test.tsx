@@ -68,9 +68,10 @@ describe('ScoreBreakdown', () => {
     const { container } = render(<ScoreBreakdown factors={factors} />);
 
     const labels = container.querySelectorAll('[role="progressbar"]');
-    // With equal weights, contribution = score * (1/6), so sorted by score desc
+    // With priority weights, contribution = score * weight, sorted desc:
+    // crowd(90*0.25=22.5), weather(50*0.20=10), distance(70*0.08=5.6), price(30*0.12=3.6), snow(10*0.30=3), parking(20*0.05=1)
     const ariaValues = Array.from(labels).map((el) => Number(el.getAttribute('aria-valuenow')));
-    expect(ariaValues).toEqual([90, 70, 50, 30, 20, 10]);
+    expect(ariaValues).toEqual([90, 50, 70, 30, 10, 20]);
   });
 
   it('applies green color for scores >= 80', () => {

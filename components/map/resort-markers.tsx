@@ -4,10 +4,12 @@ import { useEffect, useRef } from 'react';
 import type mapboxgl from 'mapbox-gl';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { calculatePerfectDayScore, getScoreColorHex } from '@/lib/utils/score';
+import type { FactorName } from '@/lib/utils/score';
 
 interface ResortMarkersProps {
   map: mapboxgl.Map | null;
   resorts: ResortWithConditions[];
+  weights?: Record<FactorName, number>;
   onResortClick?: (resort: ResortWithConditions) => void;
   onResortHover?: (resort: ResortWithConditions | null) => void;
 }
@@ -122,6 +124,7 @@ function createPopupContent(resort: ResortWithConditions, score: number): string
 export function ResortMarkers({
   map,
   resorts,
+  weights,
   onResortClick,
   onResortHover,
 }: ResortMarkersProps) {
@@ -139,7 +142,7 @@ export function ResortMarkers({
 
       // Create markers for each resort
       resorts.forEach((resort) => {
-        const { score } = calculatePerfectDayScore(resort.conditions);
+        const { score } = calculatePerfectDayScore(resort.conditions, null, weights);
         const color = getScoreColorHex(score);
 
         const el = createMarkerElement(score, color);
@@ -214,7 +217,7 @@ export function ResortMarkers({
         popupRef.current = null;
       }
     };
-  }, [map, resorts, onResortClick, onResortHover]);
+  }, [map, resorts, weights, onResortClick, onResortHover]);
 
   return null; // Markers are added directly to the map
 }

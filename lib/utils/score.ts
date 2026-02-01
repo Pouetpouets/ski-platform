@@ -38,17 +38,29 @@ export const FACTOR_NAMES = ['snow', 'crowd', 'weather', 'price', 'distance', 'p
 export type FactorName = (typeof FACTOR_NAMES)[number];
 
 // =============================================================================
-// DEFAULT EQUAL WEIGHTS (1/6 each)
+// PRIORITY-BASED WEIGHT DISTRIBUTION
 // =============================================================================
 
-export const DEFAULT_WEIGHTS: Record<FactorName, number> = {
-  snow: 1 / 6,
-  crowd: 1 / 6,
-  weather: 1 / 6,
-  price: 1 / 6,
-  distance: 1 / 6,
-  parking: 1 / 6,
-};
+/** Weight distribution by priority rank (1st to 6th) */
+export const PRIORITY_WEIGHT_DISTRIBUTION = [0.30, 0.25, 0.20, 0.12, 0.08, 0.05] as const;
+
+/** Default priority order */
+export const DEFAULT_PRIORITY_ORDER: FactorName[] = ['snow', 'crowd', 'weather', 'price', 'distance', 'parking'];
+
+/**
+ * Convert a priority order into weights.
+ * First factor in the array gets 0.30, second 0.25, etc.
+ */
+export function priorityOrderToWeights(priorityOrder: FactorName[]): Record<FactorName, number> {
+  const weights = {} as Record<FactorName, number>;
+  for (let i = 0; i < FACTOR_NAMES.length; i++) {
+    weights[priorityOrder[i]] = PRIORITY_WEIGHT_DISTRIBUTION[i];
+  }
+  return weights;
+}
+
+/** Default weights based on default priority order */
+export const DEFAULT_WEIGHTS: Record<FactorName, number> = priorityOrderToWeights(DEFAULT_PRIORITY_ORDER);
 
 // =============================================================================
 // INDIVIDUAL FACTOR SCORING FUNCTIONS (each returns 0-100)

@@ -23,6 +23,7 @@ const MAP_STYLE = 'mapbox://styles/mapbox/outdoors-v12';
 interface SkiMapProps {
   className?: string;
   resorts?: ResortWithConditions[];
+  weights?: Record<string, number>;
   onMapLoad?: () => void;
   onUserLocationChange?: (coords: { latitude: number; longitude: number } | null) => void;
   onResortClick?: (resort: ResortWithConditions) => void;
@@ -31,6 +32,7 @@ interface SkiMapProps {
 export function SkiMap({
   className,
   resorts = [],
+  weights,
   onMapLoad,
   onUserLocationChange,
   onResortClick,
@@ -163,6 +165,7 @@ export function SkiMap({
         <ResortMarkers
           map={mapInstance}
           resorts={resorts}
+          weights={weights}
           onResortClick={onResortClick}
         />
       )}

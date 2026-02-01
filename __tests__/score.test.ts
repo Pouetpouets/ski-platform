@@ -14,7 +14,11 @@ import {
   SCORE_THRESHOLDS,
   DEFAULT_WEIGHTS,
   FACTOR_NAMES,
+  PRIORITY_WEIGHT_DISTRIBUTION,
+  DEFAULT_PRIORITY_ORDER,
+  priorityOrderToWeights,
 } from '@/lib/utils/score';
+import type { FactorName } from '@/lib/utils/score';
 import type { ResortConditions } from '@/lib/types/database';
 
 // =============================================================================
@@ -183,10 +187,17 @@ describe('combinedScore', () => {
     expect(combinedScore(factors)).toBe(0);
   });
 
-  it('computes weighted average correctly', () => {
+  it('computes weighted average correctly with equal weights', () => {
     const factors = { snow: 100, crowd: 0, weather: 100, price: 0, distance: 100, parking: 0 };
-    // Equal weights: (100+0+100+0+100+0) / 6 = 50
-    expect(combinedScore(factors)).toBe(50);
+    const equalWeights = { snow: 1/6, crowd: 1/6, weather: 1/6, price: 1/6, distance: 1/6, parking: 1/6 } as Record<FactorName, number>;
+    expect(combinedScore(factors, equalWeights)).toBe(50);
+  });
+
+  it('computes weighted average with priority weights', () => {
+    const factors = { snow: 100, crowd: 0, weather: 100, price: 0, distance: 100, parking: 0 };
+    // Default priority weights: snow=0.30, crowd=0.25, weather=0.20, price=0.12, distance=0.08, parking=0.05
+    // 100*0.30 + 0 + 100*0.20 + 0 + 100*0.08 + 0 = 58
+    expect(combinedScore(factors)).toBe(58);
   });
 
   it('clamps to 0-100', () => {
@@ -320,5 +331,68 @@ describe('calculatePerfectDayScore', () => {
   it('default weights sum to ~1', () => {
     const sum = Object.values(DEFAULT_WEIGHTS).reduce((a, b) => a + b, 0);
     expect(sum).toBeCloseTo(1, 5);
+  });
+});
+
+// =============================================================================
+// PRIORITY WEIGHT SYSTEM TESTS
+// =============================================================================
+
+describe('PRIORITY_WEIGHT_DISTRIBUTION', () => {
+  it('has 6 weight values', () => {
+    expect(PRIORITY_WEIGHT_DISTRIBUTION).toHaveLength(6);
+  });
+
+  it('sums to 1', () => {
+    const sum = PRIORITY_WEIGHT_DISTRIBUTION.reduce((a, b) => a + b, 0);
+    expect(sum).toBeCloseTo(1, 5);
+  });
+
+  it('is in descending order', () => {
+    for (let i = 1; i < PRIORITY_WEIGHT_DISTRIBUTION.length; i++) {
+      expect(PRIORITY_WEIGHT_DISTRIBUTION[i]).toBeLessThan(PRIORITY_WEIGHT_DISTRIBUTION[i - 1]);
+    }
+  });
+
+  it('matches expected distribution', () => {
+    expect(PRIORITY_WEIGHT_DISTRIBUTION[0]).toBe(0.30);
+    expect(PRIORITY_WEIGHT_DISTRIBUTION[1]).toBe(0.25);
+    expect(PRIORITY_WEIGHT_DISTRIBUTION[2]).toBe(0.20);
+    expect(PRIORITY_WEIGHT_DISTRIBUTION[3]).toBe(0.12);
+    expect(PRIORITY_WEIGHT_DISTRIBUTION[4]).toBe(0.08);
+    expect(PRIORITY_WEIGHT_DISTRIBUTION[5]).toBe(0.05);
+  });
+});
+
+describe('priorityOrderToWeights', () => {
+  it('assigns highest weight to first priority', () => {
+    const weights = priorityOrderToWeights(['price', 'distance', 'snow', 'crowd', 'weather', 'parking']);
+    expect(weights.price).toBe(0.30);
+    expect(weights.distance).toBe(0.25);
+    expect(weights.snow).toBe(0.20);
+  });
+
+  it('default priority order gives snow the highest weight', () => {
+    expect(DEFAULT_WEIGHTS.snow).toBe(0.30);
+    expect(DEFAULT_WEIGHTS.crowd).toBe(0.25);
+    expect(DEFAULT_WEIGHTS.weather).toBe(0.20);
+    expect(DEFAULT_WEIGHTS.price).toBe(0.12);
+    expect(DEFAULT_WEIGHTS.distance).toBe(0.08);
+    expect(DEFAULT_WEIGHTS.parking).toBe(0.05);
+  });
+
+  it('reordering priorities changes score outcome', () => {
+    const conditions = baseConditions;
+
+    // Snow-first weights (default): snow gets 0.30
+    const snowFirstWeights = priorityOrderToWeights(['snow', 'crowd', 'weather', 'price', 'distance', 'parking']);
+    const snowFirstScore = calculatePerfectDayScore(conditions, null, snowFirstWeights).score;
+
+    // Price-first weights: price gets 0.30
+    const priceFirstWeights = priorityOrderToWeights(['price', 'distance', 'parking', 'crowd', 'weather', 'snow']);
+    const priceFirstScore = calculatePerfectDayScore(conditions, null, priceFirstWeights).score;
+
+    // Scores should differ when priorities change
+    expect(snowFirstScore).not.toBe(priceFirstScore);
   });
 });
