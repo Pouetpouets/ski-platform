@@ -55,3 +55,27 @@ export function getRunsLiftsQualityLevel(
   if (percentage >= OPEN_PERCENTAGE_THRESHOLDS.MODERATE) return 'moderate';
   return 'poor';
 }
+
+/**
+ * Assess crowd quality level. Lower crowds = better quality.
+ * - Good: low
+ * - Moderate: moderate
+ * - Poor: high or very_high
+ */
+export function getCrowdQualityLevel(
+  crowdLevel: 'low' | 'moderate' | 'high' | 'very_high'
+): QualityLevel {
+  switch (crowdLevel) {
+    case 'low': return 'good';
+    case 'moderate': return 'moderate';
+    case 'high':
+    case 'very_high': return 'poor';
+  }
+}
+
+/** Format crowd level for display: replace underscores, capitalize each word */
+export function formatCrowdLevel(crowdLevel: string): string {
+  return crowdLevel
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}

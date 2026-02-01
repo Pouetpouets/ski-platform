@@ -129,8 +129,8 @@ describe('ResortDetailPanel', () => {
     expect(screen.getByText('98/106')).toBeInTheDocument();
     // Lifts
     expect(screen.getByText('45/51')).toBeInTheDocument();
-    // Crowd
-    expect(screen.getByText('low')).toBeInTheDocument();
+    // Crowd (formatted by CrowdLevelDisplay)
+    expect(screen.getByText('Low')).toBeInTheDocument();
     // Price
     expect(screen.getByText(/€59/)).toBeInTheDocument();
     // Fresh snow

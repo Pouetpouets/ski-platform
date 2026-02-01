@@ -12,7 +12,6 @@ import {
   SheetFooter,
 } from '@/components/ui/sheet';
 import {
-  Users,
   Ticket,
   Car,
   ExternalLink,
@@ -21,6 +20,7 @@ import {
 } from 'lucide-react';
 import { SnowConditions } from '@/components/resort/snow-conditions';
 import { RunsLiftsStatus } from '@/components/resort/runs-lifts-status';
+import { CrowdLevelDisplay } from '@/components/resort/crowd-level-display';
 
 interface ResortDetailPanelProps {
   resort: ResortWithConditions | null;
@@ -102,14 +102,11 @@ export function ResortDetailPanel({
                 liftsTotal={conditions.lifts_total}
               />
 
+              {/* Crowd Level Section */}
+              <CrowdLevelDisplay crowdLevel={conditions.crowd_level} />
+
               {/* Other conditions grid */}
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <ConditionItem
-                  icon={<Users className="size-4" />}
-                  label="Crowd"
-                  value={conditions.crowd_level.replace('_', ' ')}
-                  className="capitalize"
-                />
                 {conditions.weather_condition && (
                   <ConditionItem
                     icon={<Thermometer className="size-4" />}
