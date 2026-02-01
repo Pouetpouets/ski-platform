@@ -48,7 +48,7 @@ export function ResortDetailPanel({
       <SheetContent
         side="right"
         aria-label="Resort details"
-        className="w-[400px] sm:max-w-[400px] data-[state=open]:duration-200 data-[state=closed]:duration-200 overflow-y-auto"
+        className="w-[400px] sm:max-w-[400px] overflow-y-auto"
       >
         <SheetHeader className="p-6 pb-0">
           <div className="flex items-start justify-between gap-4 pr-6">
@@ -57,7 +57,9 @@ export function ResortDetailPanel({
                 {resort.name}
               </SheetTitle>
               <SheetDescription>
-                {resort.altitude_min}m - {resort.altitude_max}m
+                {resort.altitude_min !== null || resort.altitude_max !== null
+                  ? `${resort.altitude_min ?? '?'}m - ${resort.altitude_max ?? '?'}m`
+                  : `Resort details for ${resort.name}`}
               </SheetDescription>
             </div>
             {score !== null && (

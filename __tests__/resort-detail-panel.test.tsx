@@ -67,6 +67,21 @@ describe('ResortDetailPanel', () => {
     expect(container.innerHTML).toBe('');
   });
 
+  it('does not render panel content when isOpen is false with a valid resort', () => {
+    render(
+      <ResortDetailPanel
+        resort={mockResort}
+        isOpen={false}
+        onClose={vi.fn()}
+        score={85}
+        distanceInfo={mockDistanceInfo}
+      />
+    );
+
+    expect(screen.queryByText('Les Arcs')).not.toBeInTheDocument();
+    expect(screen.queryByText('85%')).not.toBeInTheDocument();
+  });
+
   it('renders resort name and altitude when open', () => {
     render(
       <ResortDetailPanel
@@ -78,8 +93,8 @@ describe('ResortDetailPanel', () => {
       />
     );
 
-    expect(screen.getByText('Les Arcs')).toBeDefined();
-    expect(screen.getByText('1200m - 3226m')).toBeDefined();
+    expect(screen.getByText('Les Arcs')).toBeInTheDocument();
+    expect(screen.getByText('1200m - 3226m')).toBeInTheDocument();
   });
 
   it('renders score badge when score is provided', () => {
@@ -93,7 +108,7 @@ describe('ResortDetailPanel', () => {
       />
     );
 
-    expect(screen.getByText('85%')).toBeDefined();
+    expect(screen.getByText('85%')).toBeInTheDocument();
   });
 
   it('renders conditions data correctly', () => {
@@ -108,18 +123,18 @@ describe('ResortDetailPanel', () => {
     );
 
     // Snow
-    expect(screen.getByText('120cm')).toBeDefined();
-    expect(screen.getByText('180cm')).toBeDefined();
+    expect(screen.getByText('120cm')).toBeInTheDocument();
+    expect(screen.getByText('180cm')).toBeInTheDocument();
     // Runs
-    expect(screen.getByText('98/106')).toBeDefined();
+    expect(screen.getByText('98/106')).toBeInTheDocument();
     // Lifts
-    expect(screen.getByText('45/51')).toBeDefined();
+    expect(screen.getByText('45/51')).toBeInTheDocument();
     // Crowd
-    expect(screen.getByText('low')).toBeDefined();
+    expect(screen.getByText('low')).toBeInTheDocument();
     // Price
-    expect(screen.getByText(/€59/)).toBeDefined();
+    expect(screen.getByText(/€59/)).toBeInTheDocument();
     // Fresh snow
-    expect(screen.getByText('+15cm')).toBeDefined();
+    expect(screen.getByText('+15cm')).toBeInTheDocument();
   });
 
   it('shows "No conditions data" when conditions is null', () => {
@@ -133,7 +148,7 @@ describe('ResortDetailPanel', () => {
       />
     );
 
-    expect(screen.getByText('No conditions data available')).toBeDefined();
+    expect(screen.getByText('No conditions data available')).toBeInTheDocument();
   });
 
   it('renders distance info', () => {
@@ -147,9 +162,9 @@ describe('ResortDetailPanel', () => {
       />
     );
 
-    expect(screen.getByText('165 km')).toBeDefined();
-    expect(screen.getByText(/Lyon/)).toBeDefined();
-    expect(screen.getByText(/3h 18min/)).toBeDefined();
+    expect(screen.getByText('165 km')).toBeInTheDocument();
+    expect(screen.getByText(/Lyon/)).toBeInTheDocument();
+    expect(screen.getByText(/3h 18min/)).toBeInTheDocument();
   });
 
   it('renders website and webcam links when URLs present', () => {
@@ -164,13 +179,13 @@ describe('ResortDetailPanel', () => {
     );
 
     const websiteLink = screen.getByText('Website');
-    expect(websiteLink).toBeDefined();
-    expect(websiteLink.closest('a')?.getAttribute('href')).toBe('https://www.lesarcs.com');
-    expect(websiteLink.closest('a')?.getAttribute('target')).toBe('_blank');
+    expect(websiteLink).toBeInTheDocument();
+    expect(websiteLink.closest('a')).toHaveAttribute('href', 'https://www.lesarcs.com');
+    expect(websiteLink.closest('a')).toHaveAttribute('target', '_blank');
 
     const webcamLink = screen.getByText('Webcams');
-    expect(webcamLink).toBeDefined();
-    expect(webcamLink.closest('a')?.getAttribute('href')).toBe('https://www.lesarcs.com/webcams.html');
+    expect(webcamLink).toBeInTheDocument();
+    expect(webcamLink.closest('a')).toHaveAttribute('href', 'https://www.lesarcs.com/webcams.html');
   });
 
   it('hides links when URLs are null', () => {
@@ -184,8 +199,8 @@ describe('ResortDetailPanel', () => {
       />
     );
 
-    expect(screen.queryByText('Website')).toBeNull();
-    expect(screen.queryByText('Webcams')).toBeNull();
+    expect(screen.queryByText('Website')).not.toBeInTheDocument();
+    expect(screen.queryByText('Webcams')).not.toBeInTheDocument();
   });
 
   it('calls onClose when sheet is closed', () => {
@@ -220,6 +235,28 @@ describe('ResortDetailPanel', () => {
     );
 
     const sheetContent = document.querySelector('[aria-label="Resort details"]');
-    expect(sheetContent).not.toBeNull();
+    expect(sheetContent).toBeInTheDocument();
+  });
+
+  it('handles null altitude values gracefully', () => {
+    const resortNoAltitude: ResortWithConditions = {
+      ...mockResort,
+      altitude_min: null,
+      altitude_max: null,
+    };
+
+    render(
+      <ResortDetailPanel
+        resort={resortNoAltitude}
+        isOpen={true}
+        onClose={vi.fn()}
+        score={85}
+        distanceInfo={mockDistanceInfo}
+      />
+    );
+
+    expect(screen.getByText('Les Arcs')).toBeInTheDocument();
+    // Should not render altitude when both are null
+    expect(screen.queryByText(/null/)).not.toBeInTheDocument();
   });
 });
