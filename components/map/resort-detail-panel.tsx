@@ -12,7 +12,6 @@ import {
   SheetFooter,
 } from '@/components/ui/sheet';
 import {
-  Car,
   ExternalLink,
   MapPin,
 } from 'lucide-react';
@@ -21,6 +20,7 @@ import { RunsLiftsStatus } from '@/components/resort/runs-lifts-status';
 import { CrowdLevelDisplay } from '@/components/resort/crowd-level-display';
 import { WeatherDisplay } from '@/components/resort/weather-display';
 import { TicketPriceDisplay } from '@/components/resort/ticket-price-display';
+import { ParkingDisplay } from '@/components/resort/parking-display';
 
 interface ResortDetailPanelProps {
   resort: ResortWithConditions | null;
@@ -115,22 +115,11 @@ export function ResortDetailPanel({
               {/* Lift Ticket Section */}
               <TicketPriceDisplay adultTicketPrice={conditions.adult_ticket_price} />
 
-              {/* Other conditions grid */}
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <ConditionItem
-                  icon={<Car className="size-4" />}
-                  label="Parking"
-                  value={conditions.parking_status.replace('_', ' ')}
-                  className="capitalize"
-                />
-                {conditions.parking_price !== null && (
-                  <ConditionItem
-                    icon={<Car className="size-4" />}
-                    label="Parking price"
-                    value={conditions.parking_price === 0 ? 'Free' : `€${conditions.parking_price}`}
-                  />
-                )}
-              </div>
+              {/* Parking Section */}
+              <ParkingDisplay
+                parkingStatus={conditions.parking_status}
+                parkingPrice={conditions.parking_price}
+              />
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">No conditions data available</p>
@@ -169,24 +158,3 @@ export function ResortDetailPanel({
   );
 }
 
-function ConditionItem({
-  icon,
-  label,
-  value,
-  className,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  className?: string;
-}) {
-  return (
-    <div className="flex items-center gap-2">
-      <span className="text-muted-foreground shrink-0">{icon}</span>
-      <div className="min-w-0">
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className={`font-medium truncate ${className ?? ''}`}>{value}</p>
-      </div>
-    </div>
-  );
-}

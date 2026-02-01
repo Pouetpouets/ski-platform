@@ -114,6 +114,30 @@ export function formatWeatherCondition(condition: string): string {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+/**
+ * Assess parking quality level.
+ * - Good: available AND free (price === 0 or null)
+ * - Moderate: available+paid OR limited
+ * - Poor: full
+ */
+export function getParkingQualityLevel(
+  parkingStatus: 'available' | 'limited' | 'full',
+  parkingPrice: number | null
+): QualityLevel {
+  if (parkingStatus === 'full') return 'poor';
+  if (parkingStatus === 'limited') return 'moderate';
+  // available
+  if (parkingPrice === null || parkingPrice === 0) return 'good';
+  return 'moderate';
+}
+
+/** Format parking status for display: replace underscores, capitalize */
+export function formatParkingStatus(status: string): string {
+  return status
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 /** Price quality thresholds (adult day pass in EUR) */
 export const PRICE_THRESHOLDS = {
   BUDGET: 45,
