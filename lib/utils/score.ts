@@ -1,13 +1,14 @@
 /**
- * Score calculation utilities
- * Temporary implementation until Epic 4 (Perfect Day Score System)
+ * Perfect Day Score calculation utilities
+ * Each factor scores 0-100, combined via weighted average into final 0-100% score
  */
 
 import type { ResortConditions } from '@/lib/types/database';
 
-/**
- * Score thresholds for color coding
- */
+// =============================================================================
+// SCORE COLOR THRESHOLDS
+// =============================================================================
+
 export const SCORE_THRESHOLDS = {
   EXCELLENT: 80, // >= 80: green
   GOOD: 60,      // >= 60: amber
@@ -15,9 +16,6 @@ export const SCORE_THRESHOLDS = {
   // < 40: red (poor)
 } as const;
 
-/**
- * Get score color class based on score value
- */
 export function getScoreColor(score: number): string {
   if (score >= SCORE_THRESHOLDS.EXCELLENT) return 'bg-score-excellent';
   if (score >= SCORE_THRESHOLDS.GOOD) return 'bg-score-good';
@@ -25,73 +23,195 @@ export function getScoreColor(score: number): string {
   return 'bg-score-poor';
 }
 
-/**
- * Get score color as hex value (for Mapbox markers)
- */
 export function getScoreColorHex(score: number): string {
-  if (score >= SCORE_THRESHOLDS.EXCELLENT) return '#22C55E'; // green
-  if (score >= SCORE_THRESHOLDS.GOOD) return '#F59E0B'; // amber
-  if (score >= SCORE_THRESHOLDS.FAIR) return '#F97316'; // orange
-  return '#EF4444'; // red
+  if (score >= SCORE_THRESHOLDS.EXCELLENT) return '#22C55E';
+  if (score >= SCORE_THRESHOLDS.GOOD) return '#F59E0B';
+  if (score >= SCORE_THRESHOLDS.FAIR) return '#F97316';
+  return '#EF4444';
+}
+
+// =============================================================================
+// SCORING FACTOR NAMES
+// =============================================================================
+
+export const FACTOR_NAMES = ['snow', 'crowd', 'weather', 'price', 'distance', 'parking'] as const;
+export type FactorName = (typeof FACTOR_NAMES)[number];
+
+// =============================================================================
+// DEFAULT EQUAL WEIGHTS (1/6 each)
+// =============================================================================
+
+export const DEFAULT_WEIGHTS: Record<FactorName, number> = {
+  snow: 1 / 6,
+  crowd: 1 / 6,
+  weather: 1 / 6,
+  price: 1 / 6,
+  distance: 1 / 6,
+  parking: 1 / 6,
+};
+
+// =============================================================================
+// INDIVIDUAL FACTOR SCORING FUNCTIONS (each returns 0-100)
+// =============================================================================
+
+/**
+ * Snow quality score based on base depth and fresh snow.
+ * Base depth contributes 70%, fresh snow contributes 30%.
+ */
+export function scoreSnow(snowDepthBase: number | null, freshSnow24h: number): number {
+  // Base depth score (0-100): linear scale, 150cm+ = max
+  let depthScore = 0;
+  if (snowDepthBase !== null) {
+    depthScore = Math.min(100, (snowDepthBase / 150) * 100);
+  }
+
+  // Fresh snow score (0-100): 30cm+ = max
+  const freshScore = Math.min(100, (freshSnow24h / 30) * 100);
+
+  return Math.round(depthScore * 0.7 + freshScore * 0.3);
 }
 
 /**
- * Calculate a simple score based on conditions data
- * This is a placeholder until the full scoring algorithm is implemented
+ * Crowd score - lower crowds = higher score.
+ * Per epic: low=100, moderate=70, high=40, very_high=20
  */
-export function calculateSimpleScore(conditions: ResortConditions | null): number {
-  if (!conditions) return 50; // Default middle score if no data
+export function scoreCrowd(crowdLevel: 'low' | 'moderate' | 'high' | 'very_high'): number {
+  switch (crowdLevel) {
+    case 'low': return 100;
+    case 'moderate': return 70;
+    case 'high': return 40;
+    case 'very_high': return 20;
+  }
+}
 
-  let score = 50; // Base score
+/**
+ * Weather score based on condition.
+ * Per epic: sunny=100, partly_cloudy=90, cloudy=80, snowing=70, rain=30, storm=10
+ */
+export function scoreWeather(weatherCondition: string | null): number {
+  switch (weatherCondition) {
+    case 'sunny': return 100;
+    case 'partly_cloudy': return 90;
+    case 'cloudy': return 80;
+    case 'overcast': return 75;
+    case 'snowing': return 70;
+    case 'rain': return 30;
+    case 'storm': return 10;
+    case 'high_winds': return 20;
+    default: return 60; // unknown or null
+  }
+}
 
-  // Snow factor (up to +20 points)
-  if (conditions.snow_depth_base !== null) {
-    if (conditions.snow_depth_base >= 100) score += 20;
-    else if (conditions.snow_depth_base >= 70) score += 15;
-    else if (conditions.snow_depth_base >= 50) score += 10;
-    else if (conditions.snow_depth_base >= 30) score += 5;
+/**
+ * Price score - cheaper = higher score.
+ * Normalized: €30 or less = 100, €70+ = 0, linear between.
+ */
+const PRICE_MIN = 30;
+const PRICE_MAX = 70;
+
+export function scorePrice(adultTicketPrice: number | null): number {
+  if (adultTicketPrice === null) return 60; // neutral if unknown
+  if (adultTicketPrice <= PRICE_MIN) return 100;
+  if (adultTicketPrice >= PRICE_MAX) return 0;
+  return Math.round(((PRICE_MAX - adultTicketPrice) / (PRICE_MAX - PRICE_MIN)) * 100);
+}
+
+/**
+ * Distance score - closer = higher score.
+ * Decay function: 0km = 100, 50km = 75, 100km = 50, 200km = 25, 400km+ = 0
+ */
+const DISTANCE_MAX_KM = 400;
+
+export function scoreDistance(distanceKm: number | null): number {
+  if (distanceKm === null) return 50; // neutral if unknown
+  if (distanceKm <= 0) return 100;
+  if (distanceKm >= DISTANCE_MAX_KM) return 0;
+  // Inverse linear decay
+  return Math.round(((DISTANCE_MAX_KM - distanceKm) / DISTANCE_MAX_KM) * 100);
+}
+
+/**
+ * Parking score.
+ * Per epic: available+free=100, available+paid=80, limited=60, full=20
+ */
+export function scoreParking(
+  parkingStatus: 'available' | 'limited' | 'full',
+  parkingPrice: number | null
+): number {
+  if (parkingStatus === 'full') return 20;
+  if (parkingStatus === 'limited') return 60;
+  // available
+  if (parkingPrice === null || parkingPrice === 0) return 100;
+  return 80; // available but paid
+}
+
+// =============================================================================
+// FACTOR SCORES INTERFACE
+// =============================================================================
+
+export interface FactorScores {
+  snow: number;
+  crowd: number;
+  weather: number;
+  price: number;
+  distance: number;
+  parking: number;
+}
+
+// =============================================================================
+// PERFECT DAY SCORE CALCULATION
+// =============================================================================
+
+/**
+ * Calculate all individual factor scores for a resort.
+ */
+export function calculateFactorScores(
+  conditions: ResortConditions,
+  distanceKm: number | null
+): FactorScores {
+  return {
+    snow: scoreSnow(conditions.snow_depth_base, conditions.fresh_snow_24h),
+    crowd: scoreCrowd(conditions.crowd_level),
+    weather: scoreWeather(conditions.weather_condition),
+    price: scorePrice(conditions.adult_ticket_price),
+    distance: scoreDistance(distanceKm),
+    parking: scoreParking(conditions.parking_status, conditions.parking_price),
+  };
+}
+
+/**
+ * Combine factor scores into a single Perfect Day Score using weights.
+ */
+export function combinedScore(
+  factors: FactorScores,
+  weights: Record<FactorName, number> = DEFAULT_WEIGHTS
+): number {
+  let total = 0;
+  let weightSum = 0;
+
+  for (const name of FACTOR_NAMES) {
+    total += factors[name] * weights[name];
+    weightSum += weights[name];
   }
 
-  // Fresh snow bonus (up to +15 points)
-  if (conditions.fresh_snow_24h >= 20) score += 15;
-  else if (conditions.fresh_snow_24h >= 10) score += 10;
-  else if (conditions.fresh_snow_24h >= 5) score += 5;
+  // Normalize in case weights don't sum to 1
+  const score = weightSum > 0 ? total / weightSum : 0;
+  return Math.round(Math.max(0, Math.min(100, score)));
+}
 
-  // Crowd factor (up to +15 points)
-  switch (conditions.crowd_level) {
-    case 'low': score += 15; break;
-    case 'moderate': score += 10; break;
-    case 'high': score += 5; break;
-    case 'very_high': score += 0; break;
-  }
+/**
+ * Calculate the Perfect Day Score for a resort.
+ * Returns score (0-100) and individual factor scores.
+ */
+export function calculatePerfectDayScore(
+  conditions: ResortConditions | null,
+  distanceKm: number | null = null,
+  weights: Record<FactorName, number> = DEFAULT_WEIGHTS
+): { score: number; factors: FactorScores | null } {
+  if (!conditions) return { score: 50, factors: null };
 
-  // Open runs/lifts factor (up to +10 points)
-  const runsRatio = conditions.runs_open / conditions.runs_total;
-  const liftsRatio = conditions.lifts_open / conditions.lifts_total;
-  const openRatio = (runsRatio + liftsRatio) / 2;
-  score += Math.round(openRatio * 10);
+  const factors = calculateFactorScores(conditions, distanceKm);
+  const score = combinedScore(factors, weights);
 
-  // Weather factor (up to +10 points)
-  switch (conditions.weather_condition) {
-    case 'sunny': score += 10; break;
-    case 'partly_cloudy': score += 8; break;
-    case 'cloudy': score += 5; break;
-    case 'snowing': score += 6; break; // Good for powder!
-    default: score += 3;
-  }
-
-  // Price factor (up to -10 points for expensive)
-  if (conditions.adult_ticket_price !== null) {
-    if (conditions.adult_ticket_price >= 65) score -= 10;
-    else if (conditions.adult_ticket_price >= 55) score -= 5;
-  }
-
-  // Parking factor (up to -5 points)
-  switch (conditions.parking_status) {
-    case 'full': score -= 5; break;
-    case 'limited': score -= 2; break;
-  }
-
-  // Clamp to 0-100
-  return Math.max(0, Math.min(100, score));
+  return { score, factors };
 }

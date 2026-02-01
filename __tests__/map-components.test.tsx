@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { SkiMapWrapper } from '@/components/map/ski-map-wrapper';
 import type { ResortWithConditions } from '@/lib/types/database';
 import {
-  calculateSimpleScore,
+  calculatePerfectDayScore,
   getScoreColor,
   getScoreColorHex,
   SCORE_THRESHOLDS,
@@ -142,17 +142,18 @@ describe('Distance info for resort card', () => {
 
 describe('Score calculation for resort card', () => {
   it('excellent conditions produce high score', () => {
-    const score = calculateSimpleScore(mockResortWithConditions.conditions);
-    expect(score).toBeGreaterThanOrEqual(SCORE_THRESHOLDS.EXCELLENT);
+    const score = calculatePerfectDayScore(mockResortWithConditions.conditions).score;
+    // Without distance data, score is slightly lower due to neutral distance factor
+    expect(score).toBeGreaterThanOrEqual(SCORE_THRESHOLDS.GOOD);
   });
 
   it('null conditions return default 50', () => {
-    const score = calculateSimpleScore(null);
+    const score = calculatePerfectDayScore(null).score;
     expect(score).toBe(50);
   });
 
   it('score always in 0-100 range for any conditions', () => {
-    const score = calculateSimpleScore(mockResortWithConditions.conditions);
+    const score = calculatePerfectDayScore(mockResortWithConditions.conditions).score;
     expect(score).toBeGreaterThanOrEqual(0);
     expect(score).toBeLessThanOrEqual(100);
   });

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import type mapboxgl from 'mapbox-gl';
 import type { ResortWithConditions } from '@/lib/types/database';
-import { calculateSimpleScore, getScoreColorHex } from '@/lib/utils/score';
+import { calculatePerfectDayScore, getScoreColorHex } from '@/lib/utils/score';
 
 interface ResortMarkersProps {
   map: mapboxgl.Map | null;
@@ -119,7 +119,7 @@ export function ResortMarkers({
 
       // Create markers for each resort
       resorts.forEach((resort) => {
-        const score = calculateSimpleScore(resort.conditions);
+        const { score } = calculatePerfectDayScore(resort.conditions);
         const color = getScoreColorHex(score);
 
         const el = createMarkerElement(score, color);

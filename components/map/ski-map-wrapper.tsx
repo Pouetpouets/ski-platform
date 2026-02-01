@@ -5,7 +5,7 @@ import { SkiMap } from './ski-map';
 import { ResortDetailPanel } from './resort-detail-panel';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { getDistanceInfo } from '@/lib/utils/distance';
-import { calculateSimpleScore } from '@/lib/utils/score';
+import { calculatePerfectDayScore } from '@/lib/utils/score';
 
 interface SkiMapWrapperProps {
   resorts: ResortWithConditions[];
@@ -36,8 +36,9 @@ export function SkiMapWrapper({ resorts }: SkiMapWrapperProps) {
   // Calculate score for selected resort
   const score = useMemo(() => {
     if (!selectedResort) return null;
-    return calculateSimpleScore(selectedResort.conditions);
-  }, [selectedResort]);
+    const distanceKm = distanceInfo?.distance ?? null;
+    return calculatePerfectDayScore(selectedResort.conditions, distanceKm).score;
+  }, [selectedResort, distanceInfo]);
 
   return (
     <>
