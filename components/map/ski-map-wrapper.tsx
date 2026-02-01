@@ -68,7 +68,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
       <Button
         variant="outline"
         size="icon"
-        className="absolute top-4 right-4 z-20 bg-background/90 backdrop-blur-sm shadow-md"
+        className="absolute bottom-6 left-4 z-20 bg-background/90 backdrop-blur-sm shadow-md"
         onClick={() => setSettingsOpen(true)}
         aria-label="Open priority settings"
       >

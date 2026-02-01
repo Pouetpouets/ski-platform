@@ -5,6 +5,12 @@ import { PrioritySettingsPanel } from '@/components/map/priority-settings-panel'
 import { PrioritiesProvider } from '@/lib/contexts/priorities-context';
 import { DEFAULT_PRIORITY_ORDER, FACTOR_LABELS, PRIORITY_WEIGHT_DISTRIBUTION } from '@/lib/utils/score';
 
+// Mock the DB preferences module
+vi.mock('@/lib/data/preferences', () => ({
+  fetchUserPriorities: vi.fn().mockResolvedValue(null),
+  saveUserPriorities: vi.fn().mockResolvedValue(false),
+}));
+
 beforeEach(() => {
   localStorage.clear();
 });

@@ -1,4 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
+
+// Mock the DB preferences module
+vi.mock('@/lib/data/preferences', () => ({
+  fetchUserPriorities: vi.fn().mockResolvedValue(null),
+  saveUserPriorities: vi.fn().mockResolvedValue(false),
+}));
 import { render, screen, fireEvent } from '@testing-library/react';
 import { SkiMapWrapper } from '@/components/map/ski-map-wrapper';
 import type { ResortWithConditions } from '@/lib/types/database';

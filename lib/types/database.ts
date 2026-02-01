@@ -65,6 +65,21 @@ export type ResortUpdate = Partial<ResortInsert>;
 export type ResortConditionsInsert = Omit<ResortConditions, 'id' | 'updated_at'>;
 export type ResortConditionsUpdate = Partial<Omit<ResortConditionsInsert, 'resort_id'>>;
 
+/**
+ * UserPreferences - Stored priority configuration for authenticated users
+ */
+export interface UserPreferences {
+  id: string;
+  user_id: string;
+  priorities: string[]; // FactorName[] stored as JSON
+  language: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type UserPreferencesInsert = Omit<UserPreferences, 'id' | 'created_at' | 'updated_at'>;
+export type UserPreferencesUpdate = Partial<Omit<UserPreferencesInsert, 'user_id'>>;
+
 // =============================================================================
 // JOINED TYPES
 // =============================================================================
@@ -101,6 +116,12 @@ export interface Database {
             referencedColumns: ['id'];
           }
         ];
+      };
+      user_preferences: {
+        Row: UserPreferences;
+        Insert: UserPreferencesInsert & { id?: string; created_at?: string; updated_at?: string };
+        Update: UserPreferencesUpdate & { updated_at?: string };
+        Relationships: [];
       };
     };
     Views: Record<string, never>;

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { getResortsWithConditions } from '@/lib/data/resorts';
 import { SkiMapWrapper } from '@/components/map/ski-map-wrapper';
 import { Skeleton } from '@/components/ui/skeleton';
+import { UserMenu } from '@/components/map/user-menu';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -35,9 +36,12 @@ export default function MapPage() {
             <span className="text-border">|</span>
             <h1 className="text-xl font-bold text-foreground">Ski Platform</h1>
           </div>
-          <p className="text-sm text-muted-foreground hidden sm:block">
-            Find your perfect ski day
-          </p>
+          <div className="flex items-center gap-3">
+            <p className="text-sm text-muted-foreground hidden sm:block">
+              Find your perfect ski day
+            </p>
+            <UserMenu />
+          </div>
         </div>
       </header>
 

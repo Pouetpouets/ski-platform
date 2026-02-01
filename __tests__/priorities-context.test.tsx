@@ -5,6 +5,12 @@ import { PrioritiesProvider, usePriorities, STORAGE_KEY } from '@/lib/contexts/p
 import { DEFAULT_PRIORITY_ORDER } from '@/lib/utils/score';
 import type { FactorName } from '@/lib/utils/score';
 
+// Mock the DB preferences module (not authenticated in tests)
+vi.mock('@/lib/data/preferences', () => ({
+  fetchUserPriorities: vi.fn().mockResolvedValue(null),
+  saveUserPriorities: vi.fn().mockResolvedValue(false),
+}));
+
 // Helper component to display and interact with context
 function PrioritiesDisplay() {
   const { priorityOrder, weights, setPriorityOrder } = usePriorities();

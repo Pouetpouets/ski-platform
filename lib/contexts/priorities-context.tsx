@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import type { FactorName } from '@/lib/utils/score';
 import { DEFAULT_PRIORITY_ORDER, FACTOR_NAMES, priorityOrderToWeights } from '@/lib/utils/score';
+import { fetchUserPriorities, saveUserPriorities } from '@/lib/data/preferences';
 
 const STORAGE_KEY = 'ski-platform-priorities';
 
@@ -55,17 +56,32 @@ function saveToStorage(order: FactorName[]): void {
 export function PrioritiesProvider({ children }: { children: React.ReactNode }) {
   const [priorityOrder, setPriorityOrderState] = useState<FactorName[]>(DEFAULT_PRIORITY_ORDER);
 
-  // Load from localStorage on mount (client-side only)
+  // Load preferences: DB takes precedence over localStorage
   useEffect(() => {
-    const stored = loadFromStorage();
-    if (stored) {
-      setPriorityOrderState(stored);
+    async function loadPriorities() {
+      // First, load from localStorage for immediate display
+      const stored = loadFromStorage();
+      if (stored) {
+        setPriorityOrderState(stored);
+      }
+
+      // Then try to fetch from DB (authenticated users)
+      const dbPriorities = await fetchUserPriorities();
+      if (dbPriorities) {
+        // DB takes precedence - update state and sync localStorage
+        setPriorityOrderState(dbPriorities);
+        saveToStorage(dbPriorities);
+      }
     }
+
+    loadPriorities();
   }, []);
 
   const setPriorityOrder = useCallback((order: FactorName[]) => {
     setPriorityOrderState(order);
     saveToStorage(order);
+    // Fire-and-forget save to DB for authenticated users
+    saveUserPriorities(order);
   }, []);
 
   const weights = useMemo(() => priorityOrderToWeights(priorityOrder), [priorityOrder]);
