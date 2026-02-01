@@ -18,10 +18,9 @@ import {
   ExternalLink,
   MapPin,
   Thermometer,
-  CableCar,
-  Route,
 } from 'lucide-react';
 import { SnowConditions } from '@/components/resort/snow-conditions';
+import { RunsLiftsStatus } from '@/components/resort/runs-lifts-status';
 
 interface ResortDetailPanelProps {
   resort: ResortWithConditions | null;
@@ -95,18 +94,16 @@ export function ResortDetailPanel({
                 freshSnow24h={conditions.fresh_snow_24h}
               />
 
+              {/* Runs & Lifts Section */}
+              <RunsLiftsStatus
+                runsOpen={conditions.runs_open}
+                runsTotal={conditions.runs_total}
+                liftsOpen={conditions.lifts_open}
+                liftsTotal={conditions.lifts_total}
+              />
+
               {/* Other conditions grid */}
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <ConditionItem
-                  icon={<Route className="size-4" />}
-                  label="Runs"
-                  value={`${conditions.runs_open}/${conditions.runs_total}`}
-                />
-                <ConditionItem
-                  icon={<CableCar className="size-4" />}
-                  label="Lifts"
-                  value={`${conditions.lifts_open}/${conditions.lifts_total}`}
-                />
                 <ConditionItem
                   icon={<Users className="size-4" />}
                   label="Crowd"
