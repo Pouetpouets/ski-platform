@@ -3,6 +3,7 @@
 import type { ResortWithConditions } from '@/lib/types/database';
 import type { DistanceInfo } from '@/lib/utils/distance';
 import { getScoreColor } from '@/lib/utils/score';
+import type { FactorScores } from '@/lib/utils/score';
 import {
   Sheet,
   SheetContent,
@@ -22,6 +23,7 @@ import { WeatherDisplay } from '@/components/resort/weather-display';
 import { TicketPriceDisplay } from '@/components/resort/ticket-price-display';
 import { ParkingDisplay } from '@/components/resort/parking-display';
 import { FactorSummary } from '@/components/resort/factor-summary';
+import { ScoreBreakdown } from '@/components/resort/score-breakdown';
 import { getAllFactorLevels } from '@/lib/utils/conditions';
 
 interface ResortDetailPanelProps {
@@ -29,6 +31,7 @@ interface ResortDetailPanelProps {
   isOpen: boolean;
   onClose: () => void;
   score: number | null;
+  factors: FactorScores | null;
   distanceInfo: DistanceInfo | null;
 }
 
@@ -37,6 +40,7 @@ export function ResortDetailPanel({
   isOpen,
   onClose,
   score,
+  factors,
   distanceInfo,
 }: ResortDetailPanelProps) {
   if (!resort) return null;
@@ -128,6 +132,11 @@ export function ResortDetailPanel({
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">No conditions data available</p>
+          )}
+
+          {/* Score Breakdown */}
+          {factors && (
+            <ScoreBreakdown factors={factors} />
           )}
         </div>
 

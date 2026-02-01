@@ -60,6 +60,7 @@ describe('ResortDetailPanel', () => {
         resort={null}
         isOpen={false}
         onClose={vi.fn()}
+        factors={null}
         score={null}
         distanceInfo={null}
       />
@@ -73,6 +74,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResort}
         isOpen={false}
         onClose={vi.fn()}
+        factors={null}
         score={85}
         distanceInfo={mockDistanceInfo}
       />
@@ -88,6 +90,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResort}
         isOpen={true}
         onClose={vi.fn()}
+        factors={null}
         score={85}
         distanceInfo={mockDistanceInfo}
       />
@@ -103,6 +106,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResort}
         isOpen={true}
         onClose={vi.fn()}
+        factors={null}
         score={85}
         distanceInfo={mockDistanceInfo}
       />
@@ -117,6 +121,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResort}
         isOpen={true}
         onClose={vi.fn()}
+        factors={null}
         score={85}
         distanceInfo={mockDistanceInfo}
       />
@@ -143,6 +148,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResortNoConditions}
         isOpen={true}
         onClose={vi.fn()}
+        factors={null}
         score={50}
         distanceInfo={mockDistanceInfo}
       />
@@ -157,6 +163,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResort}
         isOpen={true}
         onClose={vi.fn()}
+        factors={null}
         score={85}
         distanceInfo={mockDistanceInfo}
       />
@@ -173,6 +180,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResort}
         isOpen={true}
         onClose={vi.fn()}
+        factors={null}
         score={85}
         distanceInfo={mockDistanceInfo}
       />
@@ -195,6 +203,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResortNoConditions}
         isOpen={true}
         onClose={vi.fn()}
+        factors={null}
         score={50}
         distanceInfo={mockDistanceInfo}
       />
@@ -212,6 +221,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResort}
         isOpen={true}
         onClose={onClose}
+        factors={null}
         score={85}
         distanceInfo={mockDistanceInfo}
       />
@@ -230,6 +240,7 @@ describe('ResortDetailPanel', () => {
         resort={mockResort}
         isOpen={true}
         onClose={vi.fn()}
+        factors={null}
         score={85}
         distanceInfo={mockDistanceInfo}
       />
@@ -251,6 +262,7 @@ describe('ResortDetailPanel', () => {
         resort={resortNoAltitude}
         isOpen={true}
         onClose={vi.fn()}
+        factors={null}
         score={85}
         distanceInfo={mockDistanceInfo}
       />

@@ -33,11 +33,11 @@ export function SkiMapWrapper({ resorts }: SkiMapWrapperProps) {
     return getDistanceInfo(userLocation, selectedResort.latitude, selectedResort.longitude);
   }, [selectedResort, userLocation]);
 
-  // Calculate score for selected resort
-  const score = useMemo(() => {
+  // Calculate score and factors for selected resort
+  const scoreResult = useMemo(() => {
     if (!selectedResort) return null;
     const distanceKm = distanceInfo?.distance ?? null;
-    return calculatePerfectDayScore(selectedResort.conditions, distanceKm).score;
+    return calculatePerfectDayScore(selectedResort.conditions, distanceKm);
   }, [selectedResort, distanceInfo]);
 
   return (
@@ -53,7 +53,8 @@ export function SkiMapWrapper({ resorts }: SkiMapWrapperProps) {
         resort={selectedResort}
         isOpen={selectedResort !== null}
         onClose={handlePanelClose}
-        score={score}
+        score={scoreResult?.score ?? null}
+        factors={scoreResult?.factors ?? null}
         distanceInfo={distanceInfo}
       />
     </>
