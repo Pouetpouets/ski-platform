@@ -12,7 +12,6 @@ import {
   SheetFooter,
 } from '@/components/ui/sheet';
 import {
-  Ticket,
   Car,
   ExternalLink,
   MapPin,
@@ -21,6 +20,7 @@ import { SnowConditions } from '@/components/resort/snow-conditions';
 import { RunsLiftsStatus } from '@/components/resort/runs-lifts-status';
 import { CrowdLevelDisplay } from '@/components/resort/crowd-level-display';
 import { WeatherDisplay } from '@/components/resort/weather-display';
+import { TicketPriceDisplay } from '@/components/resort/ticket-price-display';
 
 interface ResortDetailPanelProps {
   resort: ResortWithConditions | null;
@@ -112,15 +112,11 @@ export function ResortDetailPanel({
                 temperatureMax={conditions.temperature_max}
               />
 
+              {/* Lift Ticket Section */}
+              <TicketPriceDisplay adultTicketPrice={conditions.adult_ticket_price} />
+
               {/* Other conditions grid */}
               <div className="grid grid-cols-2 gap-4 text-sm">
-                {conditions.adult_ticket_price !== null && (
-                  <ConditionItem
-                    icon={<Ticket className="size-4" />}
-                    label="Day pass"
-                    value={`€${conditions.adult_ticket_price}`}
-                  />
-                )}
                 <ConditionItem
                   icon={<Car className="size-4" />}
                   label="Parking"

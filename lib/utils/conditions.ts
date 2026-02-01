@@ -113,3 +113,24 @@ export function formatWeatherCondition(condition: string): string {
     .replace(/_/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
+
+/** Price quality thresholds (adult day pass in EUR) */
+export const PRICE_THRESHOLDS = {
+  BUDGET: 45,
+  AVERAGE: 55,
+} as const;
+
+/**
+ * Assess lift ticket price quality level.
+ * - Good: < €45 (budget-friendly)
+ * - Moderate: €45-€55 (average)
+ * - Poor: > €55 (premium)
+ */
+export function getPriceQualityLevel(
+  adultTicketPrice: number | null
+): QualityLevel {
+  if (adultTicketPrice === null) return 'moderate';
+  if (adultTicketPrice < PRICE_THRESHOLDS.BUDGET) return 'good';
+  if (adultTicketPrice <= PRICE_THRESHOLDS.AVERAGE) return 'moderate';
+  return 'poor';
+}
