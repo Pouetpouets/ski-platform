@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import {
   Mountain,
   MapPin,
@@ -14,6 +15,8 @@ import {
 } from 'lucide-react';
 
 function HeroSection() {
+  const t = useTranslations('landing');
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {/* Animated gradient background */}
@@ -60,20 +63,16 @@ function HeroSection() {
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 mb-8">
           <Sparkles className="h-4 w-4 text-sky-300" />
           <span className="text-sm text-sky-200 font-medium">
-            Perfect Day Score Algorithm
+            {t('badge')}
           </span>
         </div>
 
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-6">
-          Find your
-          <span className="block mt-2 bg-gradient-to-r from-sky-300 via-cyan-200 to-blue-300 bg-clip-text text-transparent">
-            perfect ski day
-          </span>
+          {t('title')}
         </h1>
 
         <p className="text-lg sm:text-xl text-blue-200/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Real-time snow conditions, crowd predictions, weather forecasts, and a
-          smart scoring algorithm to help you pick the best resort — today.
+          {t('description')}
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -82,7 +81,7 @@ function HeroSection() {
             className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-950 font-semibold rounded-xl hover:bg-sky-50 transition-all duration-200 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
           >
             <MapPin className="h-5 w-5" />
-            Explore the Map
+            {t('exploreCta')}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
 
@@ -90,16 +89,16 @@ function HeroSection() {
             href="#features"
             className="inline-flex items-center gap-2 px-8 py-4 text-white/80 font-medium rounded-xl border border-white/15 hover:bg-white/10 hover:text-white transition-all duration-200 backdrop-blur-sm"
           >
-            Discover Features
+            {t('discoverFeatures')}
           </a>
         </div>
 
         {/* Stats bar */}
         <div className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto">
           {[
-            { value: '12', label: 'Alpine Resorts' },
-            { value: '6', label: 'Score Factors' },
-            { value: '<500ms', label: 'Score Calc' },
+            { value: '12', label: t('statResorts') },
+            { value: '6', label: t('statFactors') },
+            { value: '<500ms', label: t('statCalc') },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-2xl font-bold text-white">{stat.value}</div>
@@ -117,64 +116,54 @@ function HeroSection() {
   );
 }
 
-const features = [
+const featureKeys = [
   {
+    titleKey: 'featurePerfectDay',
+    descKey: 'featurePerfectDayDesc',
     icon: TrendingUp,
-    title: 'Perfect Day Score',
-    description:
-      'Our algorithm weighs 6 real-time factors to give each resort a score from 0 to 100 — so you know exactly where to go.',
-    color: 'from-emerald-500 to-green-600',
     bgColor: 'bg-emerald-500/10',
     iconColor: 'text-emerald-400',
   },
   {
+    titleKey: 'featureSnow',
+    descKey: 'featureSnowDesc',
     icon: Snowflake,
-    title: 'Snow Conditions',
-    description:
-      'Base depth, summit depth, and fresh snow in the last 24h. Get Powder Alerts when over 20cm of fresh snow falls.',
-    color: 'from-sky-500 to-cyan-600',
     bgColor: 'bg-sky-500/10',
     iconColor: 'text-sky-400',
   },
   {
+    titleKey: 'featureCrowd',
+    descKey: 'featureCrowdDesc',
     icon: Users,
-    title: 'Crowd Predictions',
-    description:
-      'Know how crowded each resort will be before you leave. Avoid the queues and find hidden quiet spots.',
-    color: 'from-violet-500 to-purple-600',
     bgColor: 'bg-violet-500/10',
     iconColor: 'text-violet-400',
   },
   {
+    titleKey: 'featureWeather',
+    descKey: 'featureWeatherDesc',
     icon: Sun,
-    title: 'Weather Forecast',
-    description:
-      'Real-time weather data with condition icons: sunny, cloudy, snowing, or storm. Plan with confidence.',
-    color: 'from-amber-500 to-orange-600',
     bgColor: 'bg-amber-500/10',
     iconColor: 'text-amber-400',
   },
   {
+    titleKey: 'featurePrice',
+    descKey: 'featurePriceDesc',
     icon: Ticket,
-    title: 'Lift Ticket Pricing',
-    description:
-      'Compare adult day pass prices across resorts. Color-coded quality indicators show you the best deals.',
-    color: 'from-rose-500 to-pink-600',
     bgColor: 'bg-rose-500/10',
     iconColor: 'text-rose-400',
   },
   {
+    titleKey: 'featureDistance',
+    descKey: 'featureDistanceDesc',
     icon: Car,
-    title: 'Distance & Driving',
-    description:
-      'GPS-powered distance calculation and estimated driving times from your current location to each resort.',
-    color: 'from-teal-500 to-emerald-600',
     bgColor: 'bg-teal-500/10',
     iconColor: 'text-teal-400',
   },
-];
+] as const;
 
 function FeaturesSection() {
+  const t = useTranslations('landing');
+
   return (
     <section id="features" className="relative py-32 px-6 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
       <div className="max-w-6xl mx-auto">
@@ -186,23 +175,22 @@ function FeaturesSection() {
             </span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
-            Everything you need to
+            {t('featuresTitle')}
             <span className="block text-sky-600 dark:text-sky-400">
-              choose your resort
+              {t('featuresHighlight')}
             </span>
           </h2>
           <p className="mt-6 text-muted-foreground max-w-2xl mx-auto text-lg">
-            Six real-time factors, one smart score. No more guessing — just open
-            the map and go where the snow is best.
+            {t('featuresDescription')}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => {
+          {featureKeys.map((feature) => {
             const Icon = feature.icon;
             return (
               <div
-                key={feature.title}
+                key={feature.titleKey}
                 className="group relative p-8 rounded-2xl bg-card border border-border/50 hover:border-border hover:shadow-lg hover:shadow-black/5 transition-all duration-300 hover:-translate-y-1"
               >
                 <div
@@ -211,10 +199,10 @@ function FeaturesSection() {
                   <Icon className={`h-6 w-6 ${feature.iconColor}`} />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-3">
-                  {feature.title}
+                  {t(feature.titleKey)}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed text-[15px]">
-                  {feature.description}
+                  {t(feature.descKey)}
                 </p>
               </div>
             );
@@ -226,14 +214,16 @@ function FeaturesSection() {
 }
 
 function ScoreExplainerSection() {
+  const t = useTranslations('landing');
+
   const factors = [
-    { label: 'Snow Quality', weight: '16.7%', emoji: '❄️', desc: 'Base depth + fresh snow combined' },
-    { label: 'Crowd Level', weight: '16.7%', emoji: '👥', desc: 'Low, moderate, high, or packed' },
-    { label: 'Weather', weight: '16.7%', emoji: '☀️', desc: 'Sunny, cloudy, snowing, or storm' },
-    { label: 'Lift Price', weight: '16.7%', emoji: '🎫', desc: 'Normalized from €30 to €70' },
-    { label: 'Distance', weight: '16.7%', emoji: '📍', desc: 'Based on your GPS location' },
-    { label: 'Parking', weight: '16.7%', emoji: '🅿️', desc: 'Available, limited, or full' },
-  ];
+    { key: 'scoreSnow', descKey: 'scoreSnowDesc', emoji: '❄️' },
+    { key: 'scoreCrowd', descKey: 'scoreCrowdDesc', emoji: '👥' },
+    { key: 'scoreWeather', descKey: 'scoreWeatherDesc', emoji: '☀️' },
+    { key: 'scorePrice', descKey: 'scorePriceDesc', emoji: '🎫' },
+    { key: 'scoreDistance', descKey: 'scoreDistanceDesc', emoji: '📍' },
+    { key: 'scoreParking', descKey: 'scoreParkingDesc', emoji: '🅿️' },
+  ] as const;
 
   return (
     <section className="relative py-32 px-6 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 overflow-hidden">
@@ -243,31 +233,30 @@ function ScoreExplainerSection() {
       <div className="relative max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
-            How the Score Works
+            {t('scoreTitle')}
           </h2>
           <p className="mt-4 text-muted-foreground max-w-xl mx-auto text-lg">
-            Six equally weighted factors combine into a single 0-100 score,
-            calculated client-side in under 500ms.
+            {t('scoreDescription')}
           </p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {factors.map((f) => (
             <div
-              key={f.label}
+              key={f.key}
               className="flex items-start gap-4 p-5 rounded-xl bg-card/80 backdrop-blur-sm border border-border/40"
             >
               <span className="text-2xl">{f.emoji}</span>
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-foreground">
-                    {f.label}
+                    {t(f.key)}
                   </span>
                   <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-                    {f.weight}
+                    16.7%
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">{f.desc}</p>
+                <p className="text-sm text-muted-foreground mt-1">{t(f.descKey)}</p>
               </div>
             </div>
           ))}
@@ -276,10 +265,10 @@ function ScoreExplainerSection() {
         {/* Score color legend */}
         <div className="mt-12 flex flex-wrap items-center justify-center gap-6">
           {[
-            { range: '80-100', label: 'Excellent', class: 'bg-score-excellent' },
-            { range: '60-79', label: 'Good', class: 'bg-score-good' },
-            { range: '40-59', label: 'Fair', class: 'bg-score-fair' },
-            { range: '0-39', label: 'Poor', class: 'bg-score-poor' },
+            { range: '80-100', labelKey: 'excellent' as const, class: 'bg-score-excellent' },
+            { range: '60-79', labelKey: 'good' as const, class: 'bg-score-good' },
+            { range: '40-59', labelKey: 'fair' as const, class: 'bg-score-fair' },
+            { range: '0-39', labelKey: 'poor' as const, class: 'bg-score-poor' },
           ].map((tier) => (
             <div key={tier.range} className="flex items-center gap-2">
               <div className={`w-3 h-3 rounded-full ${tier.class}`} />
@@ -287,7 +276,7 @@ function ScoreExplainerSection() {
                 <span className="font-medium text-foreground">
                   {tier.range}
                 </span>{' '}
-                {tier.label}
+                {t(tier.labelKey)}
               </span>
             </div>
           ))}
@@ -298,6 +287,8 @@ function ScoreExplainerSection() {
 }
 
 function ResortsPreviewSection() {
+  const t = useTranslations('landing');
+
   const resorts = [
     'Les Arcs', 'Val d\'Isere', 'Courchevel', 'Chamonix',
     'Meribel', 'Tignes', 'La Plagne', 'Megeve',
@@ -308,11 +299,10 @@ function ResortsPreviewSection() {
     <section className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-4">
-          12 French Alps Resorts
+          {t('resortsTitle')}
         </h2>
         <p className="text-muted-foreground text-lg mb-12 max-w-xl mx-auto">
-          From legendary powder to family-friendly slopes — all the best spots
-          between Lyon, Grenoble, Annecy, and Geneva.
+          {t('resortsDescription')}
         </p>
 
         <div className="flex flex-wrap justify-center gap-3">
@@ -331,6 +321,8 @@ function ResortsPreviewSection() {
 }
 
 function CTASection() {
+  const t = useTranslations('landing');
+
   return (
     <section className="relative py-32 px-6 overflow-hidden">
       {/* Gradient background matching hero */}
@@ -352,18 +344,17 @@ function CTASection() {
 
       <div className="relative z-10 max-w-3xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
-          Ready to hit the slopes?
+          {t('ctaTitle')}
         </h2>
         <p className="mt-6 text-blue-200/70 text-lg max-w-xl mx-auto">
-          Open the interactive map, allow your GPS, and instantly see which
-          resort has the best conditions for you — right now.
+          {t('ctaDescription')}
         </p>
         <Link
           href="/map"
           className="group inline-flex items-center gap-2 mt-10 px-10 py-5 bg-white text-blue-950 font-semibold text-lg rounded-xl hover:bg-sky-50 transition-all duration-200 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
         >
           <MapPin className="h-5 w-5" />
-          Open the Map
+          {t('ctaButton')}
           <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
         </Link>
       </div>
@@ -372,15 +363,18 @@ function CTASection() {
 }
 
 function Footer() {
+  const t = useTranslations('landing');
+  const tCommon = useTranslations('common');
+
   return (
     <footer className="py-8 px-6 bg-slate-50 dark:bg-slate-950 border-t border-border/50">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Mountain className="h-5 w-5 text-sky-600 dark:text-sky-400" />
-          <span className="font-semibold text-foreground">Ski Platform</span>
+          <span className="font-semibold text-foreground">{tCommon('peakPick')}</span>
         </div>
         <p className="text-sm text-muted-foreground">
-          French Alps ski conditions & scoring
+          {t('footer')}
         </p>
       </div>
     </footer>

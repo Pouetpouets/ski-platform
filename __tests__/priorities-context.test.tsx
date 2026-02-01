@@ -88,8 +88,8 @@ describe('localStorage persistence', () => {
 
     await user.click(screen.getByTestId('reorder'));
 
-    expect(STORAGE_KEY).toBe('ski-platform-priorities');
-    expect(localStorage.getItem('ski-platform-priorities')).not.toBeNull();
+    expect(STORAGE_KEY).toBe('peakpick-priorities');
+    expect(localStorage.getItem('peakpick-priorities')).not.toBeNull();
   });
 
   it('loads saved priorities from localStorage on mount', async () => {

@@ -1,6 +1,6 @@
-# Ski Platform
+# PeakPick
 
-**Perfect Day Score** - A decision-support web application for skiers facing "where should I ski today?" paralysis.
+**Pick your perfect ski day.** A decision-support web application for skiers facing "where should I ski today?" paralysis.
 
 ## Overview
 
