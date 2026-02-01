@@ -12,17 +12,16 @@ import {
   SheetFooter,
 } from '@/components/ui/sheet';
 import {
-  Snowflake,
-  Mountain,
   Users,
   Ticket,
   Car,
   ExternalLink,
   MapPin,
-  CloudSnow,
   Thermometer,
   CableCar,
+  Route,
 } from 'lucide-react';
+import { SnowConditions } from '@/components/resort/snow-conditions';
 
 interface ResortDetailPanelProps {
   resort: ResortWithConditions | null;
@@ -88,75 +87,68 @@ export function ResortDetailPanel({
 
           {/* Conditions */}
           {conditions ? (
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <ConditionItem
-                icon={<Snowflake className="size-4" />}
-                label="Base snow"
-                value={`${conditions.snow_depth_base ?? '?'}cm`}
+            <div className="flex flex-col gap-5">
+              {/* Snow Conditions Section */}
+              <SnowConditions
+                snowDepthBase={conditions.snow_depth_base}
+                snowDepthSummit={conditions.snow_depth_summit}
+                freshSnow24h={conditions.fresh_snow_24h}
               />
-              <ConditionItem
-                icon={<Mountain className="size-4" />}
-                label="Summit snow"
-                value={`${conditions.snow_depth_summit ?? '?'}cm`}
-              />
-              <ConditionItem
-                icon={<Snowflake className="size-4" />}
-                label="Runs"
-                value={`${conditions.runs_open}/${conditions.runs_total}`}
-              />
-              <ConditionItem
-                icon={<CableCar className="size-4" />}
-                label="Lifts"
-                value={`${conditions.lifts_open}/${conditions.lifts_total}`}
-              />
-              <ConditionItem
-                icon={<Users className="size-4" />}
-                label="Crowd"
-                value={conditions.crowd_level.replace('_', ' ')}
-                className="capitalize"
-              />
-              {conditions.weather_condition && (
+
+              {/* Other conditions grid */}
+              <div className="grid grid-cols-2 gap-4 text-sm">
                 <ConditionItem
-                  icon={<Thermometer className="size-4" />}
-                  label="Weather"
-                  value={conditions.weather_condition.replace('_', ' ')}
+                  icon={<Route className="size-4" />}
+                  label="Runs"
+                  value={`${conditions.runs_open}/${conditions.runs_total}`}
+                />
+                <ConditionItem
+                  icon={<CableCar className="size-4" />}
+                  label="Lifts"
+                  value={`${conditions.lifts_open}/${conditions.lifts_total}`}
+                />
+                <ConditionItem
+                  icon={<Users className="size-4" />}
+                  label="Crowd"
+                  value={conditions.crowd_level.replace('_', ' ')}
                   className="capitalize"
                 />
-              )}
-              {conditions.temperature_min !== null && conditions.temperature_max !== null && (
-                <ConditionItem
-                  icon={<Thermometer className="size-4" />}
-                  label="Temp"
-                  value={`${conditions.temperature_min}° / ${conditions.temperature_max}°C`}
-                />
-              )}
-              {conditions.adult_ticket_price !== null && (
-                <ConditionItem
-                  icon={<Ticket className="size-4" />}
-                  label="Day pass"
-                  value={`€${conditions.adult_ticket_price}`}
-                />
-              )}
-              <ConditionItem
-                icon={<Car className="size-4" />}
-                label="Parking"
-                value={conditions.parking_status.replace('_', ' ')}
-                className="capitalize"
-              />
-              {conditions.parking_price !== null && (
+                {conditions.weather_condition && (
+                  <ConditionItem
+                    icon={<Thermometer className="size-4" />}
+                    label="Weather"
+                    value={conditions.weather_condition.replace('_', ' ')}
+                    className="capitalize"
+                  />
+                )}
+                {conditions.temperature_min !== null && conditions.temperature_max !== null && (
+                  <ConditionItem
+                    icon={<Thermometer className="size-4" />}
+                    label="Temp"
+                    value={`${conditions.temperature_min}° / ${conditions.temperature_max}°C`}
+                  />
+                )}
+                {conditions.adult_ticket_price !== null && (
+                  <ConditionItem
+                    icon={<Ticket className="size-4" />}
+                    label="Day pass"
+                    value={`€${conditions.adult_ticket_price}`}
+                  />
+                )}
                 <ConditionItem
                   icon={<Car className="size-4" />}
-                  label="Parking price"
-                  value={conditions.parking_price === 0 ? 'Free' : `€${conditions.parking_price}`}
+                  label="Parking"
+                  value={conditions.parking_status.replace('_', ' ')}
+                  className="capitalize"
                 />
-              )}
-              {conditions.fresh_snow_24h > 0 && (
-                <ConditionItem
-                  icon={<CloudSnow className="size-4" />}
-                  label="Fresh snow"
-                  value={`+${conditions.fresh_snow_24h}cm`}
-                />
-              )}
+                {conditions.parking_price !== null && (
+                  <ConditionItem
+                    icon={<Car className="size-4" />}
+                    label="Parking price"
+                    value={conditions.parking_price === 0 ? 'Free' : `€${conditions.parking_price}`}
+                  />
+                )}
+              </div>
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">No conditions data available</p>
