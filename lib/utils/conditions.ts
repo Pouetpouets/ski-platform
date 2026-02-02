@@ -43,14 +43,14 @@ export const OPEN_PERCENTAGE_THRESHOLDS = {
  * - Poor: < 50% open or no data (total = 0)
  */
 export function getRunsLiftsQualityLevel(
-  runsOpen: number,
-  runsTotal: number,
+  slopesOpenKm: number,
+  slopesTotalKm: number,
   liftsOpen: number,
   liftsTotal: number
 ): QualityLevel {
-  const total = runsTotal + liftsTotal;
+  const total = slopesTotalKm + liftsTotal;
   if (total === 0) return 'poor';
-  const percentage = ((runsOpen + liftsOpen) / total) * 100;
+  const percentage = ((slopesOpenKm + liftsOpen) / total) * 100;
   if (percentage > OPEN_PERCENTAGE_THRESHOLDS.GOOD) return 'good';
   if (percentage >= OPEN_PERCENTAGE_THRESHOLDS.MODERATE) return 'moderate';
   return 'poor';
@@ -145,8 +145,8 @@ export function formatParkingStatus(status: string): string {
 export function getAllFactorLevels(conditions: {
   snow_depth_base: number | null;
   fresh_snow_24h: number;
-  runs_open: number;
-  runs_total: number;
+  slopes_open_km: number;
+  slopes_total_km: number;
   lifts_open: number;
   lifts_total: number;
   crowd_level: 'low' | 'moderate' | 'high' | 'very_high';
@@ -157,7 +157,7 @@ export function getAllFactorLevels(conditions: {
 }): QualityLevel[] {
   return [
     getSnowQualityLevel(conditions.snow_depth_base, conditions.fresh_snow_24h),
-    getRunsLiftsQualityLevel(conditions.runs_open, conditions.runs_total, conditions.lifts_open, conditions.lifts_total),
+    getRunsLiftsQualityLevel(conditions.slopes_open_km, conditions.slopes_total_km, conditions.lifts_open, conditions.lifts_total),
     getCrowdQualityLevel(conditions.crowd_level),
     getWeatherQualityLevel(conditions.weather_condition),
     getPriceQualityLevel(conditions.adult_ticket_price),

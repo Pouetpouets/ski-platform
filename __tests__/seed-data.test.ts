@@ -7,12 +7,11 @@ import {
   RESORT_IDS,
   getResort,
   getConditions,
-  validateCoordinates,
 } from '@/lib/seed/resorts';
 
-describe('Seed Data: French Alps Resorts', () => {
+describe('Seed Data: Ski Resorts', () => {
   describe('Resort Count', () => {
-    it('should have at least 10 resorts (FR41)', () => {
+    it('should have at least 10 resorts', () => {
       expect(SEED_RESORTS.length).toBeGreaterThanOrEqual(10);
     });
 
@@ -55,6 +54,9 @@ describe('Seed Data: French Alps Resorts', () => {
         expect(typeof resort.longitude).toBe('number');
         expect(resort.altitude_min).toBeGreaterThan(0);
         expect(resort.altitude_max).toBeGreaterThan(resort.altitude_min!);
+        expect(resort.country).toBeTruthy();
+        expect(resort.region).toBeTruthy();
+        expect(resort.skiresort_info_slug).toBeTruthy();
         expect(resort.website_url).toMatch(/^https?:\/\//);
         expect(resort.webcam_url).toMatch(/^https?:\/\//);
       });
@@ -74,21 +76,17 @@ describe('Seed Data: French Alps Resorts', () => {
   });
 
   describe('Coordinate Validation', () => {
-    it('should have all coordinates within French Alps bounds', () => {
-      expect(validateCoordinates()).toBe(true);
-    });
-
-    it('should have valid latitude range (44.5°N - 46.5°N)', () => {
+    it('should have valid latitude range (-90 to 90)', () => {
       SEED_RESORTS.forEach((resort) => {
-        expect(resort.latitude).toBeGreaterThanOrEqual(44.5);
-        expect(resort.latitude).toBeLessThanOrEqual(46.5);
+        expect(resort.latitude).toBeGreaterThanOrEqual(-90);
+        expect(resort.latitude).toBeLessThanOrEqual(90);
       });
     });
 
-    it('should have valid longitude range (5.5°E - 7.5°E)', () => {
+    it('should have valid longitude range (-180 to 180)', () => {
       SEED_RESORTS.forEach((resort) => {
-        expect(resort.longitude).toBeGreaterThanOrEqual(5.5);
-        expect(resort.longitude).toBeLessThanOrEqual(7.5);
+        expect(resort.longitude).toBeGreaterThanOrEqual(-180);
+        expect(resort.longitude).toBeLessThanOrEqual(180);
       });
     });
   });
@@ -183,10 +181,10 @@ describe('Seed Data: French Alps Resorts', () => {
     });
   });
 
-  describe('Lift/Run Data', () => {
-    it('should have runs_open <= runs_total', () => {
+  describe('Slopes/Lift Data', () => {
+    it('should have slopes_open_km <= slopes_total_km', () => {
       SEED_CONDITIONS.forEach((cond) => {
-        expect(cond.runs_open).toBeLessThanOrEqual(cond.runs_total);
+        expect(cond.slopes_open_km).toBeLessThanOrEqual(cond.slopes_total_km);
       });
     });
 
@@ -196,10 +194,10 @@ describe('Seed Data: French Alps Resorts', () => {
       });
     });
 
-    it('should have positive runs and lifts counts', () => {
+    it('should have positive slopes and lifts counts', () => {
       SEED_CONDITIONS.forEach((cond) => {
-        expect(cond.runs_open).toBeGreaterThan(0);
-        expect(cond.runs_total).toBeGreaterThan(0);
+        expect(cond.slopes_open_km).toBeGreaterThan(0);
+        expect(cond.slopes_total_km).toBeGreaterThan(0);
         expect(cond.lifts_open).toBeGreaterThan(0);
         expect(cond.lifts_total).toBeGreaterThan(0);
       });

@@ -12,6 +12,9 @@ const mockResort: ResortWithConditions = {
   longitude: 6.8281,
   altitude_min: 1200,
   altitude_max: 3226,
+  country: 'France',
+  region: 'Savoie',
+  skiresort_info_slug: 'les-arcs-bourg-saint-maurice',
   website_url: 'https://www.lesarcs.com',
   webcam_url: 'https://www.lesarcs.com/webcams.html',
   created_at: '2024-01-01T00:00:00Z',
@@ -22,8 +25,8 @@ const mockResort: ResortWithConditions = {
     snow_depth_base: 120,
     snow_depth_summit: 180,
     fresh_snow_24h: 15,
-    runs_open: 98,
-    runs_total: 106,
+    slopes_open_km: 98,
+    slopes_total_km: 106,
     lifts_open: 45,
     lifts_total: 51,
     crowd_level: 'low',
@@ -41,6 +44,9 @@ const mockResortNoConditions: ResortWithConditions = {
   ...mockResort,
   id: 'test-resort-2',
   name: 'Test Resort',
+  country: null,
+  region: null,
+  skiresort_info_slug: null,
   conditions: null,
   website_url: null,
   webcam_url: null,
@@ -130,8 +136,8 @@ describe('ResortDetailPanel', () => {
     // Snow
     expect(screen.getByText('120cm')).toBeInTheDocument();
     expect(screen.getByText('180cm')).toBeInTheDocument();
-    // Runs
-    expect(screen.getByText('98/106')).toBeInTheDocument();
+    // Slopes
+    expect(screen.getByText('98km / 106km')).toBeInTheDocument();
     // Lifts
     expect(screen.getByText('45/51')).toBeInTheDocument();
     // Crowd (formatted by CrowdLevelDisplay)

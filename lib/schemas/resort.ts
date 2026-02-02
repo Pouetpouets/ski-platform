@@ -41,6 +41,9 @@ export const ResortSchema = z.object({
   longitude: z.number().min(-180).max(180),
   altitude_min: z.number().int().positive().nullable(),
   altitude_max: z.number().int().positive().nullable(),
+  country: z.string().nullable(),
+  region: z.string().nullable(),
+  skiresort_info_slug: z.string().nullable(),
   website_url: z.string().url().nullable(),
   webcam_url: z.string().url().nullable(),
   created_at: z.string().datetime(),
@@ -77,9 +80,9 @@ const ResortConditionsBaseSchema = z.object({
   snow_depth_summit: z.number().int().nonnegative().nullable(),
   fresh_snow_24h: z.number().int().nonnegative().default(0),
 
-  // Runs and lifts
-  runs_open: z.number().int().nonnegative(),
-  runs_total: z.number().int().positive(),
+  // Slopes (km) and lifts
+  slopes_open_km: z.number().nonnegative(),
+  slopes_total_km: z.number().positive(),
   lifts_open: z.number().int().nonnegative(),
   lifts_total: z.number().int().positive(),
 
@@ -107,8 +110,8 @@ type ConditionsBase = z.infer<typeof ResortConditionsBaseSchema>;
 
 function addConditionsRefinements<T extends z.ZodType<ConditionsBase>>(schema: T) {
   return schema.refine(
-    (data) => data.runs_open <= data.runs_total,
-    { message: 'runs_open cannot exceed runs_total', path: ['runs_open'] }
+    (data) => data.slopes_open_km <= data.slopes_total_km,
+    { message: 'slopes_open_km cannot exceed slopes_total_km', path: ['slopes_open_km'] }
   ).refine(
     (data) => data.lifts_open <= data.lifts_total,
     { message: 'lifts_open cannot exceed lifts_total', path: ['lifts_open'] }
@@ -194,28 +197,3 @@ export function validateResortWithConditions(data: unknown): ResortWithCondition
   return ResortWithConditionsSchema.parse(data);
 }
 
-// =============================================================================
-// FRENCH ALPS COORDINATE BOUNDS (for validation)
-// =============================================================================
-
-export const FRENCH_ALPS_BOUNDS = {
-  latMin: 44.5,
-  latMax: 46.5,
-  lonMin: 5.5,
-  lonMax: 7.5,
-} as const;
-
-/**
- * Schema for validating coordinates are within French Alps
- */
-export const FrenchAlpsCoordinatesSchema = z.object({
-  latitude: z.number().min(FRENCH_ALPS_BOUNDS.latMin).max(FRENCH_ALPS_BOUNDS.latMax),
-  longitude: z.number().min(FRENCH_ALPS_BOUNDS.lonMin).max(FRENCH_ALPS_BOUNDS.lonMax),
-});
-
-/**
- * Validate that coordinates are within French Alps region
- */
-export function isInFrenchAlps(lat: number, lon: number): boolean {
-  return FrenchAlpsCoordinatesSchema.safeParse({ latitude: lat, longitude: lon }).success;
-}

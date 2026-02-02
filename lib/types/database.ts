@@ -26,6 +26,9 @@ export interface Resort {
   longitude: number;
   altitude_min: number | null;
   altitude_max: number | null;
+  country: string | null;
+  region: string | null;
+  skiresort_info_slug: string | null;
   website_url: string | null;
   webcam_url: string | null;
   created_at: string;
@@ -41,8 +44,8 @@ export interface ResortConditions {
   snow_depth_base: number | null;
   snow_depth_summit: number | null;
   fresh_snow_24h: number;
-  runs_open: number;
-  runs_total: number;
+  slopes_open_km: number;
+  slopes_total_km: number;
   lifts_open: number;
   lifts_total: number;
   crowd_level: CrowdLevel;

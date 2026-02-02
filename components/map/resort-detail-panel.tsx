@@ -111,8 +111,8 @@ export function ResortDetailPanel({
 
               {/* Runs & Lifts Section */}
               <RunsLiftsStatus
-                runsOpen={conditions.runs_open}
-                runsTotal={conditions.runs_total}
+                slopesOpenKm={conditions.slopes_open_km}
+                slopesTotalKm={conditions.slopes_total_km}
                 liftsOpen={conditions.lifts_open}
                 liftsTotal={conditions.lifts_total}
               />

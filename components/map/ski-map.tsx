@@ -6,14 +6,13 @@ import type mapboxgl from 'mapbox-gl';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { ResortMarkers } from './resort-markers';
 
-// French Alps center coordinates
-const FRENCH_ALPS_CENTER = {
-  latitude: 45.9,
-  longitude: 6.9,
+// Fallback: Europe overview when no resorts loaded
+const FALLBACK_CENTER = {
+  latitude: 46,
+  longitude: 10,
 } as const;
 
-// Default zoom level to show French Alps overview
-const DEFAULT_ZOOM = 8;
+const FALLBACK_ZOOM = 3;
 
 // Zoom level when centered on user location
 const USER_LOCATION_ZOOM = 9;
@@ -28,6 +27,25 @@ interface SkiMapProps {
   onMapLoad?: () => void;
   onUserLocationChange?: (coords: { latitude: number; longitude: number } | null) => void;
   onResortClick?: (resort: ResortWithConditions) => void;
+}
+
+/**
+ * Compute a bounding box from an array of resorts for fitBounds
+ */
+function computeBounds(resorts: ResortWithConditions[]): [[number, number], [number, number]] | null {
+  if (resorts.length === 0) return null;
+
+  let minLng = Infinity, maxLng = -Infinity;
+  let minLat = Infinity, maxLat = -Infinity;
+
+  for (const r of resorts) {
+    if (r.longitude < minLng) minLng = r.longitude;
+    if (r.longitude > maxLng) maxLng = r.longitude;
+    if (r.latitude < minLat) minLat = r.latitude;
+    if (r.latitude > maxLat) maxLat = r.latitude;
+  }
+
+  return [[minLng, minLat], [maxLng, maxLat]];
 }
 
 export function SkiMap({
@@ -52,6 +70,10 @@ export function SkiMap({
   onMapLoadRef.current = onMapLoad;
   onUserLocationChangeRef.current = onUserLocationChange;
 
+  // Store resorts in ref for use in map load callback
+  const resortsRef = useRef(resorts);
+  resortsRef.current = resorts;
+
   // Get token from environment
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -69,8 +91,8 @@ export function SkiMap({
       const map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: MAP_STYLE,
-        center: [FRENCH_ALPS_CENTER.longitude, FRENCH_ALPS_CENTER.latitude],
-        zoom: DEFAULT_ZOOM,
+        center: [FALLBACK_CENTER.longitude, FALLBACK_CENTER.latitude],
+        zoom: FALLBACK_ZOOM,
       });
 
       // Add navigation controls (zoom +/-)
@@ -114,6 +136,12 @@ export function SkiMap({
         setIsLoaded(true);
         setMapInstance(map);
         onMapLoadRef.current?.();
+
+        // Auto-fit bounds to loaded resorts
+        const bounds = computeBounds(resortsRef.current);
+        if (bounds) {
+          map.fitBounds(bounds, { padding: 60, maxZoom: 10, duration: 0 });
+        }
 
         // Auto-trigger geolocation request after map loads
         setTimeout(() => {
@@ -182,4 +210,4 @@ export function SkiMap({
   );
 }
 
-export { FRENCH_ALPS_CENTER, DEFAULT_ZOOM, USER_LOCATION_ZOOM };
+export { FALLBACK_CENTER, FALLBACK_ZOOM, USER_LOCATION_ZOOM };

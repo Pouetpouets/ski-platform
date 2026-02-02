@@ -43,12 +43,12 @@ describe('getRunsLiftsQualityLevel', () => {
 // --- Component tests for RunsLiftsStatus ---
 
 describe('RunsLiftsStatus', () => {
-  it('renders runs and lifts counts', () => {
+  it('renders slopes and lifts counts', () => {
     render(
-      <RunsLiftsStatus runsOpen={45} runsTotal={52} liftsOpen={18} liftsTotal={22} />
+      <RunsLiftsStatus slopesOpenKm={45} slopesTotalKm={52} liftsOpen={18} liftsTotal={22} />
     );
 
-    expect(screen.getByText('45/52')).toBeInTheDocument();
+    expect(screen.getByText('45km / 52km')).toBeInTheDocument();
     expect(screen.getByText('18/22')).toBeInTheDocument();
     expect(screen.getByText('runs')).toBeInTheDocument();
     expect(screen.getByText('lifts')).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('RunsLiftsStatus', () => {
 
   it('shows open percentages', () => {
     render(
-      <RunsLiftsStatus runsOpen={45} runsTotal={52} liftsOpen={18} liftsTotal={22} />
+      <RunsLiftsStatus slopesOpenKm={45} slopesTotalKm={52} liftsOpen={18} liftsTotal={22} />
     );
 
     // 45/52 = 86.5% → 87%
@@ -67,7 +67,7 @@ describe('RunsLiftsStatus', () => {
 
   it('displays section header with Runs & Lifts title', () => {
     render(
-      <RunsLiftsStatus runsOpen={45} runsTotal={52} liftsOpen={18} liftsTotal={22} />
+      <RunsLiftsStatus slopesOpenKm={45} slopesTotalKm={52} liftsOpen={18} liftsTotal={22} />
     );
 
     expect(screen.getByText('runsLifts')).toBeInTheDocument();
@@ -75,7 +75,7 @@ describe('RunsLiftsStatus', () => {
 
   it('shows green indicator when > 80% open', () => {
     const { container } = render(
-      <RunsLiftsStatus runsOpen={90} runsTotal={100} liftsOpen={20} liftsTotal={22} />
+      <RunsLiftsStatus slopesOpenKm={90} slopesTotalKm={100} liftsOpen={20} liftsTotal={22} />
     );
 
     expect(container.querySelector('.bg-green-500')).toBeInTheDocument();
@@ -84,7 +84,7 @@ describe('RunsLiftsStatus', () => {
 
   it('shows yellow indicator when 50-80% open', () => {
     const { container } = render(
-      <RunsLiftsStatus runsOpen={30} runsTotal={50} liftsOpen={10} liftsTotal={20} />
+      <RunsLiftsStatus slopesOpenKm={30} slopesTotalKm={50} liftsOpen={10} liftsTotal={20} />
     );
 
     expect(container.querySelector('.bg-yellow-500')).toBeInTheDocument();
@@ -93,7 +93,7 @@ describe('RunsLiftsStatus', () => {
 
   it('shows red indicator when < 50% open', () => {
     const { container } = render(
-      <RunsLiftsStatus runsOpen={10} runsTotal={50} liftsOpen={5} liftsTotal={20} />
+      <RunsLiftsStatus slopesOpenKm={10} slopesTotalKm={50} liftsOpen={5} liftsTotal={20} />
     );
 
     expect(container.querySelector('.bg-red-500')).toBeInTheDocument();
@@ -102,17 +102,18 @@ describe('RunsLiftsStatus', () => {
 
   it('handles division by zero gracefully (total = 0)', () => {
     render(
-      <RunsLiftsStatus runsOpen={0} runsTotal={0} liftsOpen={0} liftsTotal={0} />
+      <RunsLiftsStatus slopesOpenKm={0} slopesTotalKm={0} liftsOpen={0} liftsTotal={0} />
     );
 
-    expect(screen.getAllByText('0/0')).toHaveLength(2);
+    expect(screen.getByText('0km / 0km')).toBeInTheDocument();
+    expect(screen.getByText('0/0')).toBeInTheDocument();
     expect(screen.getAllByText('0%')).toHaveLength(2);
     expect(screen.getByText('runsLiftsAvailability: poor')).toBeInTheDocument();
   });
 
   it('shows factor indicator with sr-only accessible label', () => {
     render(
-      <RunsLiftsStatus runsOpen={45} runsTotal={52} liftsOpen={18} liftsTotal={22} />
+      <RunsLiftsStatus slopesOpenKm={45} slopesTotalKm={52} liftsOpen={18} liftsTotal={22} />
     );
 
     const srText = screen.getByText(/runsLiftsAvailability:/);

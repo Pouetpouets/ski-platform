@@ -6,8 +6,8 @@ import { FactorIndicator } from '@/components/resort/factor-indicator';
 import { getRunsLiftsQualityLevel } from '@/lib/utils/conditions';
 
 interface RunsLiftsStatusProps {
-  runsOpen: number;
-  runsTotal: number;
+  slopesOpenKm: number;
+  slopesTotalKm: number;
   liftsOpen: number;
   liftsTotal: number;
 }
@@ -18,14 +18,14 @@ function getOpenPercentage(open: number, total: number): number {
 }
 
 export function RunsLiftsStatus({
-  runsOpen,
-  runsTotal,
+  slopesOpenKm,
+  slopesTotalKm,
   liftsOpen,
   liftsTotal,
 }: RunsLiftsStatusProps) {
   const t = useTranslations('resort');
-  const qualityLevel = getRunsLiftsQualityLevel(runsOpen, runsTotal, liftsOpen, liftsTotal);
-  const runsPercent = getOpenPercentage(runsOpen, runsTotal);
+  const qualityLevel = getRunsLiftsQualityLevel(slopesOpenKm, slopesTotalKm, liftsOpen, liftsTotal);
+  const slopesPercent = getOpenPercentage(slopesOpenKm, slopesTotalKm);
   const liftsPercent = getOpenPercentage(liftsOpen, liftsTotal);
 
   return (
@@ -43,9 +43,9 @@ export function RunsLiftsStatus({
           <Route className="size-3.5 text-muted-foreground shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-xs text-muted-foreground">{t('runs')}</p>
-            <p className="font-medium">{runsOpen}/{runsTotal}</p>
+            <p className="font-medium">{slopesOpenKm}km / {slopesTotalKm}km</p>
           </div>
-          <span className="text-xs text-muted-foreground">{runsPercent}%</span>
+          <span className="text-xs text-muted-foreground">{slopesPercent}%</span>
         </div>
 
         <div className="flex items-center gap-2">

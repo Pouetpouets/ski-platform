@@ -1,10 +1,9 @@
 /**
- * Seed data for French Alps ski resorts
+ * Seed data for ski resorts
  * Used for development, testing, and initial database population
  */
 
 import type { ResortInsert, ResortConditionsInsert } from '@/lib/types/database';
-import { FRENCH_ALPS_BOUNDS } from '@/lib/schemas/resort';
 
 /**
  * Resort data with fixed UUIDs for consistent seeding
@@ -39,6 +38,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.8281,
     altitude_min: 1200,
     altitude_max: 3226,
+    country: 'France',
+    region: 'Savoie',
+    skiresort_info_slug: 'les-arcs-bourg-saint-maurice',
     website_url: 'https://www.lesarcs.com',
     webcam_url: 'https://www.lesarcs.com/webcams.html',
   },
@@ -50,6 +52,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.6789,
     altitude_min: 1250,
     altitude_max: 3250,
+    country: 'France',
+    region: 'Savoie',
+    skiresort_info_slug: 'la-plagne',
     website_url: 'https://www.la-plagne.com',
     webcam_url: 'https://www.la-plagne.com/webcams.html',
   },
@@ -61,6 +66,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.9806,
     altitude_min: 1550,
     altitude_max: 3456,
+    country: 'France',
+    region: 'Savoie',
+    skiresort_info_slug: 'val-d-isere',
     website_url: 'https://www.valdisere.com',
     webcam_url: 'https://www.valdisere.com/webcams/',
   },
@@ -72,6 +80,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.9067,
     altitude_min: 1550,
     altitude_max: 3456,
+    country: 'France',
+    region: 'Savoie',
+    skiresort_info_slug: 'tignes',
     website_url: 'https://www.tignes.net',
     webcam_url: 'https://www.tignes.net/webcams',
   },
@@ -83,6 +94,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.6347,
     altitude_min: 1300,
     altitude_max: 2738,
+    country: 'France',
+    region: 'Savoie',
+    skiresort_info_slug: 'courchevel',
     website_url: 'https://www.courchevel.com',
     webcam_url: 'https://www.courchevel.com/webcams/',
   },
@@ -94,6 +108,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.5656,
     altitude_min: 1400,
     altitude_max: 2952,
+    country: 'France',
+    region: 'Savoie',
+    skiresort_info_slug: 'meribel',
     website_url: 'https://www.meribel.net',
     webcam_url: 'https://www.meribel.net/webcams.html',
   },
@@ -106,6 +123,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.8694,
     altitude_min: 1035,
     altitude_max: 3842,
+    country: 'France',
+    region: 'Haute-Savoie',
+    skiresort_info_slug: 'chamonix-mont-blanc',
     website_url: 'https://www.chamonix.com',
     webcam_url: 'https://www.chamonix.com/webcams',
   },
@@ -117,6 +137,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.6175,
     altitude_min: 1113,
     altitude_max: 2350,
+    country: 'France',
+    region: 'Haute-Savoie',
+    skiresort_info_slug: 'megeve-saint-gervais',
     website_url: 'https://www.megeve.com',
     webcam_url: 'https://www.megeve.com/webcams/',
   },
@@ -128,6 +151,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.4236,
     altitude_min: 1100,
     altitude_max: 2600,
+    country: 'France',
+    region: 'Haute-Savoie',
+    skiresort_info_slug: 'la-clusaz',
     website_url: 'https://www.laclusaz.com',
     webcam_url: 'https://www.laclusaz.com/webcams.html',
   },
@@ -139,6 +165,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.4297,
     altitude_min: 1000,
     altitude_max: 2100,
+    country: 'France',
+    region: 'Haute-Savoie',
+    skiresort_info_slug: 'le-grand-bornand',
     website_url: 'https://www.legrandbornand.com',
     webcam_url: 'https://www.legrandbornand.com/webcams.html',
   },
@@ -151,6 +180,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.0686,
     altitude_min: 1250,
     altitude_max: 3330,
+    country: 'France',
+    region: 'Isère',
+    skiresort_info_slug: 'alpe-d-huez',
     website_url: 'https://www.alpedhuez.com',
     webcam_url: 'https://www.alpedhuez.com/webcams/',
   },
@@ -162,6 +194,9 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
     longitude: 6.1222,
     altitude_min: 1300,
     altitude_max: 3600,
+    country: 'France',
+    region: 'Isère',
+    skiresort_info_slug: 'les-2-alpes',
     website_url: 'https://www.les2alpes.com',
     webcam_url: 'https://www.les2alpes.com/webcams/',
   },
@@ -170,6 +205,7 @@ export const SEED_RESORTS: (ResortInsert & { id: string })[] = [
 /**
  * Sample conditions data for development and testing
  * Covers range of crowd levels, snow conditions, and pricing
+ * slopes_open_km/slopes_total_km are in kilometers (as per skiresort.info)
  */
 export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { resort_id: string })[] = [
   // Les Arcs - Excellent conditions, quiet
@@ -178,8 +214,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 120,
     snow_depth_summit: 180,
     fresh_snow_24h: 15,
-    runs_open: 98,
-    runs_total: 106,
+    slopes_open_km: 180.0,
+    slopes_total_km: 200.0,
     lifts_open: 45,
     lifts_total: 51,
     crowd_level: 'low',
@@ -196,8 +232,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 100,
     snow_depth_summit: 165,
     fresh_snow_24h: 5,
-    runs_open: 115,
-    runs_total: 130,
+    slopes_open_km: 195.0,
+    slopes_total_km: 225.0,
     lifts_open: 65,
     lifts_total: 74,
     crowd_level: 'moderate',
@@ -214,8 +250,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 150,
     snow_depth_summit: 200,
     fresh_snow_24h: 20,
-    runs_open: 75,
-    runs_total: 79,
+    slopes_open_km: 250.0,
+    slopes_total_km: 300.0,
     lifts_open: 38,
     lifts_total: 42,
     crowd_level: 'high',
@@ -232,8 +268,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 145,
     snow_depth_summit: 195,
     fresh_snow_24h: 18,
-    runs_open: 68,
-    runs_total: 76,
+    slopes_open_km: 240.0,
+    slopes_total_km: 300.0,
     lifts_open: 35,
     lifts_total: 39,
     crowd_level: 'moderate',
@@ -250,8 +286,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 85,
     snow_depth_summit: 140,
     fresh_snow_24h: 8,
-    runs_open: 95,
-    runs_total: 120,
+    slopes_open_km: 120.0,
+    slopes_total_km: 150.0,
     lifts_open: 52,
     lifts_total: 58,
     crowd_level: 'very_high',
@@ -268,8 +304,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 90,
     snow_depth_summit: 150,
     fresh_snow_24h: 10,
-    runs_open: 78,
-    runs_total: 85,
+    slopes_open_km: 130.0,
+    slopes_total_km: 150.0,
     lifts_open: 38,
     lifts_total: 42,
     crowd_level: 'high',
@@ -286,8 +322,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 60,
     snow_depth_summit: 180,
     fresh_snow_24h: 25,
-    runs_open: 65,
-    runs_total: 82,
+    slopes_open_km: 100.0,
+    slopes_total_km: 155.0,
     lifts_open: 40,
     lifts_total: 49,
     crowd_level: 'moderate',
@@ -304,8 +340,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 55,
     snow_depth_summit: 95,
     fresh_snow_24h: 3,
-    runs_open: 180,
-    runs_total: 215,
+    slopes_open_km: 350.0,
+    slopes_total_km: 400.0,
     lifts_open: 55,
     lifts_total: 67,
     crowd_level: 'moderate',
@@ -322,8 +358,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 70,
     snow_depth_summit: 130,
     fresh_snow_24h: 12,
-    runs_open: 80,
-    runs_total: 84,
+    slopes_open_km: 115.0,
+    slopes_total_km: 125.0,
     lifts_open: 42,
     lifts_total: 49,
     crowd_level: 'low',
@@ -340,8 +376,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 65,
     snow_depth_summit: 110,
     fresh_snow_24h: 8,
-    runs_open: 40,
-    runs_total: 44,
+    slopes_open_km: 55.0,
+    slopes_total_km: 60.0,
     lifts_open: 23,
     lifts_total: 27,
     crowd_level: 'low',
@@ -358,8 +394,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 95,
     snow_depth_summit: 170,
     fresh_snow_24h: 6,
-    runs_open: 105,
-    runs_total: 115,
+    slopes_open_km: 200.0,
+    slopes_total_km: 250.0,
     lifts_open: 65,
     lifts_total: 75,
     crowd_level: 'moderate',
@@ -376,8 +412,8 @@ export const SEED_CONDITIONS: (Omit<ResortConditionsInsert, 'resort_id'> & { res
     snow_depth_base: 110,
     snow_depth_summit: 200,
     fresh_snow_24h: 10,
-    runs_open: 70,
-    runs_total: 89,
+    slopes_open_km: 180.0,
+    slopes_total_km: 225.0,
     lifts_open: 42,
     lifts_total: 47,
     crowd_level: 'moderate',
@@ -404,17 +440,4 @@ export function getResort(key: ResortKey) {
 export function getConditions(key: ResortKey) {
   const id = RESORT_IDS[key];
   return SEED_CONDITIONS.find((c) => c.resort_id === id);
-}
-
-/**
- * Validate all coordinates are within French Alps bounds
- */
-export function validateCoordinates(): boolean {
-  return SEED_RESORTS.every(
-    (r) =>
-      r.latitude >= FRENCH_ALPS_BOUNDS.latMin &&
-      r.latitude <= FRENCH_ALPS_BOUNDS.latMax &&
-      r.longitude >= FRENCH_ALPS_BOUNDS.lonMin &&
-      r.longitude <= FRENCH_ALPS_BOUNDS.lonMax
-  );
 }

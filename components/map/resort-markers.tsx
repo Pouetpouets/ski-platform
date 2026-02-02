@@ -121,7 +121,7 @@ function createPopupContent(resort: ResortWithConditions, score: number, labels:
           gap: 2px;
         ">
           <span>❄️ ${conditions.snow_depth_base ?? '?'}cm ${labels.base}</span>
-          <span>🎿 ${conditions.runs_open}/${conditions.runs_total} runs open</span>
+          <span>🎿 ${conditions.slopes_open_km}km / ${conditions.slopes_total_km}km open</span>
         </div>
       ` : `<span style="font-size: 11px; color: #94a3b8;">${labels.noConditions}</span>`}
     </div>

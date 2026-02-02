@@ -11,8 +11,6 @@ import {
   safeValidateResort,
   validateConditions,
   safeValidateConditions,
-  isInFrenchAlps,
-  FRENCH_ALPS_BOUNDS,
   type Resort,
   type ResortConditions,
 } from '@/lib/schemas/resort';
@@ -61,6 +59,9 @@ describe('Zod Schemas', () => {
       longitude: 6.8281,
       altitude_min: 1200,
       altitude_max: 3226,
+      country: 'France',
+      region: 'Savoie',
+      skiresort_info_slug: 'les-arcs-bourg-saint-maurice',
       website_url: 'https://www.lesarcs.com',
       webcam_url: 'https://www.lesarcs.com/webcams.html',
       created_at: '2024-01-01T00:00:00.000Z',
@@ -130,6 +131,9 @@ describe('Zod Schemas', () => {
         longitude: 6.8281,
         altitude_min: 1200,
         altitude_max: 3226,
+        country: 'France',
+        region: 'Savoie',
+        skiresort_info_slug: null,
         website_url: 'https://www.lesarcs.com',
         webcam_url: null,
       };
@@ -146,8 +150,8 @@ describe('Zod Schemas', () => {
       snow_depth_base: 120,
       snow_depth_summit: 180,
       fresh_snow_24h: 15,
-      runs_open: 98,
-      runs_total: 106,
+      slopes_open_km: 98,
+      slopes_total_km: 106,
       lifts_open: 45,
       lifts_total: 51,
       crowd_level: 'low',
@@ -179,15 +183,20 @@ describe('Zod Schemas', () => {
       ).toThrow();
     });
 
-    it('should require positive runs_total', () => {
+    it('should require positive slopes_total_km', () => {
       expect(() =>
-        ResortConditionsSchema.parse({ ...validConditions, runs_total: 0 })
+        ResortConditionsSchema.parse({ ...validConditions, slopes_total_km: 0 })
       ).toThrow();
     });
 
-    it('should allow non-negative runs_open (can be 0 if resort closed)', () => {
-      const result = ResortConditionsSchema.parse({ ...validConditions, runs_open: 0 });
-      expect(result.runs_open).toBe(0);
+    it('should allow non-negative slopes_open_km (can be 0 if resort closed)', () => {
+      const result = ResortConditionsSchema.parse({ ...validConditions, slopes_open_km: 0 });
+      expect(result.slopes_open_km).toBe(0);
+    });
+
+    it('should allow decimal values for slopes km', () => {
+      const result = ResortConditionsSchema.parse({ ...validConditions, slopes_open_km: 98.5, slopes_total_km: 106.2 });
+      expect(result.slopes_open_km).toBe(98.5);
     });
 
     it('should require positive ticket price when set', () => {
@@ -215,8 +224,8 @@ describe('Zod Schemas', () => {
       snow_depth_base: 120,
       snow_depth_summit: 180,
       fresh_snow_24h: 15,
-      runs_open: 98,
-      runs_total: 106,
+      slopes_open_km: 98,
+      slopes_total_km: 106,
       lifts_open: 45,
       lifts_total: 51,
       crowd_level: 'low',
@@ -229,10 +238,10 @@ describe('Zod Schemas', () => {
       updated_at: '2024-01-01T00:00:00.000Z',
     };
 
-    it('should reject runs_open > runs_total', () => {
+    it('should reject slopes_open_km > slopes_total_km', () => {
       expect(() =>
-        ResortConditionsSchema.parse({ ...baseConditions, runs_open: 200, runs_total: 100 })
-      ).toThrow(/runs_open/);
+        ResortConditionsSchema.parse({ ...baseConditions, slopes_open_km: 200, slopes_total_km: 100 })
+      ).toThrow(/slopes_open_km/);
     });
 
     it('should reject lifts_open > lifts_total', () => {
@@ -247,9 +256,9 @@ describe('Zod Schemas', () => {
       ).toThrow(/temperature_min/);
     });
 
-    it('should allow equal runs_open and runs_total', () => {
-      const result = ResortConditionsSchema.parse({ ...baseConditions, runs_open: 50, runs_total: 50 });
-      expect(result.runs_open).toBe(50);
+    it('should allow equal slopes_open_km and slopes_total_km', () => {
+      const result = ResortConditionsSchema.parse({ ...baseConditions, slopes_open_km: 50, slopes_total_km: 50 });
+      expect(result.slopes_open_km).toBe(50);
     });
   });
 
@@ -260,8 +269,8 @@ describe('Zod Schemas', () => {
         snow_depth_base: 120,
         snow_depth_summit: 180,
         fresh_snow_24h: 15,
-        runs_open: 98,
-        runs_total: 106,
+        slopes_open_km: 98,
+        slopes_total_km: 106,
         lifts_open: 45,
         lifts_total: 51,
         crowd_level: 'low' as const,
@@ -286,6 +295,9 @@ describe('Zod Schemas', () => {
       longitude: 6.8281,
       altitude_min: 1200,
       altitude_max: 3226,
+      country: 'France',
+      region: 'Savoie',
+      skiresort_info_slug: null,
       website_url: 'https://www.lesarcs.com',
       webcam_url: null,
       created_at: '2024-01-01T00:00:00.000Z',
@@ -322,8 +334,8 @@ describe('Zod Schemas', () => {
         snow_depth_base: 120,
         snow_depth_summit: 180,
         fresh_snow_24h: 15,
-        runs_open: 98,
-        runs_total: 106,
+        slopes_open_km: 98,
+        slopes_total_km: 106,
         lifts_open: 45,
         lifts_total: 51,
         crowd_level: 'low',
@@ -350,32 +362,6 @@ describe('Zod Schemas', () => {
     });
   });
 
-  describe('French Alps Coordinate Validation', () => {
-    it('should have correct bounds defined', () => {
-      expect(FRENCH_ALPS_BOUNDS.latMin).toBe(44.5);
-      expect(FRENCH_ALPS_BOUNDS.latMax).toBe(46.5);
-      expect(FRENCH_ALPS_BOUNDS.lonMin).toBe(5.5);
-      expect(FRENCH_ALPS_BOUNDS.lonMax).toBe(7.5);
-    });
-
-    describe('isInFrenchAlps', () => {
-      it('should return true for coordinates within bounds', () => {
-        expect(isInFrenchAlps(45.5, 6.5)).toBe(true);
-        expect(isInFrenchAlps(45.9237, 6.8694)).toBe(true); // Chamonix
-      });
-
-      it('should return false for coordinates outside bounds', () => {
-        expect(isInFrenchAlps(48.8566, 2.3522)).toBe(false); // Paris
-        expect(isInFrenchAlps(40.4168, -3.7038)).toBe(false); // Madrid
-      });
-
-      it('should return true for edge coordinates', () => {
-        expect(isInFrenchAlps(44.5, 5.5)).toBe(true);
-        expect(isInFrenchAlps(46.5, 7.5)).toBe(true);
-      });
-    });
-  });
-
   describe('Type Inference', () => {
     it('should infer Resort type from schema', () => {
       const resort: Resort = {
@@ -386,6 +372,9 @@ describe('Zod Schemas', () => {
         longitude: 6.8281,
         altitude_min: 1200,
         altitude_max: 3226,
+        country: 'France',
+        region: 'Savoie',
+        skiresort_info_slug: null,
         website_url: 'https://www.lesarcs.com',
         webcam_url: null,
         created_at: '2024-01-01T00:00:00.000Z',
@@ -402,8 +391,8 @@ describe('Zod Schemas', () => {
         snow_depth_base: 120,
         snow_depth_summit: 180,
         fresh_snow_24h: 15,
-        runs_open: 98,
-        runs_total: 106,
+        slopes_open_km: 98,
+        slopes_total_km: 106,
         lifts_open: 45,
         lifts_total: 51,
         crowd_level: 'low',

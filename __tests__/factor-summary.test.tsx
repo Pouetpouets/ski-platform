@@ -29,8 +29,8 @@ describe('getAllFactorLevels', () => {
     const levels = getAllFactorLevels({
       snow_depth_base: 120,
       fresh_snow_24h: 15,
-      runs_open: 90,
-      runs_total: 100,
+      slopes_open_km: 90,
+      slopes_total_km: 100,
       lifts_open: 20,
       lifts_total: 22,
       crowd_level: 'low',
@@ -47,8 +47,8 @@ describe('getAllFactorLevels', () => {
     const levels = getAllFactorLevels({
       snow_depth_base: 120,
       fresh_snow_24h: 15,
-      runs_open: 90,
-      runs_total: 100,
+      slopes_open_km: 90,
+      slopes_total_km: 100,
       lifts_open: 20,
       lifts_total: 22,
       crowd_level: 'low',
@@ -71,8 +71,8 @@ describe('getAllFactorLevels', () => {
     const levels = getAllFactorLevels({
       snow_depth_base: 20,
       fresh_snow_24h: 0,
-      runs_open: 10,
-      runs_total: 100,
+      slopes_open_km: 10,
+      slopes_total_km: 100,
       lifts_open: 5,
       lifts_total: 50,
       crowd_level: 'very_high',
