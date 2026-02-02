@@ -1,8 +1,18 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ResortDetailPanel } from '@/components/map/resort-detail-panel';
+import { ForecastDayProvider } from '@/lib/contexts/forecast-day-context';
 import type { ResortWithConditions } from '@/lib/types/database';
 import type { DistanceInfo } from '@/lib/utils/distance';
+
+// Helper to wrap component in required providers
+function renderPanel(props: React.ComponentProps<typeof ResortDetailPanel>) {
+  return render(
+    <ForecastDayProvider>
+      <ResortDetailPanel {...props} />
+    </ForecastDayProvider>
+  );
+}
 
 const mockResort: ResortWithConditions = {
   id: 'test-resort-1',
@@ -61,77 +71,67 @@ const mockDistanceInfo: DistanceInfo = {
 
 describe('ResortDetailPanel', () => {
   it('renders nothing when resort is null', () => {
-    const { container } = render(
-      <ResortDetailPanel
-        resort={null}
-        isOpen={false}
-        onClose={vi.fn()}
-        factors={null}
-        score={null}
-        distanceInfo={null}
-      />
-    );
+    const { container } = renderPanel({
+      resort: null,
+      isOpen: false,
+      onClose: vi.fn(),
+      factors: null,
+      score: null,
+      distanceInfo: null,
+    });
     expect(container.innerHTML).toBe('');
   });
 
   it('does not render panel content when isOpen is false with a valid resort', () => {
-    render(
-      <ResortDetailPanel
-        resort={mockResort}
-        isOpen={false}
-        onClose={vi.fn()}
-        factors={null}
-        score={85}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResort,
+      isOpen: false,
+      onClose: vi.fn(),
+      factors: null,
+      score: 85,
+      distanceInfo: mockDistanceInfo,
+    });
 
     expect(screen.queryByText('Les Arcs')).not.toBeInTheDocument();
     expect(screen.queryByText('85%')).not.toBeInTheDocument();
   });
 
   it('renders resort name and altitude when open', () => {
-    render(
-      <ResortDetailPanel
-        resort={mockResort}
-        isOpen={true}
-        onClose={vi.fn()}
-        factors={null}
-        score={85}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResort,
+      isOpen: true,
+      onClose: vi.fn(),
+      factors: null,
+      score: 85,
+      distanceInfo: mockDistanceInfo,
+    });
 
     expect(screen.getByText('Les Arcs')).toBeInTheDocument();
     expect(screen.getByText('1200m - 3226m')).toBeInTheDocument();
   });
 
   it('renders score badge when score is provided', () => {
-    render(
-      <ResortDetailPanel
-        resort={mockResort}
-        isOpen={true}
-        onClose={vi.fn()}
-        factors={null}
-        score={85}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResort,
+      isOpen: true,
+      onClose: vi.fn(),
+      factors: null,
+      score: 85,
+      distanceInfo: mockDistanceInfo,
+    });
 
     expect(screen.getByText('85%')).toBeInTheDocument();
   });
 
   it('renders conditions data correctly', () => {
-    render(
-      <ResortDetailPanel
-        resort={mockResort}
-        isOpen={true}
-        onClose={vi.fn()}
-        factors={null}
-        score={85}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResort,
+      isOpen: true,
+      onClose: vi.fn(),
+      factors: null,
+      score: 85,
+      distanceInfo: mockDistanceInfo,
+    });
 
     // Snow
     expect(screen.getByText('120cm')).toBeInTheDocument();
@@ -149,31 +149,27 @@ describe('ResortDetailPanel', () => {
   });
 
   it('shows "No conditions data" when conditions is null', () => {
-    render(
-      <ResortDetailPanel
-        resort={mockResortNoConditions}
-        isOpen={true}
-        onClose={vi.fn()}
-        factors={null}
-        score={50}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResortNoConditions,
+      isOpen: true,
+      onClose: vi.fn(),
+      factors: null,
+      score: 50,
+      distanceInfo: mockDistanceInfo,
+    });
 
     expect(screen.getByText('noConditions')).toBeInTheDocument();
   });
 
   it('renders distance info', () => {
-    render(
-      <ResortDetailPanel
-        resort={mockResort}
-        isOpen={true}
-        onClose={vi.fn()}
-        factors={null}
-        score={85}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResort,
+      isOpen: true,
+      onClose: vi.fn(),
+      factors: null,
+      score: 85,
+      distanceInfo: mockDistanceInfo,
+    });
 
     expect(screen.getByText('165 km')).toBeInTheDocument();
     expect(screen.getByText(/Lyon/)).toBeInTheDocument();
@@ -181,16 +177,14 @@ describe('ResortDetailPanel', () => {
   });
 
   it('renders website and webcam links when URLs present', () => {
-    render(
-      <ResortDetailPanel
-        resort={mockResort}
-        isOpen={true}
-        onClose={vi.fn()}
-        factors={null}
-        score={85}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResort,
+      isOpen: true,
+      onClose: vi.fn(),
+      factors: null,
+      score: 85,
+      distanceInfo: mockDistanceInfo,
+    });
 
     const websiteLink = screen.getByText('website');
     expect(websiteLink).toBeInTheDocument();
@@ -204,16 +198,14 @@ describe('ResortDetailPanel', () => {
   });
 
   it('hides links when URLs are null', () => {
-    render(
-      <ResortDetailPanel
-        resort={mockResortNoConditions}
-        isOpen={true}
-        onClose={vi.fn()}
-        factors={null}
-        score={50}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResortNoConditions,
+      isOpen: true,
+      onClose: vi.fn(),
+      factors: null,
+      score: 50,
+      distanceInfo: mockDistanceInfo,
+    });
 
     expect(screen.queryByText('website')).not.toBeInTheDocument();
     expect(screen.queryByText('webcams')).not.toBeInTheDocument();
@@ -222,16 +214,14 @@ describe('ResortDetailPanel', () => {
   it('calls onClose when sheet is closed', () => {
     const onClose = vi.fn();
 
-    render(
-      <ResortDetailPanel
-        resort={mockResort}
-        isOpen={true}
-        onClose={onClose}
-        factors={null}
-        score={85}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResort,
+      isOpen: true,
+      onClose,
+      factors: null,
+      score: 85,
+      distanceInfo: mockDistanceInfo,
+    });
 
     // The Sheet close button has sr-only "Close" text
     const closeButton = screen.getByText('Close').closest('button');
@@ -241,16 +231,14 @@ describe('ResortDetailPanel', () => {
   });
 
   it('has accessible aria-label on sheet content', () => {
-    render(
-      <ResortDetailPanel
-        resort={mockResort}
-        isOpen={true}
-        onClose={vi.fn()}
-        factors={null}
-        score={85}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: mockResort,
+      isOpen: true,
+      onClose: vi.fn(),
+      factors: null,
+      score: 85,
+      distanceInfo: mockDistanceInfo,
+    });
 
     const sheetContent = document.querySelector('[aria-label="Resort details"]');
     expect(sheetContent).toBeInTheDocument();
@@ -263,16 +251,14 @@ describe('ResortDetailPanel', () => {
       altitude_max: null,
     };
 
-    render(
-      <ResortDetailPanel
-        resort={resortNoAltitude}
-        isOpen={true}
-        onClose={vi.fn()}
-        factors={null}
-        score={85}
-        distanceInfo={mockDistanceInfo}
-      />
-    );
+    renderPanel({
+      resort: resortNoAltitude,
+      isOpen: true,
+      onClose: vi.fn(),
+      factors: null,
+      score: 85,
+      distanceInfo: mockDistanceInfo,
+    });
 
     expect(screen.getByText('Les Arcs')).toBeInTheDocument();
     // Should not render altitude when both are null

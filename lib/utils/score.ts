@@ -210,12 +210,13 @@ export interface FactorScores {
  */
 export function calculateFactorScores(
   conditions: ResortConditions,
-  distanceKm: number | null
+  distanceKm: number | null,
+  weatherOverride?: { weatherCondition: string | null }
 ): FactorScores {
   return {
     snow: scoreSnow(conditions.snow_depth_base, conditions.fresh_snow_24h),
     crowd: scoreCrowd(conditions.crowd_level),
-    weather: scoreWeather(conditions.weather_condition),
+    weather: scoreWeather(weatherOverride ? weatherOverride.weatherCondition : conditions.weather_condition),
     price: scorePrice(conditions.adult_ticket_price),
     distance: scoreDistance(distanceKm),
     parking: scoreParking(conditions.parking_status, conditions.parking_price),
@@ -249,11 +250,12 @@ export function combinedScore(
 export function calculatePerfectDayScore(
   conditions: ResortConditions | null,
   distanceKm: number | null = null,
-  weights: Record<FactorName, number> = DEFAULT_WEIGHTS
+  weights: Record<FactorName, number> = DEFAULT_WEIGHTS,
+  weatherOverride?: { weatherCondition: string | null }
 ): { score: number; factors: FactorScores | null } {
   if (!conditions) return { score: 50, factors: null };
 
-  const factors = calculateFactorScores(conditions, distanceKm);
+  const factors = calculateFactorScores(conditions, distanceKm, weatherOverride);
   const score = combinedScore(factors, weights);
 
   return { score, factors };

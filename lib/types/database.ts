@@ -69,6 +69,28 @@ export type ResortConditionsInsert = Omit<ResortConditions, 'id' | 'updated_at'>
 export type ResortConditionsUpdate = Partial<Omit<ResortConditionsInsert, 'resort_id'>>;
 
 /**
+ * ResortWeatherForecast - 7-day weather forecast from Open-Meteo
+ */
+export interface ResortWeatherForecast {
+  id: string;
+  resort_id: string;
+  forecast_date: string;
+  weather_code: number;
+  weather_condition: string;
+  temperature_min: number | null;
+  temperature_max: number | null;
+  precipitation_sum: number | null;
+  snowfall_sum: number | null;
+  wind_speed_max: number | null;
+  wind_gusts_max: number | null;
+  uv_index_max: number | null;
+  fetched_at: string;
+}
+
+export type ResortWeatherForecastInsert = Omit<ResortWeatherForecast, 'id' | 'fetched_at'>;
+export type ResortWeatherForecastUpdate = Partial<Omit<ResortWeatherForecastInsert, 'resort_id' | 'forecast_date'>>;
+
+/**
  * UserPreferences - Stored priority configuration for authenticated users
  */
 export interface UserPreferences {
@@ -92,6 +114,7 @@ export type UserPreferencesUpdate = Partial<Omit<UserPreferencesInsert, 'user_id
  */
 export interface ResortWithConditions extends Resort {
   conditions: ResortConditions | null;
+  forecasts?: ResortWeatherForecast[];
 }
 
 // =============================================================================
@@ -114,6 +137,19 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: 'resort_conditions_resort_id_fkey';
+            columns: ['resort_id'];
+            referencedRelation: 'resorts';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      resort_weather_forecasts: {
+        Row: ResortWeatherForecast;
+        Insert: ResortWeatherForecastInsert & { id?: string; fetched_at?: string };
+        Update: ResortWeatherForecastUpdate & { fetched_at?: string };
+        Relationships: [
+          {
+            foreignKeyName: 'resort_weather_forecasts_resort_id_fkey';
             columns: ['resort_id'];
             referencedRelation: 'resorts';
             referencedColumns: ['id'];

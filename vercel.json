@@ -1,6 +1,10 @@
 {
   "crons": [
     {
+      "path": "/api/cron/fetch-forecasts",
+      "schedule": "30 5 * * *"
+    },
+    {
       "path": "/api/cron/scrape-conditions",
       "schedule": "0 6 * * *"
     }

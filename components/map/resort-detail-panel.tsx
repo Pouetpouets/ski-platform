@@ -26,6 +26,7 @@ import { ParkingDisplay } from '@/components/resort/parking-display';
 import { FactorSummary } from '@/components/resort/factor-summary';
 import { ScoreBreakdown } from '@/components/resort/score-breakdown';
 import { getAllFactorLevels } from '@/lib/utils/conditions';
+import { useForecastDay } from '@/lib/contexts/forecast-day-context';
 
 interface ResortDetailPanelProps {
   resort: ResortWithConditions | null;
@@ -48,10 +49,19 @@ export function ResortDetailPanel({
 }: ResortDetailPanelProps) {
   const t = useTranslations('resort');
   const tCommon = useTranslations('common');
+  const { selectedDate } = useForecastDay();
 
   if (!resort) return null;
 
   const conditions = resort.conditions;
+
+  // Find the forecast matching the selected date
+  const forecast = resort.forecasts?.find((f) => f.forecast_date === selectedDate) ?? null;
+
+  // Use forecast weather if available, otherwise fall back to conditions
+  const weatherCondition = forecast?.weather_condition ?? conditions?.weather_condition ?? null;
+  const temperatureMin = forecast?.temperature_min ?? conditions?.temperature_min ?? null;
+  const temperatureMax = forecast?.temperature_max ?? conditions?.temperature_max ?? null;
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -120,11 +130,17 @@ export function ResortDetailPanel({
               {/* Crowd Level Section */}
               <CrowdLevelDisplay crowdLevel={conditions.crowd_level} />
 
-              {/* Weather Section */}
+              {/* Weather Section - enhanced with forecast data */}
               <WeatherDisplay
-                weatherCondition={conditions.weather_condition}
-                temperatureMin={conditions.temperature_min}
-                temperatureMax={conditions.temperature_max}
+                weatherCondition={weatherCondition}
+                temperatureMin={temperatureMin}
+                temperatureMax={temperatureMax}
+                precipitationSum={forecast?.precipitation_sum}
+                snowfallSum={forecast?.snowfall_sum}
+                windSpeedMax={forecast?.wind_speed_max}
+                windGustsMax={forecast?.wind_gusts_max}
+                uvIndexMax={forecast?.uv_index_max}
+                forecastDate={forecast ? selectedDate : null}
               />
 
               {/* Lift Ticket Section */}
@@ -177,4 +193,3 @@ export function ResortDetailPanel({
     </Sheet>
   );
 }
-

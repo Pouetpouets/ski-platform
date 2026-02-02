@@ -120,6 +120,17 @@
     "high": "Élevée",
     "very_high": "Très élevée"
   },
+  "forecast": {
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
+    "selectDay": "Sélectionner le jour de prévision",
+    "wind": "Vent",
+    "gusts": "Rafales",
+    "precipitation": "Précip",
+    "snowfall": "Chute de neige",
+    "uvIndex": "Indice UV",
+    "noForecast": "Aucune prévision disponible"
+  },
   "weatherConditions": {
     "sunny": "Ensoleillé",
     "partly_cloudy": "Partiellement nuageux",
@@ -128,7 +139,8 @@
     "snowing": "Neige",
     "rain": "Pluie",
     "storm": "Tempête",
-    "high_winds": "Vents forts"
+    "high_winds": "Vents forts",
+    "foggy": "Brouillard"
   },
   "parkingStatus": {
     "available": "Disponible",

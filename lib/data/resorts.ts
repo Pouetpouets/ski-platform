@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import type { Resort, ResortConditions, ResortWithConditions } from '@/lib/types/database';
+import type { Resort, ResortConditions, ResortWithConditions, ResortWeatherForecast } from '@/lib/types/database';
 
 /**
  * Fetch all resorts with their current conditions
@@ -40,10 +40,33 @@ export async function getResortsWithConditions(): Promise<ResortWithConditions[]
     conditionsMap.set(cond.resort_id, cond);
   });
 
-  // Combine resorts with their conditions
+  // Fetch weather forecasts (today and future)
+  const today = new Date().toISOString().split('T')[0];
+  const { data: forecastsData, error: forecastsError } = await supabase
+    .from('resort_weather_forecasts')
+    .select('*')
+    .gte('forecast_date', today)
+    .order('forecast_date');
+
+  if (forecastsError) {
+    console.error('Error fetching forecasts:', forecastsError);
+  }
+
+  const forecasts = (forecastsData ?? []) as ResortWeatherForecast[];
+
+  // Create a map of resort_id -> forecasts[]
+  const forecastsMap = new Map<string, ResortWeatherForecast[]>();
+  forecasts.forEach((fc) => {
+    const existing = forecastsMap.get(fc.resort_id) ?? [];
+    existing.push(fc);
+    forecastsMap.set(fc.resort_id, existing);
+  });
+
+  // Combine resorts with their conditions and forecasts
   return resorts.map((resort): ResortWithConditions => ({
     ...resort,
     conditions: conditionsMap.get(resort.id) ?? null,
+    forecasts: forecastsMap.get(resort.id) ?? [],
   }));
 }
 

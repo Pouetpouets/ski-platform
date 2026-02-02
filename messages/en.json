@@ -120,6 +120,17 @@
     "high": "High",
     "very_high": "Very High"
   },
+  "forecast": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "selectDay": "Select forecast day",
+    "wind": "Wind",
+    "gusts": "Gusts",
+    "precipitation": "Precip",
+    "snowfall": "Snowfall",
+    "uvIndex": "UV Index",
+    "noForecast": "No forecast available"
+  },
   "weatherConditions": {
     "sunny": "Sunny",
     "partly_cloudy": "Partly Cloudy",
@@ -128,7 +139,8 @@
     "snowing": "Snowing",
     "rain": "Rain",
     "storm": "Storm",
-    "high_winds": "High Winds"
+    "high_winds": "High Winds",
+    "foggy": "Foggy"
   },
   "parkingStatus": {
     "available": "Available",
