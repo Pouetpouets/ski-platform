@@ -2,6 +2,11 @@
 -- These slugs were causing "No data extracted" errors during scraping
 -- because they redirected to the skiresort.info homepage instead of resort pages.
 
+-- Drop UNIQUE constraint on skiresort_info_slug since multiple resorts
+-- can share the same skiresort.info page (e.g., combined ski areas like
+-- Tignes + Val d'Isère, Courchevel + Méribel + Les Menuires + Val Thorens)
+ALTER TABLE resorts DROP CONSTRAINT IF EXISTS resorts_skiresort_info_slug_key;
+
 -- FRANCE
 UPDATE resorts SET skiresort_info_slug = 'les-arcs-peisey-vallandry-paradiski' WHERE slug = 'les-arcs';
 UPDATE resorts SET skiresort_info_slug = 'la-plagne-paradiski' WHERE slug = 'la-plagne';

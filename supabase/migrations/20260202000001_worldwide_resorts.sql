@@ -5,7 +5,7 @@
 -- Add new columns to resorts
 ALTER TABLE resorts ADD COLUMN country TEXT;
 ALTER TABLE resorts ADD COLUMN region TEXT;
-ALTER TABLE resorts ADD COLUMN skiresort_info_slug TEXT UNIQUE;
+ALTER TABLE resorts ADD COLUMN skiresort_info_slug TEXT;
 CREATE INDEX idx_resorts_country ON resorts(country);
 
 -- Rename run counts to slopes in km (skiresort.info uses km)
