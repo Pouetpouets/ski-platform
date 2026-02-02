@@ -5,36 +5,36 @@
 -- FRANCE (~30 resorts)
 -- =========================================================================
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
-  ('Les Arcs', 'les-arcs', 45.5708, 6.8281, 1200, 3226, 'France', 'Savoie', 'les-arcs-bourg-saint-maurice'),
-  ('La Plagne', 'la-plagne', 45.5058, 6.6789, 1250, 3250, 'France', 'Savoie', 'la-plagne'),
-  ('Val d''Isère', 'val-disere', 45.4478, 6.9806, 1550, 3456, 'France', 'Savoie', 'val-d-isere'),
-  ('Tignes', 'tignes', 45.4692, 6.9067, 1550, 3456, 'France', 'Savoie', 'tignes'),
-  ('Courchevel', 'courchevel', 45.4147, 6.6347, 1300, 2738, 'France', 'Savoie', 'courchevel'),
-  ('Méribel', 'meribel', 45.3967, 6.5656, 1400, 2952, 'France', 'Savoie', 'meribel'),
-  ('Chamonix', 'chamonix', 45.9237, 6.8694, 1035, 3842, 'France', 'Haute-Savoie', 'chamonix-mont-blanc'),
+  ('Les Arcs', 'les-arcs', 45.5708, 6.8281, 1200, 3226, 'France', 'Savoie', 'les-arcs-peisey-vallandry-paradiski'),
+  ('La Plagne', 'la-plagne', 45.5058, 6.6789, 1250, 3250, 'France', 'Savoie', 'la-plagne-paradiski'),
+  ('Val d''Isère', 'val-disere', 45.4478, 6.9806, 1550, 3456, 'France', 'Savoie', 'tignes-val-disere'),
+  ('Tignes', 'tignes', 45.4692, 6.9067, 1550, 3456, 'France', 'Savoie', 'tignes-val-disere'),
+  ('Courchevel', 'courchevel', 45.4147, 6.6347, 1300, 2738, 'France', 'Savoie', 'les-3-vallees-val-thorens-les-menuires-meribel-courchevel'),
+  ('Méribel', 'meribel', 45.3967, 6.5656, 1400, 2952, 'France', 'Savoie', 'les-3-vallees-val-thorens-les-menuires-meribel-courchevel'),
+  ('Chamonix', 'chamonix', 45.9237, 6.8694, 1035, 3842, 'France', 'Haute-Savoie', 'brevent-flegere-chamonix'),
   ('Megève', 'megeve', 45.8567, 6.6175, 1113, 2350, 'France', 'Haute-Savoie', 'megeve-saint-gervais'),
-  ('La Clusaz', 'la-clusaz', 45.9047, 6.4236, 1100, 2600, 'France', 'Haute-Savoie', 'la-clusaz'),
+  ('La Clusaz', 'la-clusaz', 45.9047, 6.4236, 1100, 2600, 'France', 'Haute-Savoie', 'la-clusaz-manigod'),
   ('Le Grand-Bornand', 'le-grand-bornand', 45.9419, 6.4297, 1000, 2100, 'France', 'Haute-Savoie', 'le-grand-bornand'),
-  ('Alpe d''Huez', 'alpe-dhuez', 45.0922, 6.0686, 1250, 3330, 'France', 'Isère', 'alpe-d-huez'),
+  ('Alpe d''Huez', 'alpe-dhuez', 45.0922, 6.0686, 1250, 3330, 'France', 'Isère', 'alpe-dhuez'),
   ('Les Deux Alpes', 'les-deux-alpes', 45.0167, 6.1222, 1300, 3600, 'France', 'Isère', 'les-2-alpes'),
-  ('Les Menuires', 'les-menuires', 45.3247, 6.5331, 1400, 2850, 'France', 'Savoie', 'les-menuires'),
-  ('Val Thorens', 'val-thorens', 45.2975, 6.5839, 1800, 3230, 'France', 'Savoie', 'val-thorens'),
-  ('Les Gets', 'les-gets', 46.1589, 6.6686, 1172, 2002, 'France', 'Haute-Savoie', 'les-gets'),
-  ('Morzine', 'morzine', 46.1792, 6.7089, 1000, 2460, 'France', 'Haute-Savoie', 'morzine-les-gets'),
-  ('Avoriaz', 'avoriaz', 46.1911, 6.7739, 1100, 2466, 'France', 'Haute-Savoie', 'avoriaz'),
-  ('Serre Chevalier', 'serre-chevalier', 44.9422, 6.5067, 1200, 2800, 'France', 'Hautes-Alpes', 'serre-chevalier-briancon'),
-  ('La Rosière', 'la-rosiere', 45.6283, 6.8483, 1176, 2800, 'France', 'Savoie', 'la-rosiere-espace-san-bernardo'),
-  ('Flaine', 'flaine', 46.0036, 6.6872, 1600, 2500, 'France', 'Haute-Savoie', 'flaine'),
-  ('Samoëns', 'samoens', 46.0808, 6.7269, 700, 2500, 'France', 'Haute-Savoie', 'samoens-le-grand-massif'),
+  ('Les Menuires', 'les-menuires', 45.3247, 6.5331, 1400, 2850, 'France', 'Savoie', 'les-3-vallees-val-thorens-les-menuires-meribel-courchevel'),
+  ('Val Thorens', 'val-thorens', 45.2975, 6.5839, 1800, 3230, 'France', 'Savoie', 'les-3-vallees-val-thorens-les-menuires-meribel-courchevel'),
+  ('Les Gets', 'les-gets', 46.1589, 6.6686, 1172, 2002, 'France', 'Haute-Savoie', 'les-portes-du-soleil-morzine-avoriaz-les-gets-chatel-morgins-champery'),
+  ('Morzine', 'morzine', 46.1792, 6.7089, 1000, 2460, 'France', 'Haute-Savoie', 'les-portes-du-soleil-morzine-avoriaz-les-gets-chatel-morgins-champery'),
+  ('Avoriaz', 'avoriaz', 46.1911, 6.7739, 1100, 2466, 'France', 'Haute-Savoie', 'les-portes-du-soleil-morzine-avoriaz-les-gets-chatel-morgins-champery'),
+  ('Serre Chevalier', 'serre-chevalier', 44.9422, 6.5067, 1200, 2800, 'France', 'Hautes-Alpes', 'serre-chevalier-briancon-chantemerle-villeneuve-la-salle-le-monetier-les-bains'),
+  ('La Rosière', 'la-rosiere', 45.6283, 6.8483, 1176, 2800, 'France', 'Savoie', 'espace-san-bernardo-la-rosiere-la-thuile'),
+  ('Flaine', 'flaine', 46.0036, 6.6872, 1600, 2500, 'France', 'Haute-Savoie', 'le-grand-massif-flaine-les-carroz-morillon-samoens-sixt'),
+  ('Samoëns', 'samoens', 46.0808, 6.7269, 700, 2500, 'France', 'Haute-Savoie', 'le-grand-massif-flaine-les-carroz-morillon-samoens-sixt'),
   ('Les Contamines', 'les-contamines', 45.8178, 6.7261, 1164, 2500, 'France', 'Haute-Savoie', 'les-contamines-montjoie'),
-  ('Peisey-Vallandry', 'peisey-vallandry', 45.5467, 6.7622, 1250, 3250, 'France', 'Savoie', 'peisey-vallandry'),
-  ('Vars', 'vars', 44.5889, 6.6917, 1650, 2750, 'France', 'Hautes-Alpes', 'vars-risoul'),
-  ('Risoul', 'risoul', 44.6244, 6.6367, 1850, 2750, 'France', 'Hautes-Alpes', 'risoul-la-foret-blanche'),
+  ('Peisey-Vallandry', 'peisey-vallandry', 45.5467, 6.7622, 1250, 3250, 'France', 'Savoie', 'les-arcs-peisey-vallandry-paradiski'),
+  ('Vars', 'vars', 44.5889, 6.6917, 1650, 2750, 'France', 'Hautes-Alpes', 'vars-risoul-la-foret-blanche'),
+  ('Risoul', 'risoul', 44.6244, 6.6367, 1850, 2750, 'France', 'Hautes-Alpes', 'vars-risoul-la-foret-blanche'),
   ('Isola 2000', 'isola-2000', 44.1867, 7.1622, 1800, 2610, 'France', 'Alpes-Maritimes', 'isola-2000'),
   ('Auron', 'auron', 44.2386, 6.9328, 1600, 2450, 'France', 'Alpes-Maritimes', 'auron'),
   ('Les Orres', 'les-orres', 44.5014, 6.5517, 1550, 2720, 'France', 'Hautes-Alpes', 'les-orres'),
-  ('Montgenèvre', 'montgenevre', 44.9317, 6.7244, 1860, 2700, 'France', 'Hautes-Alpes', 'montgenevre'),
-  ('Font-Romeu', 'font-romeu', 42.4967, 2.0322, 1700, 2213, 'France', 'Pyrénées-Orientales', 'font-romeu-pyrenees-2000')
+  ('Montgenèvre', 'montgenevre', 44.9317, 6.7244, 1860, 2700, 'France', 'Hautes-Alpes', 'via-lattea-sestriere-sauze-doulx-san-sicario-claviere-montgenevre'),
+  ('Font-Romeu', 'font-romeu', 42.4967, 2.0322, 1700, 2213, 'France', 'Pyrénées-Orientales', 'font-romeu-bolquere-pyrenees-2000')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
   region = EXCLUDED.region,
@@ -48,35 +48,35 @@ ON CONFLICT (slug) DO UPDATE SET
 -- AUSTRIA (~30 resorts)
 -- =========================================================================
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
-  ('St. Anton am Arlberg', 'st-anton', 47.1296, 10.2683, 1304, 2811, 'Austria', 'Tyrol', 'st-anton-am-arlberg'),
-  ('Kitzbühel', 'kitzbuehel', 47.4492, 12.3925, 800, 2000, 'Austria', 'Tyrol', 'kitzbuehel-kirchberg'),
+  ('St. Anton am Arlberg', 'st-anton', 47.1296, 10.2683, 1304, 2811, 'Austria', 'Tyrol', 'st-anton-st-christoph-stuben-lech-zuers-warth-schroecken-ski-arlberg'),
+  ('Kitzbühel', 'kitzbuehel', 47.4492, 12.3925, 800, 2000, 'Austria', 'Tyrol', 'kitzski-kitzbuehel-kirchberg'),
   ('Ischgl', 'ischgl', 46.9697, 10.2939, 1377, 2872, 'Austria', 'Tyrol', 'ischgl-samnaun-silvretta-arena'),
   ('Sölden', 'soelden', 46.9653, 10.8761, 1350, 3340, 'Austria', 'Tyrol', 'soelden'),
   ('Lech Zürs', 'lech-zuers', 47.2075, 10.1419, 1450, 2811, 'Austria', 'Vorarlberg', 'lech-zuers-am-arlberg'),
-  ('Mayrhofen', 'mayrhofen', 47.1669, 11.8617, 630, 2500, 'Austria', 'Tyrol', 'mayrhofen-hippach'),
+  ('Mayrhofen', 'mayrhofen', 47.1669, 11.8617, 630, 2500, 'Austria', 'Tyrol', 'mayrhofen-penken-ahorn-rastkogel-eggalm-mountopolis'),
   ('Obergurgl-Hochgurgl', 'obergurgl', 46.8678, 11.0267, 1793, 3080, 'Austria', 'Tyrol', 'obergurgl-hochgurgl'),
-  ('Stubaier Gletscher', 'stubai-glacier', 46.9978, 11.3128, 1750, 3210, 'Austria', 'Tyrol', 'stubaier-gletscher-stubai-glacier'),
-  ('Hintertux Glacier', 'hintertux', 47.0647, 11.6631, 1500, 3250, 'Austria', 'Tyrol', 'hintertuxer-gletscher-hintertux-glacier'),
-  ('Saalbach Hinterglemm', 'saalbach', 47.3914, 12.6372, 1003, 2096, 'Austria', 'Salzburg', 'saalbach-hinterglemm-leogang-fieberbrunn'),
+  ('Stubaier Gletscher', 'stubai-glacier', 46.9978, 11.3128, 1750, 3210, 'Austria', 'Tyrol', 'stubai-glacier-stubaier-gletscher'),
+  ('Hintertux Glacier', 'hintertux', 47.0647, 11.6631, 1500, 3250, 'Austria', 'Tyrol', 'hintertux-glacier-hintertuxer-gletscher'),
+  ('Saalbach Hinterglemm', 'saalbach', 47.3914, 12.6372, 1003, 2096, 'Austria', 'Salzburg', 'saalbach-hinterglemm-leogang-fieberbrunn-skicircus'),
   ('Obertauern', 'obertauern', 47.2547, 13.5592, 1630, 2313, 'Austria', 'Salzburg', 'obertauern'),
   ('Bad Gastein', 'bad-gastein', 47.1128, 13.1339, 840, 2686, 'Austria', 'Salzburg', 'bad-gastein-bad-hofgastein'),
-  ('Schladming', 'schladming', 47.3933, 13.6872, 745, 2015, 'Austria', 'Styria', 'schladming-planai-hochwurzen'),
-  ('Zillertal Arena', 'zillertal-arena', 47.2306, 12.0597, 580, 2500, 'Austria', 'Tyrol', 'zillertal-arena-zell-gerlos'),
+  ('Schladming', 'schladming', 47.3933, 13.6872, 745, 2015, 'Austria', 'Styria', 'schladming-planai-hochwurzen-hauser-kaibling-reiteralm-4-berge-skischaukel'),
+  ('Zillertal Arena', 'zillertal-arena', 47.2306, 12.0597, 580, 2500, 'Austria', 'Tyrol', 'zillertal-arena-zell-am-ziller-gerlos-koenigsleiten-hochkrimml'),
   ('Kaprun / Kitzsteinhorn', 'kaprun', 47.1847, 12.6889, 768, 3029, 'Austria', 'Salzburg', 'kitzsteinhorn-maiskogel-kaprun'),
-  ('Zell am See', 'zell-am-see', 47.3256, 12.7972, 757, 2000, 'Austria', 'Salzburg', 'zell-am-see-schmittenhoehe'),
+  ('Zell am See', 'zell-am-see', 47.3256, 12.7972, 757, 2000, 'Austria', 'Salzburg', 'schmittenhoehe-zell-am-see'),
   ('Nassfeld', 'nassfeld', 46.5603, 13.2692, 600, 2020, 'Austria', 'Carinthia', 'nassfeld-hermagor'),
   ('Silvretta Montafon', 'silvretta-montafon', 46.9711, 9.9833, 700, 2430, 'Austria', 'Vorarlberg', 'silvretta-montafon'),
   ('Ski Welt Wilder Kaiser', 'skiwelt', 47.4583, 12.3089, 620, 1957, 'Austria', 'Tyrol', 'skiwelt-wilder-kaiser-brixental'),
   ('Ötztal', 'oetztal', 47.2228, 10.8600, 1400, 2272, 'Austria', 'Tyrol', 'hochoetz-oetz'),
   ('Serfaus-Fiss-Ladis', 'serfaus-fiss-ladis', 47.0392, 10.6017, 1200, 2820, 'Austria', 'Tyrol', 'serfaus-fiss-ladis'),
   ('Warth-Schröcken', 'warth-schroecken', 47.2544, 10.1831, 1495, 2811, 'Austria', 'Vorarlberg', 'warth-schroecken'),
-  ('Pitztal Glacier', 'pitztal', 46.9258, 10.8539, 1740, 3440, 'Austria', 'Tyrol', 'pitztaler-gletscher-rifflsee-pitztal-glacier'),
+  ('Pitztal Glacier', 'pitztal', 46.9258, 10.8539, 1740, 3440, 'Austria', 'Tyrol', 'pitztal-glacier-pitztaler-gletscher'),
   ('Axamer Lizum', 'axamer-lizum', 47.2000, 11.3000, 1580, 2340, 'Austria', 'Tyrol', 'axamer-lizum'),
   ('Kühtai', 'kuehtai', 47.2103, 11.0122, 2020, 2520, 'Austria', 'Tyrol', 'kuehtai'),
-  ('Arlberg (Stuben)', 'stuben-arlberg', 47.1300, 10.1833, 1407, 2811, 'Austria', 'Vorarlberg', 'stuben-am-arlberg'),
-  ('Damüls-Mellau', 'damuels-mellau', 47.2833, 9.8833, 700, 2100, 'Austria', 'Vorarlberg', 'damuels-mellau-faschina'),
+  ('Arlberg (Stuben)', 'stuben-arlberg', 47.1300, 10.1833, 1407, 2811, 'Austria', 'Vorarlberg', 'st-anton-st-christoph-stuben-lech-zuers-warth-schroecken-ski-arlberg'),
+  ('Damüls-Mellau', 'damuels-mellau', 47.2833, 9.8833, 700, 2100, 'Austria', 'Vorarlberg', 'damuels-mellau'),
   ('Hochkönig', 'hochkoenig', 47.3833, 13.0833, 800, 1900, 'Austria', 'Salzburg', 'hochkoenig-maria-alm-dienten-muehlbach'),
-  ('Katschberg', 'katschberg', 47.0583, 13.6167, 1066, 2220, 'Austria', 'Carinthia', 'katschberg-aineck'),
+  ('Katschberg', 'katschberg', 47.0583, 13.6167, 1066, 2220, 'Austria', 'Carinthia', 'katschberg'),
   ('Alpbachtal', 'alpbachtal', 47.3500, 11.8500, 672, 2025, 'Austria', 'Tyrol', 'ski-juwel-alpbachtal-wildschoenau')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
@@ -91,30 +91,30 @@ ON CONFLICT (slug) DO UPDATE SET
 -- SWITZERLAND (~25 resorts)
 -- =========================================================================
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
-  ('Zermatt', 'zermatt', 46.0207, 7.7491, 1620, 3883, 'Switzerland', 'Valais', 'zermatt-matterhorn-ski-paradise'),
-  ('Verbier', 'verbier', 46.0967, 7.2283, 821, 3330, 'Switzerland', 'Valais', 'verbier-4-vallees'),
+  ('Zermatt', 'zermatt', 46.0207, 7.7491, 1620, 3883, 'Switzerland', 'Valais', 'zermatt-breuil-cervinia-valtournenche-matterhorn'),
+  ('Verbier', 'verbier', 46.0967, 7.2283, 821, 3330, 'Switzerland', 'Valais', '4-vallees-verbier-la-tzoumaz-nendaz-veysonnaz-thyon'),
   ('St. Moritz', 'st-moritz', 46.4908, 9.8381, 1720, 3303, 'Switzerland', 'Graubünden', 'st-moritz-corviglia'),
-  ('Davos Klosters', 'davos', 46.8003, 9.8369, 810, 2844, 'Switzerland', 'Graubünden', 'davos-klosters-parsenn'),
-  ('Jungfrau Region', 'jungfrau', 46.5958, 7.9575, 944, 2970, 'Switzerland', 'Bern', 'jungfrau-ski-region-grindelwald-wengen'),
-  ('Laax', 'laax', 46.8089, 9.2581, 1100, 3018, 'Switzerland', 'Graubünden', 'laax'),
+  ('Davos Klosters', 'davos', 46.8003, 9.8369, 810, 2844, 'Switzerland', 'Graubünden', 'parsenn-davos-klosters'),
+  ('Jungfrau Region', 'jungfrau', 46.5958, 7.9575, 944, 2970, 'Switzerland', 'Bern', 'kleine-scheidegg-maennlichen-grindelwald-wengen'),
+  ('Laax', 'laax', 46.8089, 9.2581, 1100, 3018, 'Switzerland', 'Graubünden', 'laax-flims-falera'),
   ('Saas-Fee', 'saas-fee', 46.1078, 7.9272, 1800, 3600, 'Switzerland', 'Valais', 'saas-fee'),
   ('Crans-Montana', 'crans-montana', 46.3136, 7.4875, 1500, 3000, 'Switzerland', 'Valais', 'crans-montana'),
-  ('Engelberg-Titlis', 'engelberg', 46.8219, 8.4036, 1003, 3028, 'Switzerland', 'Obwalden', 'engelberg-titlis'),
+  ('Engelberg-Titlis', 'engelberg', 46.8219, 8.4036, 1003, 3028, 'Switzerland', 'Obwalden', 'titlis-engelberg'),
   ('Arosa Lenzerheide', 'arosa-lenzerheide', 46.7833, 9.6806, 1229, 2865, 'Switzerland', 'Graubünden', 'arosa-lenzerheide'),
-  ('Andermatt-Sedrun', 'andermatt', 46.6361, 8.5944, 1444, 2961, 'Switzerland', 'Uri', 'andermatt-sedrun-disentis'),
-  ('4 Vallées (Nendaz)', 'nendaz', 46.1833, 7.3000, 1400, 3330, 'Switzerland', 'Valais', 'nendaz-4-vallees'),
-  ('Portes du Soleil (Swiss side)', 'portes-du-soleil-ch', 46.1833, 6.8333, 1050, 2277, 'Switzerland', 'Valais', 'les-crosets-champoussin-portes-du-soleil'),
+  ('Andermatt-Sedrun', 'andermatt', 46.6361, 8.5944, 1444, 2961, 'Switzerland', 'Uri', 'andermatt-oberalp-sedrun'),
+  ('4 Vallées (Nendaz)', 'nendaz', 46.1833, 7.3000, 1400, 3330, 'Switzerland', 'Valais', '4-vallees-verbier-la-tzoumaz-nendaz-veysonnaz-thyon'),
+  ('Portes du Soleil (Swiss side)', 'portes-du-soleil-ch', 46.1833, 6.8333, 1050, 2277, 'Switzerland', 'Valais', 'les-portes-du-soleil-morzine-avoriaz-les-gets-chatel-morgins-champery'),
   ('Adelboden-Lenk', 'adelboden-lenk', 46.4917, 7.5583, 1068, 2362, 'Switzerland', 'Bern', 'adelboden-lenk'),
-  ('Gstaad', 'gstaad', 46.4739, 7.2861, 1000, 3000, 'Switzerland', 'Bern', 'gstaad'),
-  ('Leukerbad', 'leukerbad', 46.3811, 7.6278, 1411, 2610, 'Switzerland', 'Valais', 'leukerbad-torrent'),
+  ('Gstaad', 'gstaad', 46.4739, 7.2861, 1000, 3000, 'Switzerland', 'Bern', 'eggli-la-videmanette-gstaad-saanen-rougemont'),
+  ('Leukerbad', 'leukerbad', 46.3811, 7.6278, 1411, 2610, 'Switzerland', 'Valais', 'leukerbad'),
   ('Grimentz-Zinal', 'grimentz-zinal', 46.1833, 7.5833, 1570, 2896, 'Switzerland', 'Valais', 'grimentz-zinal'),
-  ('Villars-Gryon', 'villars', 46.3000, 7.0500, 1300, 2120, 'Switzerland', 'Vaud', 'villars-gryon'),
+  ('Villars-Gryon', 'villars', 46.3000, 7.0500, 1300, 2120, 'Switzerland', 'Vaud', 'villars-gryon-les-diablerets'),
   ('Anzère', 'anzere', 46.3000, 7.4000, 1500, 2420, 'Switzerland', 'Valais', 'anzere'),
-  ('Mürren', 'muerren', 46.5597, 7.8928, 1650, 2970, 'Switzerland', 'Bern', 'muerren-schilthorn'),
-  ('Hoch-Ybrig', 'hoch-ybrig', 47.0333, 8.7833, 1037, 1856, 'Switzerland', 'Schwyz', 'hoch-ybrig'),
-  ('Klosters', 'klosters', 46.8667, 9.8833, 1124, 2602, 'Switzerland', 'Graubünden', 'davos-klosters-madrisa'),
-  ('Champéry', 'champery', 46.1747, 6.8706, 1050, 2277, 'Switzerland', 'Valais', 'champery-les-crosets-champoussin-morgins'),
-  ('Samnaun', 'samnaun', 46.9456, 10.3736, 1377, 2872, 'Switzerland', 'Graubünden', 'samnaun-ischgl'),
+  ('Mürren', 'muerren', 46.5597, 7.8928, 1650, 2970, 'Switzerland', 'Bern', 'schilthorn-muerren-lauterbrunnen'),
+  ('Hoch-Ybrig', 'hoch-ybrig', 47.0333, 8.7833, 1037, 1856, 'Switzerland', 'Schwyz', 'hoch-ybrig-unteriberg-oberiberg'),
+  ('Klosters', 'klosters', 46.8667, 9.8833, 1124, 2602, 'Switzerland', 'Graubünden', 'madrisa-davos-klosters'),
+  ('Champéry', 'champery', 46.1747, 6.8706, 1050, 2277, 'Switzerland', 'Valais', 'les-portes-du-soleil-morzine-avoriaz-les-gets-chatel-morgins-champery'),
+  ('Samnaun', 'samnaun', 46.9456, 10.3736, 1377, 2872, 'Switzerland', 'Graubünden', 'ischgl-samnaun-silvretta-arena'),
   ('Aletsch Arena', 'aletsch-arena', 46.3833, 8.0667, 1845, 2869, 'Switzerland', 'Valais', 'aletsch-arena')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
@@ -129,24 +129,24 @@ ON CONFLICT (slug) DO UPDATE SET
 -- ITALY (~20 resorts)
 -- =========================================================================
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
-  ('Cortina d''Ampezzo', 'cortina', 46.5369, 12.1353, 1224, 2930, 'Italy', 'Veneto', 'cortina-d-ampezzo'),
+  ('Cortina d''Ampezzo', 'cortina', 46.5369, 12.1353, 1224, 2930, 'Italy', 'Veneto', 'cortina-dampezzo'),
   ('Val Gardena', 'val-gardena', 46.5578, 11.7561, 1236, 2518, 'Italy', 'South Tyrol', 'val-gardena-groeden'),
   ('Alta Badia', 'alta-badia', 46.5600, 11.8625, 1324, 2778, 'Italy', 'South Tyrol', 'alta-badia'),
   ('Madonna di Campiglio', 'madonna-di-campiglio', 46.2289, 10.8264, 853, 2504, 'Italy', 'Trentino', 'madonna-di-campiglio-pinzolo-folgarida-marilleva'),
   ('Kronplatz / Plan de Corones', 'kronplatz', 46.7442, 11.9578, 835, 2275, 'Italy', 'South Tyrol', 'kronplatz-plan-de-corones'),
-  ('Selva Val Gardena', 'selva-val-gardena', 46.5556, 11.7594, 1236, 2518, 'Italy', 'South Tyrol', 'selva-val-gardena-selva-wolkenstein'),
+  ('Selva Val Gardena', 'selva-val-gardena', 46.5556, 11.7594, 1236, 2518, 'Italy', 'South Tyrol', 'val-gardena-groeden'),
   ('Livigno', 'livigno', 46.5381, 10.1350, 1816, 2798, 'Italy', 'Lombardy', 'livigno'),
-  ('Cervinia', 'cervinia', 45.9364, 7.6319, 1524, 3480, 'Italy', 'Aosta Valley', 'breuil-cervinia-valtournenche'),
-  ('Courmayeur', 'courmayeur', 45.7967, 6.9697, 1224, 2755, 'Italy', 'Aosta Valley', 'courmayeur'),
-  ('Sestriere', 'sestriere', 44.9567, 6.8789, 1350, 2823, 'Italy', 'Piedmont', 'vialattea-sestriere-sauze-d-oulx-san-sicario'),
-  ('Bormio', 'bormio', 46.4683, 10.3722, 1225, 3012, 'Italy', 'Lombardy', 'bormio'),
-  ('San Martino di Castrozza', 'san-martino', 46.2667, 11.8000, 1404, 2357, 'Italy', 'Trentino', 'san-martino-di-castrozza-rolle-pass'),
-  ('Canazei (Dolomiti Superski)', 'canazei', 46.4767, 11.7706, 1460, 2628, 'Italy', 'Trentino', 'belvedere-canazei'),
+  ('Cervinia', 'cervinia', 45.9364, 7.6319, 1524, 3480, 'Italy', 'Aosta Valley', 'zermatt-breuil-cervinia-valtournenche-matterhorn'),
+  ('Courmayeur', 'courmayeur', 45.7967, 6.9697, 1224, 2755, 'Italy', 'Aosta Valley', 'courmayeur-checrouit-val-veny'),
+  ('Sestriere', 'sestriere', 44.9567, 6.8789, 1350, 2823, 'Italy', 'Piedmont', 'via-lattea-sestriere-sauze-doulx-san-sicario-claviere-montgenevre'),
+  ('Bormio', 'bormio', 46.4683, 10.3722, 1225, 3012, 'Italy', 'Lombardy', 'bormio-cima-bianca'),
+  ('San Martino di Castrozza', 'san-martino', 46.2667, 11.8000, 1404, 2357, 'Italy', 'Trentino', 'san-martino-di-castrozza'),
+  ('Canazei (Dolomiti Superski)', 'canazei', 46.4767, 11.7706, 1460, 2628, 'Italy', 'Trentino', 'belvedere-col-rodella-ciampac-buffaure-canazei-campitello-alba-pozza-di-fassa'),
   ('Arabba (Dolomiti)', 'arabba', 46.4972, 11.8744, 1602, 3269, 'Italy', 'Veneto', 'arabba-marmolada'),
-  ('La Thuile', 'la-thuile', 45.7178, 6.9547, 1441, 2610, 'Italy', 'Aosta Valley', 'la-thuile'),
-  ('Passo Tonale', 'passo-tonale', 46.2592, 10.5847, 1121, 3016, 'Italy', 'Trentino', 'pontedilegno-tonale'),
+  ('La Thuile', 'la-thuile', 45.7178, 6.9547, 1441, 2610, 'Italy', 'Aosta Valley', 'espace-san-bernardo-la-rosiere-la-thuile'),
+  ('Passo Tonale', 'passo-tonale', 46.2592, 10.5847, 1121, 3016, 'Italy', 'Trentino', 'ponte-di-legno-tonale-presena-glacier-temu-pontedilegno-tonale'),
   ('Alpe di Siusi', 'alpe-di-siusi', 46.5417, 11.6250, 1680, 2350, 'Italy', 'South Tyrol', 'alpe-di-siusi-seiser-alm'),
-  ('Monterosa Ski', 'monterosa', 45.8358, 7.8136, 1212, 3275, 'Italy', 'Aosta Valley', 'monterosa-ski-champoluc-gressoney-alagna'),
+  ('Monterosa Ski', 'monterosa', 45.8358, 7.8136, 1212, 3275, 'Italy', 'Aosta Valley', 'alagna-valsesia-gressoney-la-trinite-champoluc-frachey-monterosa-ski'),
   ('Bardonecchia', 'bardonecchia', 45.0789, 6.7014, 1312, 2750, 'Italy', 'Piedmont', 'bardonecchia'),
   ('Aprica', 'aprica', 46.1533, 10.1492, 1181, 2300, 'Italy', 'Lombardy', 'aprica')
 ON CONFLICT (slug) DO UPDATE SET
@@ -163,17 +163,17 @@ ON CONFLICT (slug) DO UPDATE SET
 -- =========================================================================
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
   ('Vail', 'vail', 39.6403, -106.3742, 2457, 3527, 'USA', 'Colorado', 'vail'),
-  ('Aspen Snowmass', 'aspen-snowmass', 39.2084, -106.9490, 2473, 3813, 'USA', 'Colorado', 'aspen-snowmass'),
+  ('Aspen Snowmass', 'aspen-snowmass', 39.2084, -106.9490, 2473, 3813, 'USA', 'Colorado', 'snowmass'),
   ('Park City', 'park-city', 40.6514, -111.5080, 2080, 3048, 'USA', 'Utah', 'park-city'),
-  ('Mammoth Mountain', 'mammoth', 37.6308, -119.0326, 2424, 3369, 'USA', 'California', 'mammoth-mountain-ski-area'),
+  ('Mammoth Mountain', 'mammoth', 37.6308, -119.0326, 2424, 3369, 'USA', 'California', 'mammoth-mountain'),
   ('Jackson Hole', 'jackson-hole', 43.5877, -110.8279, 1924, 3185, 'USA', 'Wyoming', 'jackson-hole'),
   ('Breckenridge', 'breckenridge', 39.4817, -106.0384, 2926, 3914, 'USA', 'Colorado', 'breckenridge'),
   ('Telluride', 'telluride', 37.9375, -107.8123, 2659, 3831, 'USA', 'Colorado', 'telluride'),
   ('Steamboat Springs', 'steamboat', 40.4572, -106.8045, 2103, 3221, 'USA', 'Colorado', 'steamboat'),
   ('Big Sky', 'big-sky', 45.2833, -111.4014, 2072, 3403, 'USA', 'Montana', 'big-sky-resort'),
-  ('Sun Valley', 'sun-valley', 43.6978, -114.3511, 1752, 2789, 'USA', 'Idaho', 'sun-valley'),
+  ('Sun Valley', 'sun-valley', 43.6978, -114.3511, 1752, 2789, 'USA', 'Idaho', 'bald-mountain-sun-valley'),
   ('Deer Valley', 'deer-valley', 40.6375, -111.4783, 2003, 2917, 'USA', 'Utah', 'deer-valley'),
-  ('Alta', 'alta', 40.5884, -111.6386, 2600, 3216, 'USA', 'Utah', 'alta-ski-area'),
+  ('Alta', 'alta', 40.5884, -111.6386, 2600, 3216, 'USA', 'Utah', 'alta'),
   ('Snowbird', 'snowbird', 40.5830, -111.6508, 2365, 3353, 'USA', 'Utah', 'snowbird'),
   ('Squaw Valley (Palisades Tahoe)', 'palisades-tahoe', 39.1968, -120.2354, 1890, 2757, 'USA', 'California', 'palisades-tahoe'),
   ('Heavenly', 'heavenly', 38.9353, -119.9400, 1996, 3060, 'USA', 'California', 'heavenly'),
@@ -182,16 +182,16 @@ INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max
   ('Copper Mountain', 'copper-mountain', 39.5022, -106.1497, 2926, 3753, 'USA', 'Colorado', 'copper-mountain'),
   ('Winter Park', 'winter-park', 39.8841, -105.7625, 2743, 3676, 'USA', 'Colorado', 'winter-park'),
   ('Keystone', 'keystone', 39.5792, -105.9475, 2835, 3651, 'USA', 'Colorado', 'keystone'),
-  ('Crested Butte', 'crested-butte', 38.8986, -106.9653, 2775, 3707, 'USA', 'Colorado', 'crested-butte-mountain-resort'),
-  ('Taos Ski Valley', 'taos', 36.5964, -105.4542, 2804, 3804, 'USA', 'New Mexico', 'taos-ski-valley'),
+  ('Crested Butte', 'crested-butte', 38.8986, -106.9653, 2775, 3707, 'USA', 'Colorado', 'crested-butte'),
+  ('Taos Ski Valley', 'taos', 36.5964, -105.4542, 2804, 3804, 'USA', 'New Mexico', 'taos'),
   ('Sugarbush', 'sugarbush', 44.1356, -72.9011, 427, 1244, 'USA', 'Vermont', 'sugarbush'),
   ('Snowbasin', 'snowbasin', 41.2160, -111.8569, 1956, 2896, 'USA', 'Utah', 'snowbasin'),
   ('Mt. Bachelor', 'mt-bachelor', 43.9790, -121.6886, 1775, 2763, 'USA', 'Oregon', 'mt-bachelor'),
-  ('Crystal Mountain', 'crystal-mountain', 46.9350, -121.5047, 1341, 2134, 'USA', 'Washington', 'crystal-mountain-washington'),
+  ('Crystal Mountain', 'crystal-mountain', 46.9350, -121.5047, 1341, 2134, 'USA', 'Washington', 'crystal-mountain-wa'),
   ('Arapahoe Basin', 'arapahoe-basin', 39.6425, -105.8719, 3286, 3978, 'USA', 'Colorado', 'arapahoe-basin'),
   ('Beaver Creek', 'beaver-creek', 39.6042, -106.5164, 2255, 3488, 'USA', 'Colorado', 'beaver-creek'),
   ('Northstar California', 'northstar', 39.2746, -120.1211, 1929, 2624, 'USA', 'California', 'northstar-california-resort'),
-  ('Whiteface Mountain', 'whiteface', 44.3658, -73.9028, 362, 1417, 'USA', 'New York', 'whiteface-mountain-lake-placid')
+  ('Whiteface Mountain', 'whiteface', 44.3658, -73.9028, 362, 1417, 'USA', 'New York', 'whiteface-lake-placid')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
   region = EXCLUDED.region,
@@ -207,18 +207,18 @@ ON CONFLICT (slug) DO UPDATE SET
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
   ('Whistler Blackcomb', 'whistler', 50.1163, -122.9574, 653, 2284, 'Canada', 'British Columbia', 'whistler-blackcomb'),
   ('Lake Louise', 'lake-louise', 51.4414, -116.1524, 1645, 2637, 'Canada', 'Alberta', 'lake-louise'),
-  ('Banff Sunshine', 'banff-sunshine', 51.0714, -115.7833, 1660, 2730, 'Canada', 'Alberta', 'banff-sunshine-village'),
+  ('Banff Sunshine', 'banff-sunshine', 51.0714, -115.7833, 1660, 2730, 'Canada', 'Alberta', 'sunshine-village'),
   ('Revelstoke', 'revelstoke', 50.9583, -118.1614, 512, 2225, 'Canada', 'British Columbia', 'revelstoke-mountain-resort'),
   ('Big White', 'big-white', 49.7258, -118.9314, 1508, 2319, 'Canada', 'British Columbia', 'big-white'),
   ('Sun Peaks', 'sun-peaks', 50.8831, -119.8925, 1200, 2080, 'Canada', 'British Columbia', 'sun-peaks'),
   ('Tremblant', 'tremblant', 46.2142, -74.5856, 265, 875, 'Canada', 'Quebec', 'mont-tremblant'),
-  ('Kicking Horse', 'kicking-horse', 51.2972, -117.0478, 1190, 2450, 'Canada', 'British Columbia', 'kicking-horse'),
+  ('Kicking Horse', 'kicking-horse', 51.2972, -117.0478, 1190, 2450, 'Canada', 'British Columbia', 'kicking-horse-golden'),
   ('Fernie', 'fernie', 49.4614, -115.0878, 1082, 1925, 'Canada', 'British Columbia', 'fernie'),
   ('Silver Star', 'silver-star', 50.3614, -119.0619, 1155, 1915, 'Canada', 'British Columbia', 'silverstar'),
-  ('Marmot Basin', 'marmot-basin', 52.8024, -118.0822, 1698, 2601, 'Canada', 'Alberta', 'marmot-basin'),
+  ('Marmot Basin', 'marmot-basin', 52.8024, -118.0822, 1698, 2601, 'Canada', 'Alberta', 'marmot-basin-jasper'),
   ('Panorama', 'panorama', 50.4600, -116.2350, 1160, 2365, 'Canada', 'British Columbia', 'panorama'),
   ('Red Mountain', 'red-mountain', 49.1050, -117.8439, 1185, 2075, 'Canada', 'British Columbia', 'red-mountain-resort-rossland'),
-  ('Nakiska', 'nakiska', 50.9417, -115.1500, 1525, 2258, 'Canada', 'Alberta', 'nakiska-ski-area'),
+  ('Nakiska', 'nakiska', 50.9417, -115.1500, 1525, 2258, 'Canada', 'Alberta', 'nakiska'),
   ('Le Massif de Charlevoix', 'le-massif', 47.2642, -70.6236, 3, 806, 'Canada', 'Quebec', 'le-massif-de-charlevoix')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
@@ -233,12 +233,12 @@ ON CONFLICT (slug) DO UPDATE SET
 -- JAPAN (~10 resorts)
 -- =========================================================================
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
-  ('Niseko United', 'niseko', 42.8628, 140.6989, 260, 1308, 'Japan', 'Hokkaido', 'niseko-united-grand-hirafu-hanazono-niseko-village-annupuri'),
-  ('Hakuba Valley', 'hakuba', 36.6983, 137.8322, 760, 1831, 'Japan', 'Nagano', 'hakuba-valley'),
+  ('Niseko United', 'niseko', 42.8628, 140.6989, 260, 1308, 'Japan', 'Hokkaido', 'niseko-united-annupuri-grand-hirafu-hanazono-niseko-village'),
+  ('Hakuba Valley', 'hakuba', 36.6983, 137.8322, 760, 1831, 'Japan', 'Nagano', 'happo-one-hakuba'),
   ('Furano', 'furano', 43.3378, 142.3617, 245, 1074, 'Japan', 'Hokkaido', 'furano'),
-  ('Shiga Kogen', 'shiga-kogen', 36.7986, 138.5253, 1340, 2307, 'Japan', 'Nagano', 'shiga-kogen-yakebitai-yama-okushiga'),
+  ('Shiga Kogen', 'shiga-kogen', 36.7986, 138.5253, 1340, 2307, 'Japan', 'Nagano', 'shigakogen-mountain-resort'),
   ('Nozawa Onsen', 'nozawa-onsen', 36.9261, 138.6292, 565, 1650, 'Japan', 'Nagano', 'nozawa-onsen'),
-  ('Myoko Kogen', 'myoko-kogen', 36.8814, 138.6389, 450, 1500, 'Japan', 'Niigata', 'myoko-kogen-akakura'),
+  ('Myoko Kogen', 'myoko-kogen', 36.8814, 138.6389, 450, 1500, 'Japan', 'Niigata', 'myoko-akakura'),
   ('Rusutsu', 'rusutsu', 42.7419, 140.5764, 350, 994, 'Japan', 'Hokkaido', 'rusutsu'),
   ('Kiroro', 'kiroro', 43.0750, 140.9800, 570, 1180, 'Japan', 'Hokkaido', 'kiroro-snow-world'),
   ('Tomamu', 'tomamu', 43.0617, 142.6333, 530, 1239, 'Japan', 'Hokkaido', 'hoshino-resorts-tomamu'),
@@ -280,15 +280,15 @@ ON CONFLICT (slug) DO UPDATE SET
 -- =========================================================================
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
   ('Grandvalira', 'grandvalira', 42.5556, 1.7344, 1710, 2640, 'Andorra', 'Andorra', 'grandvalira'),
-  ('Vallnord Pal-Arinsal', 'vallnord', 42.5700, 1.4800, 1550, 2560, 'Andorra', 'Andorra', 'vallnord-pal-arinsal'),
+  ('Vallnord Pal-Arinsal', 'vallnord', 42.5700, 1.4800, 1550, 2560, 'Andorra', 'Andorra', 'pal-arinsal-la-massana-vallnord'),
   ('Ordino Arcalís', 'ordino-arcalis', 42.6183, 1.4878, 1940, 2625, 'Andorra', 'Andorra', 'ordino-arcalis'),
   ('Baqueira-Beret', 'baqueira-beret', 42.6944, 0.9500, 1500, 2610, 'Spain', 'Catalonia', 'baqueira-beret'),
-  ('Sierra Nevada', 'sierra-nevada', 37.0956, -3.3964, 2100, 3300, 'Spain', 'Andalusia', 'sierra-nevada'),
-  ('Formigal-Panticosa', 'formigal', 42.7597, -0.3547, 1500, 2250, 'Spain', 'Aragon', 'formigal-panticosa'),
+  ('Sierra Nevada', 'sierra-nevada', 37.0956, -3.3964, 2100, 3300, 'Spain', 'Andalusia', 'sierra-nevada-pradollano'),
+  ('Formigal-Panticosa', 'formigal', 42.7597, -0.3547, 1500, 2250, 'Spain', 'Aragon', 'formigal'),
   ('Cerler', 'cerler', 42.5578, 0.5264, 1500, 2630, 'Spain', 'Aragon', 'cerler'),
-  ('La Molina', 'la-molina', 42.3372, 1.9422, 1700, 2445, 'Spain', 'Catalonia', 'la-molina'),
-  ('Masella', 'masella', 42.3356, 1.8878, 1600, 2535, 'Spain', 'Catalonia', 'masella'),
-  ('Boí Taüll', 'boi-taull', 42.4722, 0.8222, 2020, 2751, 'Spain', 'Catalonia', 'boi-taull')
+  ('La Molina', 'la-molina', 42.3372, 1.9422, 1700, 2445, 'Spain', 'Catalonia', 'la-molina-masella-alp2500'),
+  ('Masella', 'masella', 42.3356, 1.8878, 1600, 2535, 'Spain', 'Catalonia', 'la-molina-masella-alp2500'),
+  ('Boí Taüll', 'boi-taull', 42.4722, 0.8222, 2020, 2751, 'Spain', 'Catalonia', 'boi-tauell')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
   region = EXCLUDED.region,
@@ -304,8 +304,8 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- Germany
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
-  ('Garmisch-Partenkirchen', 'garmisch', 47.4347, 11.0875, 708, 2050, 'Germany', 'Bavaria', 'garmisch-classic'),
-  ('Oberstdorf-Kleinwalsertal', 'oberstdorf', 47.4128, 10.2789, 820, 2224, 'Germany', 'Bavaria', 'oberstdorf-kleinwalsertal'),
+  ('Garmisch-Partenkirchen', 'garmisch', 47.4347, 11.0875, 708, 2050, 'Germany', 'Bavaria', 'garmisch-classic-garmisch-partenkirchen'),
+  ('Oberstdorf-Kleinwalsertal', 'oberstdorf', 47.4128, 10.2789, 820, 2224, 'Germany', 'Bavaria', 'fellhorn-kanzelwand-oberstdorf-riezlern'),
   ('Zugspitze', 'zugspitze', 47.4211, 10.9847, 2000, 2720, 'Germany', 'Bavaria', 'zugspitze')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
@@ -319,7 +319,7 @@ ON CONFLICT (slug) DO UPDATE SET
 -- Slovenia
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
   ('Kranjska Gora', 'kranjska-gora', 46.4847, 13.7856, 800, 1215, 'Slovenia', 'Upper Carniola', 'kranjska-gora'),
-  ('Vogel', 'vogel', 46.2639, 13.8386, 569, 1800, 'Slovenia', 'Upper Carniola', 'vogel')
+  ('Vogel', 'vogel', 46.2639, 13.8386, 569, 1800, 'Slovenia', 'Upper Carniola', 'vogel-bohinj')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
   region = EXCLUDED.region,
@@ -419,7 +419,7 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- Turkey
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
-  ('Uludağ', 'uludag', 40.1019, 29.1203, 1767, 2543, 'Turkey', 'Bursa', 'uludag')
+  ('Uludağ', 'uludag', 40.1019, 29.1203, 1767, 2543, 'Turkey', 'Bursa', 'uludag-bursa')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
   region = EXCLUDED.region,
@@ -455,7 +455,7 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- Slovakia
 INSERT INTO resorts (name, slug, latitude, longitude, altitude_min, altitude_max, country, region, skiresort_info_slug) VALUES
-  ('Jasná Nízke Tatry', 'jasna', 48.9478, 19.5839, 943, 2024, 'Slovakia', 'Žilina', 'jasna-nizke-tatry')
+  ('Jasná Nízke Tatry', 'jasna', 48.9478, 19.5839, 943, 2024, 'Slovakia', 'Žilina', 'jasna-nizke-tatry-chopok')
 ON CONFLICT (slug) DO UPDATE SET
   country = EXCLUDED.country,
   region = EXCLUDED.region,
