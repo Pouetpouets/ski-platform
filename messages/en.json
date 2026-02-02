@@ -67,7 +67,8 @@
     "loadingMap": "Loading map...",
     "perfectDayScore": "Perfect Day Score",
     "noConditions": "No conditions data",
-    "base": "base"
+    "base": "base",
+    "searchResorts": "Search resorts..."
   },
   "priorities": {
     "title": "Your Priorities",

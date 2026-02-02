@@ -4,15 +4,13 @@ import { useState, useCallback, useMemo } from 'react';
 import { SkiMap } from './ski-map';
 import { ResortDetailPanel } from './resort-detail-panel';
 import { PrioritySettingsPanel } from './priority-settings-panel';
-import { DayPicker } from './day-picker';
+import { MapCommandBar } from './map-command-bar';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { getDistanceInfo } from '@/lib/utils/distance';
 import { calculatePerfectDayScore } from '@/lib/utils/score';
 import { PrioritiesProvider, usePriorities } from '@/lib/contexts/priorities-context';
 import { ForecastDayProvider, useForecastDay } from '@/lib/contexts/forecast-day-context';
-import { useTranslations } from 'next-intl';
-import { Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ResortSearchProvider, useResortSearch } from '@/lib/contexts/resort-search-context';
 
 interface SkiMapWrapperProps {
   resorts: ResortWithConditions[];
@@ -22,16 +20,18 @@ export function SkiMapWrapper({ resorts }: SkiMapWrapperProps) {
   return (
     <PrioritiesProvider>
       <ForecastDayProvider>
-        <SkiMapContent resorts={resorts} />
+        <ResortSearchProvider>
+          <SkiMapContent resorts={resorts} />
+        </ResortSearchProvider>
       </ForecastDayProvider>
     </PrioritiesProvider>
   );
 }
 
 function SkiMapContent({ resorts }: SkiMapWrapperProps) {
-  const t = useTranslations('priorities');
   const { weights } = usePriorities();
   const { selectedDate } = useForecastDay();
+  const { searchQuery } = useResortSearch();
   const [selectedResort, setSelectedResort] = useState<ResortWithConditions | null>(null);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -47,6 +47,23 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
   const handlePanelClose = useCallback(() => {
     setSelectedResort(null);
   }, []);
+
+  // Compute highlighted slugs from search query
+  const highlightedSlugs = useMemo<Set<string> | null>(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return null;
+    const slugs = new Set<string>();
+    for (const resort of resorts) {
+      const haystack = [resort.name, resort.region, resort.country]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+      if (haystack.includes(q)) {
+        slugs.add(resort.slug);
+      }
+    }
+    return slugs;
+  }, [searchQuery, resorts]);
 
   // Calculate distance for selected resort
   const distanceInfo = useMemo(() => {
@@ -75,25 +92,12 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
         className="h-full w-full"
         resorts={resorts}
         weights={weights}
+        highlightedSlugs={highlightedSlugs}
         onResortClick={handleResortClick}
         onUserLocationChange={handleUserLocationChange}
       />
 
-      {/* Day picker overlay */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 bg-background/90 backdrop-blur-sm shadow-md rounded-lg px-2 py-1.5">
-        <DayPicker />
-      </div>
-
-      {/* Settings trigger button */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute bottom-6 left-4 z-20 bg-background/90 backdrop-blur-sm shadow-md"
-        onClick={() => setSettingsOpen(true)}
-        aria-label={t('openSettings')}
-      >
-        <Settings className="size-4" />
-      </Button>
+      <MapCommandBar onSettingsOpen={() => setSettingsOpen(true)} />
 
       <PrioritySettingsPanel
         isOpen={settingsOpen}

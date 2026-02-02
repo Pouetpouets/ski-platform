@@ -24,6 +24,7 @@ interface SkiMapProps {
   className?: string;
   resorts?: ResortWithConditions[];
   weights?: Record<string, number>;
+  highlightedSlugs?: Set<string> | null;
   onMapLoad?: () => void;
   onUserLocationChange?: (coords: { latitude: number; longitude: number } | null) => void;
   onResortClick?: (resort: ResortWithConditions) => void;
@@ -52,6 +53,7 @@ export function SkiMap({
   className,
   resorts = [],
   weights,
+  highlightedSlugs,
   onMapLoad,
   onUserLocationChange,
   onResortClick,
@@ -196,6 +198,7 @@ export function SkiMap({
           map={mapInstance}
           resorts={resorts}
           weights={weights}
+          highlightedSlugs={highlightedSlugs}
           onResortClick={onResortClick}
         />
       )}

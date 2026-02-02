@@ -67,7 +67,8 @@
     "loadingMap": "Chargement de la carte...",
     "perfectDayScore": "Perfect Day Score",
     "noConditions": "Pas de données disponibles",
-    "base": "base"
+    "base": "base",
+    "searchResorts": "Rechercher une station..."
   },
   "priorities": {
     "title": "Vos priorités",

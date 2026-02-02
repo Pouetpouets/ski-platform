@@ -24,7 +24,7 @@ export function DayPicker() {
       {availableDates.map((date, index) => (
         <Button
           key={date}
-          variant={date === selectedDate ? 'default' : 'outline'}
+          variant={date === selectedDate ? 'default' : 'ghost'}
           size="sm"
           className="shrink-0 text-xs h-8 px-3"
           onClick={() => setSelectedDate(date)}

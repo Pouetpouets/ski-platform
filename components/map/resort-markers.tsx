@@ -11,6 +11,7 @@ interface ResortMarkersProps {
   map: mapboxgl.Map | null;
   resorts: ResortWithConditions[];
   weights?: Record<FactorName, number>;
+  highlightedSlugs?: Set<string> | null;
   onResortClick?: (resort: ResortWithConditions) => void;
   onResortHover?: (resort: ResortWithConditions | null) => void;
 }
@@ -132,12 +133,14 @@ export function ResortMarkers({
   map,
   resorts,
   weights,
+  highlightedSlugs,
   onResortClick,
   onResortHover,
 }: ResortMarkersProps) {
   const t = useTranslations('map');
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
+  const resortSlugsByMarkerIndex = useRef<string[]>([]);
 
   useEffect(() => {
     if (!map) return;
@@ -147,6 +150,7 @@ export function ResortMarkers({
       // Clear existing markers
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
+      resortSlugsByMarkerIndex.current = [];
 
       // Create markers for each resort
       resorts.forEach((resort) => {
@@ -201,6 +205,7 @@ export function ResortMarkers({
         });
 
         markersRef.current.push(marker);
+        resortSlugsByMarkerIndex.current.push(resort.slug);
       });
 
       // Apply initial zoom state
@@ -230,6 +235,32 @@ export function ResortMarkers({
       }
     };
   }, [map, resorts, weights, onResortClick, onResortHover]);
+
+  // Highlight/dim markers based on search
+  useEffect(() => {
+    const markers = markersRef.current;
+    const slugs = resortSlugsByMarkerIndex.current;
+
+    markers.forEach((marker, i) => {
+      const el = marker.getElement();
+      const container = el.querySelector('.marker-container') as HTMLElement;
+      if (!container) return;
+
+      if (highlightedSlugs === null || highlightedSlugs === undefined) {
+        // No search — reset all
+        container.style.opacity = '1';
+        container.style.filter = '';
+      } else if (highlightedSlugs.has(slugs[i])) {
+        // Matching
+        container.style.opacity = '1';
+        container.style.filter = '';
+      } else {
+        // Non-matching — dim
+        container.style.opacity = '0.25';
+        container.style.filter = 'grayscale(0.5)';
+      }
+    });
+  }, [highlightedSlugs]);
 
   return null; // Markers are added directly to the map
 }
