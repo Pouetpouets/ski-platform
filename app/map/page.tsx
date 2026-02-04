@@ -1,10 +1,8 @@
 import { Suspense } from 'react';
-import { getTranslations } from 'next-intl/server';
 import { getResortsWithConditions } from '@/lib/data/resorts';
 import { SkiMapWrapper } from '@/components/map/ski-map-wrapper';
 import { Skeleton } from '@/components/ui/skeleton';
 import { UserMenu } from '@/components/map/user-menu';
-import { LanguageSwitcher } from '@/components/language-switcher';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -21,10 +19,7 @@ function MapSkeleton() {
   );
 }
 
-export default async function MapPage() {
-  const t = await getTranslations('common');
-  const tMap = await getTranslations('map');
-
+export default function MapPage() {
   return (
     <main className="h-screen w-screen relative">
       {/* Header overlay */}
@@ -36,16 +31,15 @@ export default async function MapPage() {
               className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              {t('back')}
+              Back
             </Link>
             <span className="text-border">|</span>
-            <h1 className="text-xl font-bold text-foreground">{t('peakPick')}</h1>
+            <h1 className="text-xl font-bold text-foreground">PeakPick</h1>
           </div>
           <div className="flex items-center gap-3">
             <p className="text-sm text-muted-foreground hidden sm:block">
-              {tMap('tagline')}
+              Pick your perfect ski day.
             </p>
-            <LanguageSwitcher />
             <UserMenu />
           </div>
         </div>

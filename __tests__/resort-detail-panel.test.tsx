@@ -141,7 +141,7 @@ describe('ResortDetailPanel', () => {
     // Lifts
     expect(screen.getByText('45/51')).toBeInTheDocument();
     // Crowd (formatted by CrowdLevelDisplay)
-    expect(screen.getByText('low')).toBeInTheDocument();
+    expect(screen.getByText('Low')).toBeInTheDocument();
     // Price
     expect(screen.getByText(/€59/)).toBeInTheDocument();
     // Fresh snow
@@ -158,7 +158,7 @@ describe('ResortDetailPanel', () => {
       distanceInfo: mockDistanceInfo,
     });
 
-    expect(screen.getByText('noConditions')).toBeInTheDocument();
+    expect(screen.getByText('No conditions data available')).toBeInTheDocument();
   });
 
   it('renders distance info', () => {
@@ -186,12 +186,12 @@ describe('ResortDetailPanel', () => {
       distanceInfo: mockDistanceInfo,
     });
 
-    const websiteLink = screen.getByText('website');
+    const websiteLink = screen.getByText('Website');
     expect(websiteLink).toBeInTheDocument();
     expect(websiteLink.closest('a')).toHaveAttribute('href', 'https://www.lesarcs.com');
     expect(websiteLink.closest('a')).toHaveAttribute('target', '_blank');
 
-    const webcamLink = screen.getByText('webcams');
+    const webcamLink = screen.getByText('Webcams');
     expect(webcamLink).toBeInTheDocument();
     expect(webcamLink.closest('a')).toHaveAttribute('href', 'https://www.lesarcs.com/webcams.html');
     expect(webcamLink.closest('a')).toHaveAttribute('target', '_blank');
@@ -207,8 +207,8 @@ describe('ResortDetailPanel', () => {
       distanceInfo: mockDistanceInfo,
     });
 
-    expect(screen.queryByText('website')).not.toBeInTheDocument();
-    expect(screen.queryByText('webcams')).not.toBeInTheDocument();
+    expect(screen.queryByText('Website')).not.toBeInTheDocument();
+    expect(screen.queryByText('Webcams')).not.toBeInTheDocument();
   });
 
   it('calls onClose when sheet is closed', () => {

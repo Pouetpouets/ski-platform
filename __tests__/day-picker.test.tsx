@@ -3,8 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { DayPicker } from '@/components/map/day-picker';
 import { ForecastDayProvider } from '@/lib/contexts/forecast-day-context';
 
-// Mock next-intl is already set up in setup.ts
-
 describe('DayPicker', () => {
   function renderWithProvider() {
     return render(
@@ -20,15 +18,14 @@ describe('DayPicker', () => {
     expect(buttons).toHaveLength(7);
   });
 
-  it('shows "today" label for the first button', () => {
+  it('shows "Today" label for the first button', () => {
     renderWithProvider();
-    // The mock useTranslations returns the key, so first button text is "today"
-    expect(screen.getByText('today')).toBeInTheDocument();
+    expect(screen.getByText('Today')).toBeInTheDocument();
   });
 
-  it('shows "tomorrow" label for the second button', () => {
+  it('shows "Tomorrow" label for the second button', () => {
     renderWithProvider();
-    expect(screen.getByText('tomorrow')).toBeInTheDocument();
+    expect(screen.getByText('Tomorrow')).toBeInTheDocument();
   });
 
   it('first button is active by default (has default variant)', () => {

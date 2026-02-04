@@ -13,7 +13,7 @@ describe('WeatherDisplay with forecast extras', () => {
       />
     );
 
-    expect(screen.getByText(/wind.*35 km\/h/i)).toBeInTheDocument();
+    expect(screen.getByText(/Wind.*35 km\/h/i)).toBeInTheDocument();
   });
 
   it('renders wind gusts when provided', () => {
@@ -26,7 +26,7 @@ describe('WeatherDisplay with forecast extras', () => {
       />
     );
 
-    expect(screen.getByText(/gusts.*55 km\/h/i)).toBeInTheDocument();
+    expect(screen.getByText(/Gusts.*55 km\/h/i)).toBeInTheDocument();
   });
 
   it('renders precipitation when > 0', () => {
@@ -39,7 +39,7 @@ describe('WeatherDisplay with forecast extras', () => {
       />
     );
 
-    expect(screen.getByText(/precipitation.*12.5 mm/i)).toBeInTheDocument();
+    expect(screen.getByText(/Precip.*12.5 mm/i)).toBeInTheDocument();
   });
 
   it('does not render precipitation when 0', () => {
@@ -53,7 +53,7 @@ describe('WeatherDisplay with forecast extras', () => {
       />
     );
 
-    expect(screen.queryByText(/precipitation/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Precip/i)).not.toBeInTheDocument();
   });
 
   it('renders snowfall when > 0', () => {
@@ -66,7 +66,7 @@ describe('WeatherDisplay with forecast extras', () => {
       />
     );
 
-    expect(screen.getByText(/snowfall.*15 cm/i)).toBeInTheDocument();
+    expect(screen.getByText(/Snowfall.*15 cm/i)).toBeInTheDocument();
   });
 
   it('renders UV index when provided', () => {
@@ -79,7 +79,7 @@ describe('WeatherDisplay with forecast extras', () => {
       />
     );
 
-    expect(screen.getByText(/uvIndex.*6.5/i)).toBeInTheDocument();
+    expect(screen.getByText(/UV Index.*6.5/i)).toBeInTheDocument();
   });
 
   it('does not render extras when none provided (backward compatible)', () => {
@@ -91,10 +91,10 @@ describe('WeatherDisplay with forecast extras', () => {
       />
     );
 
-    expect(screen.queryByText(/wind/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/precipitation/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/snowfall/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/uvIndex/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Wind/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Precip/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Snowfall/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/UV Index/i)).not.toBeInTheDocument();
   });
 
   it('still returns null when all data is missing', () => {

@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import {
   Sun,
   CloudSun,
@@ -40,6 +39,18 @@ const WEATHER_ICONS: Record<string, React.ReactNode> = {
   foggy: <Cloud className="size-4" />,
 };
 
+const weatherConditionLabels: Record<string, string> = {
+  sunny: 'Sunny',
+  partly_cloudy: 'Partly Cloudy',
+  cloudy: 'Cloudy',
+  overcast: 'Overcast',
+  snowing: 'Snowing',
+  rain: 'Rain',
+  storm: 'Storm',
+  high_winds: 'High Winds',
+  foggy: 'Foggy',
+};
+
 export function WeatherDisplay({
   weatherCondition,
   temperatureMin,
@@ -50,10 +61,6 @@ export function WeatherDisplay({
   windGustsMax,
   uvIndexMax,
 }: WeatherDisplayProps) {
-  const t = useTranslations('resort');
-  const tWeather = useTranslations('weatherConditions');
-  const tForecast = useTranslations('forecast');
-
   if (!weatherCondition && temperatureMin === null && temperatureMax === null) {
     return null;
   }
@@ -71,8 +78,8 @@ export function WeatherDisplay({
       {/* Section header */}
       <div className="flex items-center gap-2">
         <Thermometer className="size-4 text-muted-foreground" />
-        <p className="text-sm font-semibold">{t('weather')}</p>
-        <FactorIndicator level={qualityLevel} label={t('weather')} />
+        <p className="text-sm font-semibold">Weather</p>
+        <FactorIndicator level={qualityLevel} label="Weather" />
       </div>
 
       {/* Weather data */}
@@ -82,7 +89,7 @@ export function WeatherDisplay({
             <span className="text-muted-foreground">
               {WEATHER_ICONS[weatherCondition] ?? <Cloud className="size-4" />}
             </span>
-            <span className="font-medium">{tWeather(weatherCondition)}</span>
+            <span className="font-medium">{weatherConditionLabels[weatherCondition] ?? weatherCondition}</span>
           </div>
         )}
         {temperatureMin !== null && temperatureMax !== null && (
@@ -98,31 +105,31 @@ export function WeatherDisplay({
           {windSpeedMax != null && (
             <div className="flex items-center gap-1.5">
               <Wind className="size-3.5" />
-              <span>{tForecast('wind')}: {windSpeedMax} km/h</span>
+              <span>Wind: {windSpeedMax} km/h</span>
             </div>
           )}
           {windGustsMax != null && (
             <div className="flex items-center gap-1.5">
               <Wind className="size-3.5" />
-              <span>{tForecast('gusts')}: {windGustsMax} km/h</span>
+              <span>Gusts: {windGustsMax} km/h</span>
             </div>
           )}
           {precipitationSum != null && precipitationSum > 0 && (
             <div className="flex items-center gap-1.5">
               <Droplets className="size-3.5" />
-              <span>{tForecast('precipitation')}: {precipitationSum} mm</span>
+              <span>Precip: {precipitationSum} mm</span>
             </div>
           )}
           {snowfallSum != null && snowfallSum > 0 && (
             <div className="flex items-center gap-1.5">
               <Snowflake className="size-3.5" />
-              <span>{tForecast('snowfall')}: {snowfallSum} cm</span>
+              <span>Snowfall: {snowfallSum} cm</span>
             </div>
           )}
           {uvIndexMax != null && (
             <div className="flex items-center gap-1.5">
               <ShieldAlert className="size-3.5" />
-              <span>{tForecast('uvIndex')}: {uvIndexMax}</span>
+              <span>UV Index: {uvIndexMax}</span>
             </div>
           )}
         </div>

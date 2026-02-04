@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 import {
   Mountain,
   MapPin,
@@ -353,14 +352,12 @@ function CTASection() {
 /* ─── Footer: Minimal ─── */
 
 function Footer() {
-  const tCommon = useTranslations('common');
-
   return (
     <footer className="py-10 px-6 bg-white dark:bg-slate-950 border-t border-border/30">
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <Mountain className="h-5 w-5 text-indigo-500" />
-          <span className="font-semibold text-foreground">{tCommon('peakPick')}</span>
+          <span className="font-semibold text-foreground">PeakPick</span>
         </div>
         <p className="text-sm text-muted-foreground">
           Pick your perfect ski day.

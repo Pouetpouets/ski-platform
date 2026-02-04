@@ -70,8 +70,8 @@ describe('SnowConditions', () => {
 
     expect(screen.getByText('120cm')).toBeInTheDocument();
     expect(screen.getByText('180cm')).toBeInTheDocument();
-    expect(screen.getByText('base')).toBeInTheDocument();
-    expect(screen.getByText('summit')).toBeInTheDocument();
+    expect(screen.getByText('Base')).toBeInTheDocument();
+    expect(screen.getByText('Summit')).toBeInTheDocument();
   });
 
   it('renders fresh snow when freshSnow24h > 0', () => {
@@ -80,7 +80,7 @@ describe('SnowConditions', () => {
     );
 
     expect(screen.getByText('+15cm')).toBeInTheDocument();
-    expect(screen.getByText('fresh24h')).toBeInTheDocument();
+    expect(screen.getByText('Fresh (24h)')).toBeInTheDocument();
   });
 
   it('hides fresh snow row when freshSnow24h is 0', () => {
@@ -88,7 +88,7 @@ describe('SnowConditions', () => {
       <SnowConditions snowDepthBase={100} snowDepthSummit={150} freshSnow24h={0} />
     );
 
-    expect(screen.queryByText('fresh24h')).not.toBeInTheDocument();
+    expect(screen.queryByText('Fresh (24h)')).not.toBeInTheDocument();
   });
 
   it('renders Powder Alert badge when fresh_snow_24h > 20', () => {
@@ -96,7 +96,7 @@ describe('SnowConditions', () => {
       <SnowConditions snowDepthBase={100} snowDepthSummit={150} freshSnow24h={25} />
     );
 
-    expect(screen.getByText('powderAlert')).toBeInTheDocument();
+    expect(screen.getByText('Powder Alert')).toBeInTheDocument();
   });
 
   it('does NOT render Powder Alert badge when fresh_snow_24h <= 20', () => {
@@ -104,7 +104,7 @@ describe('SnowConditions', () => {
       <SnowConditions snowDepthBase={100} snowDepthSummit={150} freshSnow24h={20} />
     );
 
-    expect(screen.queryByText('powderAlert')).not.toBeInTheDocument();
+    expect(screen.queryByText('Powder Alert')).not.toBeInTheDocument();
   });
 
   it('highlights fresh snow value text when powder alert is active', () => {
@@ -139,7 +139,7 @@ describe('SnowConditions', () => {
       <SnowConditions snowDepthBase={80} snowDepthSummit={120} freshSnow24h={0} />
     );
 
-    expect(screen.getByText('snowConditions')).toBeInTheDocument();
+    expect(screen.getByText('Snow Conditions')).toBeInTheDocument();
   });
 
   it('shows factor indicator with correct level based on snow quality', () => {
@@ -150,7 +150,7 @@ describe('SnowConditions', () => {
 
     const greenDot = container.querySelector('.bg-green-500');
     expect(greenDot).toBeInTheDocument();
-    expect(screen.getByText('snowQuality: good')).toBeInTheDocument();
+    expect(screen.getByText('Snow quality: good')).toBeInTheDocument();
   });
 
   it('shows poor indicator when snow data is null', () => {
@@ -160,7 +160,7 @@ describe('SnowConditions', () => {
 
     const redDot = container.querySelector('.bg-red-500');
     expect(redDot).toBeInTheDocument();
-    expect(screen.getByText('snowQuality: poor')).toBeInTheDocument();
+    expect(screen.getByText('Snow quality: poor')).toBeInTheDocument();
   });
 
   it('renders fresh snow row even when both depths are null', () => {
@@ -171,7 +171,7 @@ describe('SnowConditions', () => {
     const questionMarks = screen.getAllByText('?cm');
     expect(questionMarks).toHaveLength(2);
     expect(screen.getByText('+10cm')).toBeInTheDocument();
-    expect(screen.getByText('fresh24h')).toBeInTheDocument();
+    expect(screen.getByText('Fresh (24h)')).toBeInTheDocument();
   });
 
   it('exports POWDER_ALERT_THRESHOLD_CM as 20', () => {

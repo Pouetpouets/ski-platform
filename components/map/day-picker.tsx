@@ -1,22 +1,20 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { useForecastDay } from '@/lib/contexts/forecast-day-context';
 import { Button } from '@/components/ui/button';
 
 /**
  * Format a date string for the pill button label.
- * Today shows "Today"/"Aujourd'hui", tomorrow shows day name abbreviation.
+ * Today shows "Today", tomorrow shows "Tomorrow", rest show day name abbreviation.
  */
-function formatDayLabel(dateStr: string, index: number, t: (key: string) => string): string {
-  if (index === 0) return t('today');
-  if (index === 1) return t('tomorrow');
+function formatDayLabel(dateStr: string, index: number): string {
+  if (index === 0) return 'Today';
+  if (index === 1) return 'Tomorrow';
   const date = new Date(dateStr + 'T12:00:00'); // noon to avoid timezone issues
   return date.toLocaleDateString(undefined, { weekday: 'short' });
 }
 
 export function DayPicker() {
-  const t = useTranslations('forecast');
   const { selectedDate, setSelectedDate, availableDates } = useForecastDay();
 
   return (
@@ -28,9 +26,9 @@ export function DayPicker() {
           size="sm"
           className="shrink-0 text-xs h-8 px-3"
           onClick={() => setSelectedDate(date)}
-          aria-label={t('selectDay')}
+          aria-label="Select forecast day"
         >
-          {formatDayLabel(date, index, t)}
+          {formatDayLabel(date, index)}
         </Button>
       ))}
     </div>

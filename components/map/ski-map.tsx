@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
 import type mapboxgl from 'mapbox-gl';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { ResortMarkers } from './resort-markers';
@@ -25,6 +24,7 @@ interface SkiMapProps {
   resorts?: ResortWithConditions[];
   weights?: Record<string, number>;
   highlightedSlugs?: Set<string> | null;
+  snowLayerVisible?: boolean;
   onMapLoad?: () => void;
   onUserLocationChange?: (coords: { latitude: number; longitude: number } | null) => void;
   onResortClick?: (resort: ResortWithConditions) => void;
@@ -49,16 +49,30 @@ function computeBounds(resorts: ResortWithConditions[]): [[number, number], [num
   return [[minLng, minLat], [maxLng, maxLat]];
 }
 
+function buildSnowGeoJSON(resorts: ResortWithConditions[]): GeoJSON.FeatureCollection {
+  return {
+    type: 'FeatureCollection',
+    features: resorts.map((r) => ({
+      type: 'Feature' as const,
+      geometry: { type: 'Point' as const, coordinates: [r.longitude, r.latitude] },
+      properties: { freshSnow: r.conditions?.fresh_snow_24h ?? 0 },
+    })),
+  };
+}
+
+const SNOW_HEATMAP_LAYER_ID = 'snow-heatmap';
+const SNOW_SOURCE_ID = 'snow-conditions';
+
 export function SkiMap({
   className,
   resorts = [],
   weights,
   highlightedSlugs,
+  snowLayerVisible = false,
   onMapLoad,
   onUserLocationChange,
   onResortClick,
 }: SkiMapProps) {
-  const t = useTranslations('map');
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const geolocateControlRef = useRef<mapboxgl.GeolocateControl | null>(null);
@@ -139,6 +153,58 @@ export function SkiMap({
         setMapInstance(map);
         onMapLoadRef.current?.();
 
+        // Add snow-conditions heatmap source & layer
+        map.addSource(SNOW_SOURCE_ID, {
+          type: 'geojson',
+          data: buildSnowGeoJSON(resortsRef.current),
+        });
+
+        map.addLayer({
+          id: SNOW_HEATMAP_LAYER_ID,
+          type: 'heatmap',
+          source: SNOW_SOURCE_ID,
+          layout: {
+            visibility: 'none',
+          },
+          paint: {
+            // Weight each point by freshSnow (0–60 cm range), minimum 0.15 so low-snow resorts still appear
+            'heatmap-weight': [
+              'interpolate', ['linear'], ['get', 'freshSnow'],
+              0, 0.15,
+              10, 0.4,
+              30, 0.7,
+              60, 1,
+            ],
+            // Higher intensity so sparse points are visible
+            'heatmap-intensity': [
+              'interpolate', ['linear'], ['zoom'],
+              0, 2,
+              8, 4,
+              14, 6,
+            ],
+            // Snow-themed color ramp: start showing color at very low density
+            'heatmap-color': [
+              'interpolate', ['linear'], ['heatmap-density'],
+              0, 'rgba(0,0,0,0)',
+              0.05, 'rgba(186,225,255,0.4)',
+              0.15, 'rgba(135,206,250,0.6)',
+              0.3, 'rgba(100,149,237,0.7)',
+              0.5, 'rgba(65,105,225,0.8)',
+              0.7, 'rgba(106,90,205,0.85)',
+              1, 'rgba(128,0,128,0.9)',
+            ],
+            // Much larger radius so isolated points form visible blobs
+            'heatmap-radius': [
+              'interpolate', ['linear'], ['zoom'],
+              4, 40,
+              8, 70,
+              12, 100,
+              14, 130,
+            ],
+            'heatmap-opacity': 0.6,
+          },
+        });
+
         // Auto-fit bounds to loaded resorts
         const bounds = computeBounds(resortsRef.current);
         if (bounds) {
@@ -169,6 +235,35 @@ export function SkiMap({
       setMapInstance(null);
     };
   }, [mapboxToken]);
+
+  // Toggle heatmap layer visibility
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !map.isStyleLoaded()) return;
+    try {
+      map.setLayoutProperty(
+        SNOW_HEATMAP_LAYER_ID,
+        'visibility',
+        snowLayerVisible ? 'visible' : 'none'
+      );
+    } catch {
+      // Layer may not exist yet
+    }
+  }, [snowLayerVisible, mapInstance]);
+
+  // Keep heatmap source data in sync with resorts
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !map.isStyleLoaded()) return;
+    try {
+      const source = map.getSource(SNOW_SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
+      if (source) {
+        source.setData(buildSnowGeoJSON(resorts));
+      }
+    } catch {
+      // Source may not exist yet
+    }
+  }, [resorts, mapInstance]);
 
   if (!mapboxToken) {
     return (
@@ -206,7 +301,7 @@ export function SkiMap({
       {/* Loading indicator */}
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-background/80">
-          <div className="animate-pulse text-muted-foreground">{t('loadingMap')}</div>
+          <div className="animate-pulse text-muted-foreground">Loading map...</div>
         </div>
       )}
     </div>

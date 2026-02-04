@@ -1,7 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { Search, Settings } from 'lucide-react';
+import { Search, Settings, Snowflake } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DayPicker } from './day-picker';
@@ -9,10 +8,11 @@ import { useResortSearch } from '@/lib/contexts/resort-search-context';
 
 interface MapCommandBarProps {
   onSettingsOpen: () => void;
+  snowLayerVisible: boolean;
+  onSnowLayerToggle: () => void;
 }
 
-export function MapCommandBar({ onSettingsOpen }: MapCommandBarProps) {
-  const t = useTranslations();
+export function MapCommandBar({ onSettingsOpen, snowLayerVisible, onSnowLayerToggle }: MapCommandBarProps) {
   const { searchQuery, setSearchQuery } = useResortSearch();
 
   return (
@@ -27,7 +27,7 @@ export function MapCommandBar({ onSettingsOpen }: MapCommandBarProps) {
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
             <Input
               type="text"
-              placeholder={t('map.searchResorts')}
+              placeholder="Search resorts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-8 h-8 text-sm bg-background/50 border-white/10"
@@ -36,9 +36,18 @@ export function MapCommandBar({ onSettingsOpen }: MapCommandBarProps) {
           <Button
             variant="ghost"
             size="icon"
+            className={`shrink-0 size-8 ${snowLayerVisible ? 'bg-blue-500/20 text-blue-400' : ''}`}
+            onClick={onSnowLayerToggle}
+            aria-label="Snow layer"
+          >
+            <Snowflake className="size-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             className="shrink-0 size-8"
             onClick={onSettingsOpen}
-            aria-label={t('priorities.openSettings')}
+            aria-label="Open priority settings"
           >
             <Settings className="size-4" />
           </Button>

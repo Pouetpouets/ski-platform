@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,7 +15,6 @@ import { LogIn, LogOut, User } from 'lucide-react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 export function UserMenu() {
-  const t = useTranslations('common');
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -59,7 +57,7 @@ export function UserMenu() {
       >
         <Link href="/auth/login">
           <LogIn className="size-3.5 mr-1.5" />
-          {t('signIn')}
+          Sign In
         </Link>
       </Button>
     );
@@ -81,7 +79,7 @@ export function UserMenu() {
           variant="outline"
           size="icon"
           className="size-8 rounded-full bg-background/90 backdrop-blur-sm font-semibold text-sm"
-          aria-label={t('userMenu')}
+          aria-label="User menu"
         >
           {initial}
         </Button>
@@ -94,13 +92,13 @@ export function UserMenu() {
         <DropdownMenuItem asChild>
           <Link href="/protected" className="cursor-pointer">
             <User className="size-3.5 mr-2" />
-            {t('account')}
+            Account
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
           <LogOut className="size-3.5 mr-2" />
-          {t('signOut')}
+          Sign Out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

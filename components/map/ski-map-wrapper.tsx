@@ -35,6 +35,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
   const [selectedResort, setSelectedResort] = useState<ResortWithConditions | null>(null);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [snowLayerVisible, setSnowLayerVisible] = useState(false);
 
   const handleResortClick = useCallback((resort: ResortWithConditions) => {
     setSelectedResort(resort);
@@ -93,11 +94,16 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
         resorts={resorts}
         weights={weights}
         highlightedSlugs={highlightedSlugs}
+        snowLayerVisible={snowLayerVisible}
         onResortClick={handleResortClick}
         onUserLocationChange={handleUserLocationChange}
       />
 
-      <MapCommandBar onSettingsOpen={() => setSettingsOpen(true)} />
+      <MapCommandBar
+        onSettingsOpen={() => setSettingsOpen(true)}
+        snowLayerVisible={snowLayerVisible}
+        onSnowLayerToggle={() => setSnowLayerVisible((v) => !v)}
+      />
 
       <PrioritySettingsPanel
         isOpen={settingsOpen}

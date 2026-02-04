@@ -71,7 +71,7 @@ describe('WeatherDisplay', () => {
       <WeatherDisplay weatherCondition="sunny" temperatureMin={-5} temperatureMax={2} />
     );
 
-    expect(screen.getByText('weather')).toBeInTheDocument();
+    expect(screen.getByText('Weather')).toBeInTheDocument();
   });
 
   it('displays formatted weather condition', () => {
@@ -79,7 +79,7 @@ describe('WeatherDisplay', () => {
       <WeatherDisplay weatherCondition="partly_cloudy" temperatureMin={-3} temperatureMax={1} />
     );
 
-    expect(screen.getByText('partly_cloudy')).toBeInTheDocument();
+    expect(screen.getByText('Partly Cloudy')).toBeInTheDocument();
   });
 
   it('displays temperature range', () => {
@@ -96,7 +96,7 @@ describe('WeatherDisplay', () => {
     );
 
     expect(container.querySelector('.bg-green-500')).toBeInTheDocument();
-    expect(screen.getByText('weather: good')).toBeInTheDocument();
+    expect(screen.getByText('Weather: good')).toBeInTheDocument();
   });
 
   it('shows yellow indicator for cloudy weather', () => {
@@ -105,7 +105,7 @@ describe('WeatherDisplay', () => {
     );
 
     expect(container.querySelector('.bg-yellow-500')).toBeInTheDocument();
-    expect(screen.getByText('weather: moderate')).toBeInTheDocument();
+    expect(screen.getByText('Weather: moderate')).toBeInTheDocument();
   });
 
   it('shows red indicator for snowing weather', () => {
@@ -114,7 +114,7 @@ describe('WeatherDisplay', () => {
     );
 
     expect(container.querySelector('.bg-red-500')).toBeInTheDocument();
-    expect(screen.getByText('weather: poor')).toBeInTheDocument();
+    expect(screen.getByText('Weather: poor')).toBeInTheDocument();
   });
 
   it('shows red indicator for storm weather', () => {
@@ -130,7 +130,7 @@ describe('WeatherDisplay', () => {
       <WeatherDisplay weatherCondition="sunny" temperatureMin={null} temperatureMax={null} />
     );
 
-    expect(screen.getByText('sunny')).toBeInTheDocument();
+    expect(screen.getByText('Sunny')).toBeInTheDocument();
     expect(screen.queryByText(/°C/)).not.toBeInTheDocument();
   });
 
@@ -140,7 +140,7 @@ describe('WeatherDisplay', () => {
     );
 
     expect(screen.getByText('-5° / 2°C')).toBeInTheDocument();
-    expect(screen.getByText('weather')).toBeInTheDocument();
+    expect(screen.getByText('Weather')).toBeInTheDocument();
   });
 
   it('returns null when all data is missing', () => {
@@ -156,7 +156,7 @@ describe('WeatherDisplay', () => {
       <WeatherDisplay weatherCondition="sunny" temperatureMin={-5} temperatureMax={2} />
     );
 
-    const srText = screen.getByText(/weather:/);
+    const srText = screen.getByText(/Weather:/);
     expect(srText).toHaveClass('sr-only');
   });
 });

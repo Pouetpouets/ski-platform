@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { Users } from 'lucide-react';
 import { FactorIndicator } from '@/components/resort/factor-indicator';
 import { getCrowdQualityLevel } from '@/lib/utils/conditions';
@@ -10,9 +9,14 @@ interface CrowdLevelDisplayProps {
   crowdLevel: CrowdLevel;
 }
 
+const crowdLevelLabels: Record<string, string> = {
+  low: 'Low',
+  moderate: 'Moderate',
+  high: 'High',
+  very_high: 'Very High',
+};
+
 export function CrowdLevelDisplay({ crowdLevel }: CrowdLevelDisplayProps) {
-  const t = useTranslations('resort');
-  const tCrowd = useTranslations('crowdLevels');
   const qualityLevel = getCrowdQualityLevel(crowdLevel);
 
   return (
@@ -20,13 +24,13 @@ export function CrowdLevelDisplay({ crowdLevel }: CrowdLevelDisplayProps) {
       {/* Section header */}
       <div className="flex items-center gap-2">
         <Users className="size-4 text-muted-foreground" />
-        <p className="text-sm font-semibold">{t('crowdLevel')}</p>
-        <FactorIndicator level={qualityLevel} label={t('crowdLevel')} />
+        <p className="text-sm font-semibold">Crowd Level</p>
+        <FactorIndicator level={qualityLevel} label="Crowd Level" />
       </div>
 
       {/* Crowd data */}
       <div className="text-sm">
-        <p className="font-medium">{tCrowd(crowdLevel)}</p>
+        <p className="font-medium">{crowdLevelLabels[crowdLevel] ?? crowdLevel}</p>
       </div>
     </div>
   );

@@ -57,32 +57,32 @@ describe('ParkingDisplay', () => {
   it('renders section header with "Parking" title', () => {
     render(<ParkingDisplay parkingStatus="available" parkingPrice={10} />);
 
-    expect(screen.getByText('parking')).toBeInTheDocument();
+    expect(screen.getByText('Parking')).toBeInTheDocument();
   });
 
   it('displays formatted parking status', () => {
     render(<ParkingDisplay parkingStatus="available" parkingPrice={10} />);
 
-    expect(screen.getByText('available')).toBeInTheDocument();
+    expect(screen.getByText('Available')).toBeInTheDocument();
   });
 
   it('displays parking price with euro sign', () => {
     render(<ParkingDisplay parkingStatus="available" parkingPrice={15} />);
 
-    expect(screen.getByText('€15perDay')).toBeInTheDocument();
+    expect(screen.getByText('€15/day')).toBeInTheDocument();
   });
 
   it('displays "Free" when price is 0', () => {
     render(<ParkingDisplay parkingStatus="available" parkingPrice={0} />);
 
-    expect(screen.getByText('free')).toBeInTheDocument();
+    expect(screen.getByText('Free')).toBeInTheDocument();
   });
 
   it('hides price when null', () => {
     render(<ParkingDisplay parkingStatus="available" parkingPrice={null} />);
 
     expect(screen.queryByText(/€/)).not.toBeInTheDocument();
-    expect(screen.queryByText('free')).not.toBeInTheDocument();
+    expect(screen.queryByText('Free')).not.toBeInTheDocument();
   });
 
   it('shows green indicator for available + free', () => {
@@ -91,7 +91,7 @@ describe('ParkingDisplay', () => {
     );
 
     expect(container.querySelector('.bg-green-500')).toBeInTheDocument();
-    expect(screen.getByText('parking: good')).toBeInTheDocument();
+    expect(screen.getByText('Parking: good')).toBeInTheDocument();
   });
 
   it('shows yellow indicator for limited', () => {
@@ -100,7 +100,7 @@ describe('ParkingDisplay', () => {
     );
 
     expect(container.querySelector('.bg-yellow-500')).toBeInTheDocument();
-    expect(screen.getByText('parking: moderate')).toBeInTheDocument();
+    expect(screen.getByText('Parking: moderate')).toBeInTheDocument();
   });
 
   it('shows red indicator for full', () => {
@@ -109,13 +109,13 @@ describe('ParkingDisplay', () => {
     );
 
     expect(container.querySelector('.bg-red-500')).toBeInTheDocument();
-    expect(screen.getByText('parking: poor')).toBeInTheDocument();
+    expect(screen.getByText('Parking: poor')).toBeInTheDocument();
   });
 
   it('shows factor indicator with sr-only accessible label', () => {
     render(<ParkingDisplay parkingStatus="available" parkingPrice={10} />);
 
-    const srText = screen.getByText(/parking:/);
+    const srText = screen.getByText(/Parking:/);
     expect(srText).toHaveClass('sr-only');
   });
 });

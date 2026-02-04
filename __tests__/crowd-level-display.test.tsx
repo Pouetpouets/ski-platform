@@ -49,53 +49,53 @@ describe('CrowdLevelDisplay', () => {
   it('renders section header with "Crowd Level" title', () => {
     render(<CrowdLevelDisplay crowdLevel="low" />);
 
-    expect(screen.getByText('crowdLevel')).toBeInTheDocument();
+    expect(screen.getByText('Crowd Level')).toBeInTheDocument();
   });
 
   it('displays formatted crowd level text', () => {
     render(<CrowdLevelDisplay crowdLevel="very_high" />);
 
-    expect(screen.getByText('very_high')).toBeInTheDocument();
+    expect(screen.getByText('Very High')).toBeInTheDocument();
   });
 
   it('displays "Low" for low crowd level', () => {
     render(<CrowdLevelDisplay crowdLevel="low" />);
 
-    expect(screen.getByText('low')).toBeInTheDocument();
+    expect(screen.getByText('Low')).toBeInTheDocument();
   });
 
   it('shows green indicator for low crowd', () => {
     const { container } = render(<CrowdLevelDisplay crowdLevel="low" />);
 
     expect(container.querySelector('.bg-green-500')).toBeInTheDocument();
-    expect(screen.getByText('crowdLevel: good')).toBeInTheDocument();
+    expect(screen.getByText('Crowd Level: good')).toBeInTheDocument();
   });
 
   it('shows yellow indicator for moderate crowd', () => {
     const { container } = render(<CrowdLevelDisplay crowdLevel="moderate" />);
 
     expect(container.querySelector('.bg-yellow-500')).toBeInTheDocument();
-    expect(screen.getByText('crowdLevel: moderate')).toBeInTheDocument();
+    expect(screen.getByText('Crowd Level: moderate')).toBeInTheDocument();
   });
 
   it('shows red indicator for high crowd', () => {
     const { container } = render(<CrowdLevelDisplay crowdLevel="high" />);
 
     expect(container.querySelector('.bg-red-500')).toBeInTheDocument();
-    expect(screen.getByText('crowdLevel: poor')).toBeInTheDocument();
+    expect(screen.getByText('Crowd Level: poor')).toBeInTheDocument();
   });
 
   it('shows red indicator for very_high crowd', () => {
     const { container } = render(<CrowdLevelDisplay crowdLevel="very_high" />);
 
     expect(container.querySelector('.bg-red-500')).toBeInTheDocument();
-    expect(screen.getByText('crowdLevel: poor')).toBeInTheDocument();
+    expect(screen.getByText('Crowd Level: poor')).toBeInTheDocument();
   });
 
   it('shows factor indicator with sr-only accessible label', () => {
     render(<CrowdLevelDisplay crowdLevel="low" />);
 
-    const srText = screen.getByText(/crowdLevel:/);
+    const srText = screen.getByText(/Crowd Level:/);
     expect(srText).toHaveClass('sr-only');
   });
 });

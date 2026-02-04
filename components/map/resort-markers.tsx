@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
 import type mapboxgl from 'mapbox-gl';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { calculatePerfectDayScore, getScoreColorHex } from '@/lib/utils/score';
@@ -137,7 +136,6 @@ export function ResortMarkers({
   onResortClick,
   onResortHover,
 }: ResortMarkersProps) {
-  const t = useTranslations('map');
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
   const resortSlugsByMarkerIndex = useRef<string[]>([]);
@@ -185,9 +183,9 @@ export function ResortMarkers({
           })
             .setLngLat([resort.longitude, resort.latitude])
             .setHTML(createPopupContent(resort, score, {
-              perfectDayScore: t('perfectDayScore'),
-              base: t('base'),
-              noConditions: t('noConditions'),
+              perfectDayScore: 'Perfect Day Score',
+              base: 'base',
+              noConditions: 'No conditions data',
             }))
             .addTo(map);
         });

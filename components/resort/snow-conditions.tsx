@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { Snowflake, Mountain, CloudSnow } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { FactorIndicator } from '@/components/resort/factor-indicator';
@@ -20,7 +19,6 @@ export function SnowConditions({
   snowDepthSummit,
   freshSnow24h,
 }: SnowConditionsProps) {
-  const t = useTranslations('resort');
   const qualityLevel = getSnowQualityLevel(snowDepthBase, freshSnow24h);
   const isPowderAlert = freshSnow24h > POWDER_ALERT_THRESHOLD_CM;
 
@@ -29,8 +27,8 @@ export function SnowConditions({
       {/* Section header */}
       <div className="flex items-center gap-2">
         <Snowflake className="size-4 text-muted-foreground" />
-        <p className="text-sm font-semibold">{t('snowConditions')}</p>
-        <FactorIndicator level={qualityLevel} label={t('snowQuality')} />
+        <p className="text-sm font-semibold">Snow Conditions</p>
+        <FactorIndicator level={qualityLevel} label="Snow quality" />
       </div>
 
       {/* Snow data grid */}
@@ -38,7 +36,7 @@ export function SnowConditions({
         <div className="flex items-center gap-2">
           <Snowflake className="size-3.5 text-muted-foreground shrink-0" />
           <div className="min-w-0">
-            <p className="text-xs text-muted-foreground">{t('base')}</p>
+            <p className="text-xs text-muted-foreground">Base</p>
             <p className="font-medium">{snowDepthBase ?? '?'}cm</p>
           </div>
         </div>
@@ -46,7 +44,7 @@ export function SnowConditions({
         <div className="flex items-center gap-2">
           <Mountain className="size-3.5 text-muted-foreground shrink-0" />
           <div className="min-w-0">
-            <p className="text-xs text-muted-foreground">{t('summit')}</p>
+            <p className="text-xs text-muted-foreground">Summit</p>
             <p className="font-medium">{snowDepthSummit ?? '?'}cm</p>
           </div>
         </div>
@@ -55,14 +53,14 @@ export function SnowConditions({
           <div className="flex items-center gap-2 col-span-2">
             <CloudSnow className="size-3.5 text-muted-foreground shrink-0" />
             <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">{t('fresh24h')}</p>
+              <p className="text-xs text-muted-foreground">Fresh (24h)</p>
               <p className={`font-medium ${isPowderAlert ? 'text-blue-600' : ''}`}>
                 +{freshSnow24h}cm
               </p>
             </div>
             {isPowderAlert && (
               <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200 text-xs">
-                {t('powderAlert')}
+                Powder Alert
               </Badge>
             )}
           </div>

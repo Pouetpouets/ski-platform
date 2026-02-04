@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import type { FactorScores, FactorName } from '@/lib/utils/score';
 import { DEFAULT_WEIGHTS, FACTOR_NAMES, FACTOR_EMOJI } from '@/lib/utils/score';
 
@@ -8,6 +7,15 @@ interface ScoreBreakdownProps {
   factors: FactorScores;
   weights?: Record<FactorName, number>;
 }
+
+const factorLabels: Record<string, string> = {
+  snow: 'Snow',
+  crowd: 'Crowd',
+  weather: 'Weather',
+  price: 'Price',
+  distance: 'Distance',
+  parking: 'Parking',
+};
 
 function getBarColor(score: number): string {
   if (score >= 80) return 'bg-green-500';
@@ -17,13 +25,10 @@ function getBarColor(score: number): string {
 }
 
 export function ScoreBreakdown({ factors, weights = DEFAULT_WEIGHTS }: ScoreBreakdownProps) {
-  const t = useTranslations('resort');
-  const tFactors = useTranslations('factors');
-
   // Build factor entries with contribution and sort by contribution descending
   const entries = FACTOR_NAMES.map((name) => ({
     name,
-    label: tFactors(name),
+    label: factorLabels[name] ?? name,
     emoji: FACTOR_EMOJI[name],
     score: factors[name],
     weight: weights[name],
@@ -32,7 +37,7 @@ export function ScoreBreakdown({ factors, weights = DEFAULT_WEIGHTS }: ScoreBrea
 
   return (
     <div className="space-y-3">
-      <p className="text-sm font-semibold">{t('scoreBreakdown')}</p>
+      <p className="text-sm font-semibold">Score Breakdown</p>
       <div className="space-y-2">
         {entries.map((entry) => (
           <div key={entry.name} className="space-y-1">
