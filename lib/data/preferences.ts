@@ -8,6 +8,7 @@ import { FACTOR_NAMES } from '@/lib/utils/score';
  */
 export async function fetchUserPriorities(): Promise<FactorName[] | null> {
   const supabase = createClient();
+  if (!supabase) return null;
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
@@ -33,6 +34,7 @@ export async function fetchUserPriorities(): Promise<FactorName[] | null> {
  */
 export async function saveUserPriorities(priorities: FactorName[]): Promise<boolean> {
   const supabase = createClient();
+  if (!supabase) return false;
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return false;
 

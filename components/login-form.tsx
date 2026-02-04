@@ -32,6 +32,12 @@ export function LoginForm({
     setIsLoading(true);
     setError(null);
 
+    if (!supabase) {
+      setError("Service unavailable");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -49,6 +55,11 @@ export function LoginForm({
   const handleOAuthLogin = async (provider: "google" | "apple") => {
     const supabase = createClient();
     setError(null);
+
+    if (!supabase) {
+      setError("Service unavailable");
+      return;
+    }
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider,

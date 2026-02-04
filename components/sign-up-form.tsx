@@ -33,6 +33,12 @@ export function SignUpForm({
     setIsLoading(true);
     setError(null);
 
+    if (!supabase) {
+      setError("Service unavailable");
+      setIsLoading(false);
+      return;
+    }
+
     if (password !== repeatPassword) {
       setError("Passwords do not match");
       setIsLoading(false);

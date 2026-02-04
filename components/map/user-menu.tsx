@@ -22,6 +22,10 @@ export function UserMenu() {
 
   useEffect(() => {
     const supabase = createClient();
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
 
     // Get initial session
     supabase.auth.getUser().then(({ data }) => {
@@ -65,6 +69,7 @@ export function UserMenu() {
 
   const handleSignOut = async () => {
     const supabase = createClient();
+    if (!supabase) return;
     await supabase.auth.signOut();
     window.location.reload();
   };
