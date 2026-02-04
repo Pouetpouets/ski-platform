@@ -5,7 +5,7 @@
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/lib/types/database';
+import type { Database, Resort } from '@/lib/types/database';
 import type { ForecastFetchResult } from './types';
 import { fetchForecast } from './fetcher';
 
@@ -18,13 +18,15 @@ export async function fetchAllForecasts(
   supabase: SupabaseClient<Database>
 ): Promise<ForecastFetchResult> {
   // Load all resorts
-  const { data: resorts, error: resortsError } = await supabase
+  const { data: resortsData, error: resortsError } = await supabase
     .from('resorts')
-    .select('id, name, latitude, longitude');
+    .select('*');
 
-  if (resortsError || !resorts) {
+  if (resortsError || !resortsData) {
     throw new Error(`Failed to load resorts: ${resortsError?.message ?? 'no data'}`);
   }
+
+  const resorts = resortsData as unknown as Resort[];
 
   const result: ForecastFetchResult = { success: [], failed: [] };
 
@@ -54,7 +56,7 @@ export async function fetchAllForecasts(
 
         const { error: upsertError } = await supabase
           .from('resort_weather_forecasts')
-          .upsert(rows, { onConflict: 'resort_id,forecast_date' });
+          .upsert(rows as any, { onConflict: 'resort_id,forecast_date' });
 
         if (upsertError) {
           throw new Error(upsertError.message);
