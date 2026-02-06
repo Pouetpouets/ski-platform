@@ -5,7 +5,16 @@ import {
   Snowflake,
   ArrowRight,
   ChevronDown,
+  Thermometer,
+  Sun,
+  Cloud,
+  CloudSnow,
+  CloudSun,
+  Map,
+  Sparkles,
+  Navigation,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 /* ─── SVG Components ─── */
 
@@ -128,10 +137,8 @@ function HeroSection() {
 
       {/* Content — minimal, centered above the landscape */}
       <div className="relative z-10 text-center px-6 max-w-3xl mx-auto -mt-28">
-        <p className="text-sm font-medium text-slate-500/80 tracking-widest uppercase mb-6">
-          PeakPick
-        </p>
-
+        <div className="mb-6 inline-flex items-center justify-center p-4 rounded-2xl shadow-indigo-500/10">
+        </div>
         <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight leading-[1.05] text-slate-800">
           Pick your
           <br />
@@ -168,20 +175,16 @@ function PromiseSection() {
   return (
     <section className="py-32 sm:py-40 px-6 bg-white dark:bg-slate-950">
       <div className="max-w-3xl mx-auto text-center">
-        <p className="text-sm font-medium text-indigo-500 tracking-widest uppercase mb-8">
-          The problem
-        </p>
+       
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-[1.15]">
           Every ski morning, the same question.
-          <span className="block mt-3 text-slate-400 dark:text-slate-500">
-            Five websites. Conflicting info. No clear answer.
-          </span>
+         
         </h2>
         <div className="mt-12 h-px w-16 bg-slate-200 dark:bg-slate-800 mx-auto" />
         <p className="mt-12 text-xl sm:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
           PeakPick replaces the guesswork with a single number: your{' '}
           <span className="text-foreground font-semibold">Perfect Day Score</span>.
-          One look at the map, and you know exactly where to go.
+         
         </p>
       </div>
     </section>
@@ -191,24 +194,24 @@ function PromiseSection() {
 /* ─── Journey: 3 steps as storytelling ─── */
 
 function JourneySection() {
-  const steps = [
+  const steps: { number: string; title: string; description: string; icon: LucideIcon }[] = [
     {
       number: '01',
       title: 'Open the map',
       description: 'GPS locates you. Resorts appear around you with color-coded scores — green means go.',
-      visual: '🗺️',
+      icon: Map,
     },
     {
       number: '02',
       title: 'Compare at a glance',
       description: 'Snow depth, crowd levels, weather, lift prices, parking — everything condensed into one score per resort.',
-      visual: '✨',
+      icon: Sparkles,
     },
     {
       number: '03',
       title: 'Go ski',
       description: 'Tap the best score. Check the webcam. Close your phone. Have the best day on the slopes.',
-      visual: '⛷️',
+      icon: Navigation,
     },
   ];
 
@@ -218,21 +221,19 @@ function JourneySection() {
         <p className="text-sm font-medium text-indigo-500 tracking-widest uppercase mb-8 text-center">
           How it works
         </p>
-        <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight text-center mb-20">
-          From couch to chairlift
-          <span className="block text-slate-400 dark:text-slate-500 mt-2">in under two minutes.</span>
-        </h2>
 
-        <div className="space-y-20 sm:space-y-28">
+        <div className="space-y-16 sm:space-y-20">
           {steps.map((step) => (
-            <div key={step.number} className="flex flex-col sm:flex-row items-start gap-8 sm:gap-12">
-              <div className="flex-shrink-0 flex items-center gap-5">
-                <span className="text-6xl">{step.visual}</span>
-                <span className="text-5xl sm:text-6xl font-bold text-slate-200 dark:text-slate-800 leading-none">
+            <div key={step.number} className="flex flex-col sm:flex-row items-start gap-6 sm:gap-10">
+              <div className="flex-shrink-0 flex items-center gap-4">
+                <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 shadow-lg shadow-indigo-500/25">
+                  <step.icon className="h-8 w-8 text-white" strokeWidth={1.5} />
+                </div>
+                <span className="text-5xl sm:text-6xl font-bold text-white [-webkit-text-stroke:1px_#cbd5e1] dark:[-webkit-text-stroke:1px_#334155] leading-none">
                   {step.number}
                 </span>
               </div>
-              <div className="pt-2">
+              <div className="pt-1">
                 <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
                   {step.title}
                 </h3>
@@ -248,49 +249,83 @@ function JourneySection() {
   );
 }
 
-/* ─── Resorts: Names that evoke the mountains ─── */
+/* ─── Resorts: Real-time conditions ─── */
+
+type WeatherType = 'sunny' | 'cloudy' | 'partlyCloudy' | 'snowing';
+
+const WeatherIcon = ({ type, className }: { type: WeatherType; className?: string }) => {
+  const icons = {
+    sunny: Sun,
+    cloudy: Cloud,
+    partlyCloudy: CloudSun,
+    snowing: CloudSnow,
+  };
+  const Icon = icons[type];
+  return <Icon className={className} />;
+};
 
 function ResortsSection() {
   const resorts = [
-    { name: 'Chamonix', altitude: '1,035 — 3,842m' },
-    { name: 'Val d\'Isere', altitude: '1,785 — 3,456m' },
-    { name: 'Courchevel', altitude: '1,300 — 2,738m' },
-    { name: 'Les Arcs', altitude: '1,200 — 3,226m' },
-    { name: 'Tignes', altitude: '1,550 — 3,456m' },
-    { name: 'Meribel', altitude: '1,100 — 2,952m' },
-    { name: 'La Plagne', altitude: '1,250 — 3,250m' },
-    { name: 'Megeve', altitude: '1,113 — 2,353m' },
-    { name: 'Alpe d\'Huez', altitude: '1,250 — 3,330m' },
-    { name: 'La Clusaz', altitude: '1,040 — 2,600m' },
-    { name: 'Les Deux Alpes', altitude: '1,300 — 3,600m' },
-    { name: 'Le Grand-Bornand', altitude: '1,000 — 2,100m' },
+    { name: 'Chamonix', snow: 185, temp: -8, weather: 'sunny' as WeatherType, fresh: 25 },
+    { name: 'Val d\'Isere', snow: 210, temp: -12, weather: 'snowing' as WeatherType, fresh: 45 },
+    { name: 'Courchevel', snow: 165, temp: -6, weather: 'partlyCloudy' as WeatherType, fresh: 15 },
+    { name: 'Les Arcs', snow: 195, temp: -10, weather: 'cloudy' as WeatherType, fresh: 30 },
+    { name: 'Tignes', snow: 220, temp: -14, weather: 'snowing' as WeatherType, fresh: 50 },
+    { name: 'Meribel', snow: 155, temp: -5, weather: 'sunny' as WeatherType, fresh: 10 },
+    { name: 'La Plagne', snow: 200, temp: -11, weather: 'partlyCloudy' as WeatherType, fresh: 35 },
+    { name: 'Megeve', snow: 120, temp: -3, weather: 'cloudy' as WeatherType, fresh: 5 },
+    { name: 'Alpe d\'Huez', snow: 175, temp: -7, weather: 'sunny' as WeatherType, fresh: 20 },
+    { name: 'La Clusaz', snow: 140, temp: -4, weather: 'partlyCloudy' as WeatherType, fresh: 12 },
+    { name: 'Les Deux Alpes', snow: 230, temp: -15, weather: 'snowing' as WeatherType, fresh: 55 },
+    { name: 'Le Grand-Bornand', snow: 110, temp: -2, weather: 'cloudy' as WeatherType, fresh: 8 },
   ];
 
   return (
     <section className="py-32 px-6 bg-white dark:bg-slate-950">
       <div className="max-w-5xl mx-auto">
         <p className="text-sm font-medium text-indigo-500 tracking-widest uppercase mb-8 text-center">
-          Coverage
+          Live conditions
         </p>
         <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight text-center mb-6">
-          The French Alps, at a glance.
+          The French Alps, right now.
         </h2>
         <p className="text-muted-foreground text-lg text-center max-w-xl mx-auto mb-16">
-          From legendary powder fields to family-friendly slopes. Twelve resorts between Lyon, Grenoble, Annecy, and Geneva.
+          Real-time snow depths, temperatures, and weather across twelve resorts.
         </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {resorts.map((resort) => (
             <div
               key={resort.name}
-              className="group p-5 rounded-2xl border border-border/50 bg-card hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-md transition-all duration-200"
+              className="group p-5 rounded-2xl border border-border/50 bg-card hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-lg transition-all duration-200"
             >
-              <p className="font-semibold text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                {resort.name}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {resort.altitude}
-              </p>
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <p className="font-semibold text-lg text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                    {resort.name}
+                  </p>
+                  {resort.fresh > 0 && (
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">
+                      +{resort.fresh}cm fresh
+                    </p>
+                  )}
+                </div>
+                <WeatherIcon
+                  type={resort.weather}
+                  className="h-8 w-8 text-slate-400 group-hover:text-indigo-400 transition-colors"
+                />
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1.5">
+                  <Snowflake className="h-4 w-4 text-sky-500" />
+                  <span className="text-sm font-medium text-foreground">{resort.snow}cm</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Thermometer className="h-4 w-4 text-indigo-500" />
+                  <span className="text-sm font-medium text-foreground">{resort.temp}°C</span>
+                </div>
+              </div>
             </div>
           ))}
         </div>
