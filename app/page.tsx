@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import {
-  Mountain,
+  MountainSnow,
   MapPin,
   Snowflake,
   ArrowRight,
@@ -356,7 +356,7 @@ function Footer() {
     <footer className="py-10 px-6 bg-white dark:bg-slate-950 border-t border-border/30">
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <Mountain className="h-5 w-5 text-indigo-500" />
+          <MountainSnow className="h-5 w-5 text-indigo-500" />
           <span className="font-semibold text-foreground">PeakPick</span>
         </div>
         <p className="text-sm text-muted-foreground">
