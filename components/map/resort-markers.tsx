@@ -10,6 +10,7 @@ interface ResortMarkersProps {
   map: mapboxgl.Map | null;
   resorts: ResortWithConditions[];
   weights?: Record<FactorName, number>;
+  selectedDate?: string;
   highlightedSlugs?: Set<string> | null;
   onResortClick?: (resort: ResortWithConditions) => void;
   onResortHover?: (resort: ResortWithConditions | null) => void;
@@ -265,6 +266,7 @@ export function ResortMarkers({
   map,
   resorts,
   weights,
+  selectedDate,
   highlightedSlugs,
   onResortClick,
   onResortHover,
@@ -290,7 +292,15 @@ export function ResortMarkers({
 
       // Create markers for each resort
       resorts.forEach((resort) => {
-        const { score } = calculatePerfectDayScore(resort.conditions, null, weights);
+        // Get weather override from forecast if selectedDate is set
+        const forecast = selectedDate 
+          ? resort.forecasts?.find((f) => f.forecast_date === selectedDate)
+          : null;
+        const weatherOverride = forecast 
+          ? { weatherCondition: forecast.weather_condition }
+          : undefined;
+        
+        const { score } = calculatePerfectDayScore(resort.conditions, null, weights, weatherOverride);
 
         const el = createMarkerElement(score, resort.name, showLabels, showNumbers);
 
@@ -367,7 +377,7 @@ export function ResortMarkers({
         map.off('zoom', zoomListenerRef.current);
       }
     };
-  }, [map, resorts, weights, onResortClick, onResortHover]);
+  }, [map, resorts, weights, selectedDate, onResortClick, onResortHover]);
 
   // Highlight/dim markers based on search
   useEffect(() => {

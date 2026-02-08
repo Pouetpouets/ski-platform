@@ -23,6 +23,7 @@ interface SkiMapProps {
   className?: string;
   resorts?: ResortWithConditions[];
   weights?: Record<string, number>;
+  selectedDate?: string;
   highlightedSlugs?: Set<string> | null;
   snowLayerVisible?: boolean;
   onMapLoad?: () => void;
@@ -67,6 +68,7 @@ export function SkiMap({
   className,
   resorts = [],
   weights,
+  selectedDate,
   highlightedSlugs,
   snowLayerVisible = false,
   onMapLoad,
@@ -293,6 +295,7 @@ export function SkiMap({
           map={mapInstance}
           resorts={resorts}
           weights={weights}
+          selectedDate={selectedDate}
           highlightedSlugs={highlightedSlugs}
           onResortClick={onResortClick}
         />

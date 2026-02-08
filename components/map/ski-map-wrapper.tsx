@@ -34,8 +34,8 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
   const { searchQuery } = useResortSearch();
   const [selectedResort, setSelectedResort] = useState<ResortWithConditions | null>(null);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [snowLayerVisible, setSnowLayerVisible] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(true);
+  const [snowLayerVisible, setSnowLayerVisible] = useState(true);
 
   const handleResortClick = useCallback((resort: ResortWithConditions) => {
     setSelectedResort(resort);
@@ -93,6 +93,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
         className="h-full w-full"
         resorts={resorts}
         weights={weights}
+        selectedDate={selectedDate}
         highlightedSlugs={highlightedSlugs}
         snowLayerVisible={snowLayerVisible}
         onResortClick={handleResortClick}
