@@ -1,0 +1,126 @@
+# generated: 2026-01-29
+# project: Ski Platform
+# project_key: ski-platform
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-01-29
+project: Ski Platform
+project_key: ski-platform
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1: Foundation & Data Setup
+  epic-1: done
+  1-1-project-initialization-with-vercel-supabase-starter: done
+  1-2-supabase-database-schema-for-resorts: done
+  1-3-shadcn-ui-configuration-with-tailwind-css-v4: done
+  1-4-seed-data-for-french-alps-resorts: done
+  1-5-zod-schemas-for-data-validation: done
+  epic-1-retrospective: optional
+
+  # Epic 2: Interactive Map Experience
+  epic-2: done
+  2-1-mapbox-gl-js-integration: done
+  2-2-geolocation-permission-user-location: done
+  2-3-resort-markers-on-map: done
+  2-4-distance-calculation-from-user-location: done
+  2-5-map-zoom-and-pan-controls: done
+  2-6-color-coded-condition-markers: done
+  epic-2-retrospective: optional
+
+  # Epic 3: Resort Information Display
+  epic-3: done
+  3-1-resort-detail-panel-component: done
+  3-2-display-snow-conditions: done
+  3-3-display-open-runs-lifts-status: done
+  3-4-display-crowd-predictions: done
+  3-5-display-weather-forecast: done
+  3-6-display-lift-ticket-pricing: done
+  3-7-display-parking-information: done
+  3-8-add-webcam-links: done
+  3-9-factor-indicators-green-yellow-red: done
+  epic-3-retrospective: optional
+
+  # Epic 4: Perfect Day Score System
+  epic-4: done
+  4-1-implement-score-calculation-algorithm: done
+  4-2-display-scores-on-map-markers: done
+  4-3-show-score-breakdown-in-detail-panel: done
+  4-4-real-time-score-update-on-priority-change: done
+  4-5-apply-user-priority-weights: done
+  epic-4-retrospective: optional
+
+  # Epic 5: User Personalization
+  epic-5: done
+  5-1-create-priority-configuration-ui: done
+  5-2-implement-drag-and-drop-reordering: done
+  5-3-persist-preferences-to-localstorage: done
+  5-4-reset-to-default-priorities: done
+  5-5-apply-priorities-to-score-calculation: done
+  epic-5-retrospective: optional
+
+  # Epic 6: Authentication & Accounts
+  epic-6: done
+  6-1-anonymous-browsing-support: done
+  6-2-configure-supabase-auth-providers: done
+  6-3-implement-google-sign-in: done
+  6-4-implement-apple-sign-in: done
+  6-5-create-user-menu-component: done
+  6-6-sync-preferences-to-database: done
+  epic-6-retrospective: optional
+
+  # Epic 7: Email Alerts
+  epic-7: backlog
+  7-1-create-alert-subscription-ui: backlog
+  7-2-configure-resend-integration: backlog
+  7-3-create-weekly-alert-email-template: backlog
+  7-4-implement-cron-job-for-weekly-alerts: backlog
+  7-5-add-unsubscribe-functionality: backlog
+  epic-7-retrospective: optional
+
+  # Epic 8: Multi-Language Support
+  epic-8: backlog
+  8-1-configure-next-intl: backlog
+  8-2-create-translation-files-fr-en: backlog
+  8-3-add-language-switcher-component: backlog
+  8-4-persist-language-preference: backlog
+  epic-8-retrospective: optional
+
+  # Epic 9: Data Operations & Freshness
+  epic-9: backlog
+  9-1-create-scraping-cron-job: backlog
+  9-2-implement-data-validation: backlog
+  9-3-create-admin-resort-management-ui: backlog
+  9-4-add-data-freshness-indicators: backlog
+  epic-9-retrospective: optional
