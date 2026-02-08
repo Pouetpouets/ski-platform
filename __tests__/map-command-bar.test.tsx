@@ -22,11 +22,11 @@ describe('MapCommandBar', () => {
     );
   }
 
-  it('renders 7 day pill buttons', () => {
+  it('renders 5 day pill buttons', () => {
     renderBar();
-    // 7 day buttons + 1 location button + 1 snow toggle + 1 settings button = 10
+    // 5 day buttons + 1 location button + 1 snow toggle + 1 settings button = 8
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(10);
+    expect(buttons).toHaveLength(8);
   });
 
   it('renders a search input', () => {

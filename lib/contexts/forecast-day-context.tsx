@@ -5,18 +5,18 @@ import { createContext, useContext, useState, useCallback, useMemo } from 'react
 interface ForecastDayContextValue {
   selectedDate: string; // YYYY-MM-DD
   setSelectedDate: (date: string) => void;
-  availableDates: string[]; // 7 dates starting from today
+  availableDates: string[]; // 5 dates starting from today
 }
 
 const ForecastDayContext = createContext<ForecastDayContextValue | null>(null);
 
 /**
- * Generate an array of 7 date strings (YYYY-MM-DD) starting from today.
+ * Generate an array of 5 date strings (YYYY-MM-DD) starting from today.
  */
 function generateDates(): string[] {
   const dates: string[] = [];
   const now = new Date();
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 5; i++) {
     const d = new Date(now);
     d.setDate(now.getDate() + i);
     dates.push(d.toISOString().split('T')[0]);

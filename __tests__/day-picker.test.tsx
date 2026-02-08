@@ -12,10 +12,10 @@ describe('DayPicker', () => {
     );
   }
 
-  it('renders 7 day buttons', () => {
+  it('renders 5 day buttons', () => {
     renderWithProvider();
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(7);
+    expect(buttons).toHaveLength(5);
   });
 
   it('shows "Today" label for the first button', () => {
