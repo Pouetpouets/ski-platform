@@ -93,3 +93,44 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Mapbox Popup Styles */
+.mapboxgl-popup-content {
+  padding: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  overflow: hidden;
+}
+
+.mapboxgl-popup-tip {
+  border-top-color: white !important;
+}
+
+.resort-preview-popup .mapboxgl-popup-content {
+  background: white;
+}
+
+/* Resort Markers - Mobile touch targets */
+@media (max-width: 768px) {
+  .resort-marker {
+    touch-action: manipulation;
+  }
+  
+  .resort-marker .marker-container {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+}
+
+/* Smooth marker animations */
+.resort-marker {
+  will-change: transform;
+}
+
+.resort-marker .marker-container {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resort-marker:hover .marker-container {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.15);
+}
