@@ -16,7 +16,7 @@ export function MapCommandBar({ onSettingsOpen, snowLayerVisible, onSnowLayerTog
   const { searchQuery, setSearchQuery } = useResortSearch();
 
   return (
-    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 w-[min(420px,calc(100vw-2rem))]">
+    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[10000] w-[min(420px,calc(100vw-2rem))]">
       <div className="bg-background/70 backdrop-blur-xl border border-white/10 shadow-lg rounded-2xl px-3 py-2.5 flex flex-col gap-2">
         {/* Day pills */}
         <DayPicker />

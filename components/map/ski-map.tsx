@@ -152,7 +152,6 @@ export function SkiMap({
 
       map.on('load', () => {
         setIsLoaded(true);
-        setMapInstance(map);
         onMapLoadRef.current?.();
 
         // Add snow-conditions heatmap source & layer
@@ -166,7 +165,7 @@ export function SkiMap({
           type: 'heatmap',
           source: SNOW_SOURCE_ID,
           layout: {
-            visibility: 'none',
+            visibility: 'visible',
           },
           paint: {
             // Weight each point by freshSnow (0–60 cm range), minimum 0.15 so low-snow resorts still appear
@@ -212,6 +211,9 @@ export function SkiMap({
         if (bounds) {
           map.fitBounds(bounds, { padding: 60, maxZoom: 10, duration: 0 });
         }
+
+        // Set map instance after layers are added so visibility effects can run
+        setMapInstance(map);
 
         // Auto-trigger geolocation request after map loads
         setTimeout(() => {

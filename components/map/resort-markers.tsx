@@ -67,6 +67,7 @@ function createMarkerElement(
       justify-content: center;
       position: relative;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transform-origin: center center;
     ">
       <span class="marker-score" style="
         color: white;
