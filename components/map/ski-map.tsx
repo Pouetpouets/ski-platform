@@ -27,6 +27,7 @@ interface SkiMapProps {
   highlightedSlugs?: Set<string> | null;
   snowLayerVisible?: boolean;
   flyToLocation?: { latitude: number; longitude: number } | null;
+  onFlyToComplete?: () => void;
   onMapLoad?: () => void;
   onUserLocationChange?: (coords: { latitude: number; longitude: number } | null) => void;
   onResortClick?: (resort: ResortWithConditions) => void;
@@ -74,6 +75,7 @@ export function SkiMap({
   highlightedSlugs,
   snowLayerVisible = false,
   flyToLocation,
+  onFlyToComplete,
   onMapLoad,
   onUserLocationChange,
   onResortClick,
@@ -90,9 +92,11 @@ export function SkiMap({
   const onMapLoadRef = useRef(onMapLoad);
   const onUserLocationChangeRef = useRef(onUserLocationChange);
   const onGeolocationDeniedRef = useRef(onGeolocationDenied);
+  const onFlyToCompleteRef = useRef(onFlyToComplete);
   onMapLoadRef.current = onMapLoad;
   onUserLocationChangeRef.current = onUserLocationChange;
   onGeolocationDeniedRef.current = onGeolocationDenied;
+  onFlyToCompleteRef.current = onFlyToComplete;
 
   // Store resorts in ref for use in map load callback
   const resortsRef = useRef(resorts);
@@ -287,6 +291,9 @@ export function SkiMap({
       duration: 2000,
       essential: true,
     });
+
+    // Reset state after triggering animation to allow re-selection of same location
+    onFlyToCompleteRef.current?.();
   }, [flyToLocation, isLoaded]);
 
   if (!mapboxToken) {

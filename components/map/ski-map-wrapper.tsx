@@ -70,6 +70,10 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
     setFlyToLocation(coords);
   }, []);
 
+  const handleFlyToComplete = useCallback(() => {
+    setFlyToLocation(null);
+  }, []);
+
   const handlePanelClose = useCallback(() => {
     setSelectedResort(null);
   }, []);
@@ -122,6 +126,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
         highlightedSlugs={highlightedSlugs}
         snowLayerVisible={snowLayerVisible}
         flyToLocation={flyToLocation}
+        onFlyToComplete={handleFlyToComplete}
         onResortClick={handleResortClick}
         onUserLocationChange={handleUserLocationChange}
         onGeolocationDenied={handleGeolocationDenied}
