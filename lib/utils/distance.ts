@@ -95,7 +95,8 @@ export interface DistanceInfo {
 export function getDistanceInfo(
   userLocation: { latitude: number; longitude: number } | null,
   targetLat: number,
-  targetLon: number
+  targetLon: number,
+  locationName?: string | null
 ): DistanceInfo {
   const location = userLocation ?? DEFAULT_REFERENCE_LOCATION;
   const isUserLocation = userLocation !== null;
@@ -107,10 +108,23 @@ export function getDistanceInfo(
     targetLon
   );
 
+  // Determine fromLocation label:
+  // 1. If locationName provided, use it
+  // 2. If user has geolocation, use "your location"
+  // 3. Otherwise use default reference city name
+  let fromLocation: string;
+  if (locationName) {
+    fromLocation = locationName;
+  } else if (isUserLocation) {
+    fromLocation = 'your location';
+  } else {
+    fromLocation = DEFAULT_REFERENCE_LOCATION.name;
+  }
+
   return {
     distance,
     formattedDistance: formatDistance(distance),
     drivingTime: estimateDrivingTime(distance),
-    fromLocation: isUserLocation ? 'your location' : DEFAULT_REFERENCE_LOCATION.name,
+    fromLocation,
   };
 }

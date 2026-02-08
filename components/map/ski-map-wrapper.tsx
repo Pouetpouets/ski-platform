@@ -5,12 +5,14 @@ import { SkiMap } from './ski-map';
 import { ResortDetailPanel } from './resort-detail-panel';
 import { PrioritySettingsPanel } from './priority-settings-panel';
 import { MapCommandBar } from './map-command-bar';
+import { LocationModal } from './location-modal';
 import type { ResortWithConditions } from '@/lib/types/database';
 import { getDistanceInfo } from '@/lib/utils/distance';
 import { calculatePerfectDayScore } from '@/lib/utils/score';
 import { PrioritiesProvider, usePriorities } from '@/lib/contexts/priorities-context';
 import { ForecastDayProvider, useForecastDay } from '@/lib/contexts/forecast-day-context';
 import { ResortSearchProvider, useResortSearch } from '@/lib/contexts/resort-search-context';
+import { LocationProvider, useLocation } from '@/lib/contexts/location-context';
 
 interface SkiMapWrapperProps {
   resorts: ResortWithConditions[];
@@ -18,13 +20,15 @@ interface SkiMapWrapperProps {
 
 export function SkiMapWrapper({ resorts }: SkiMapWrapperProps) {
   return (
-    <PrioritiesProvider>
-      <ForecastDayProvider>
-        <ResortSearchProvider>
-          <SkiMapContent resorts={resorts} />
-        </ResortSearchProvider>
-      </ForecastDayProvider>
-    </PrioritiesProvider>
+    <LocationProvider>
+      <PrioritiesProvider>
+        <ForecastDayProvider>
+          <ResortSearchProvider>
+            <SkiMapContent resorts={resorts} />
+          </ResortSearchProvider>
+        </ForecastDayProvider>
+      </PrioritiesProvider>
+    </LocationProvider>
   );
 }
 
@@ -32,18 +36,34 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
   const { weights } = usePriorities();
   const { selectedDate } = useForecastDay();
   const { searchQuery } = useResortSearch();
+  const { location, setGeolocation } = useLocation();
   const [selectedResort, setSelectedResort] = useState<ResortWithConditions | null>(null);
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(true);
   const [snowLayerVisible, setSnowLayerVisible] = useState(true);
+  const [locationModalOpen, setLocationModalOpen] = useState(false);
+
+  // Derive userLocation coordinates for distance calculations
+  const userLocation = useMemo(() => {
+    if (!location) return null;
+    return { latitude: location.latitude, longitude: location.longitude };
+  }, [location]);
 
   const handleResortClick = useCallback((resort: ResortWithConditions) => {
     setSelectedResort(resort);
   }, []);
 
   const handleUserLocationChange = useCallback((coords: { latitude: number; longitude: number } | null) => {
-    setUserLocation(coords);
-  }, []);
+    if (coords) {
+      setGeolocation(coords.latitude, coords.longitude);
+    }
+  }, [setGeolocation]);
+
+  const handleGeolocationDenied = useCallback(() => {
+    // Only open modal if user hasn't already set a location
+    if (!location) {
+      setLocationModalOpen(true);
+    }
+  }, [location]);
 
   const handlePanelClose = useCallback(() => {
     setSelectedResort(null);
@@ -69,8 +89,8 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
   // Calculate distance for selected resort
   const distanceInfo = useMemo(() => {
     if (!selectedResort) return null;
-    return getDistanceInfo(userLocation, selectedResort.latitude, selectedResort.longitude);
-  }, [selectedResort, userLocation]);
+    return getDistanceInfo(userLocation, selectedResort.latitude, selectedResort.longitude, location?.name);
+  }, [selectedResort, userLocation, location?.name]);
 
   // Derive weather override from selected day's forecast
   const weatherOverride = useMemo(() => {
@@ -98,12 +118,21 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
         snowLayerVisible={snowLayerVisible}
         onResortClick={handleResortClick}
         onUserLocationChange={handleUserLocationChange}
+        onGeolocationDenied={handleGeolocationDenied}
       />
 
       <MapCommandBar
         onSettingsOpen={() => setSettingsOpen(true)}
         snowLayerVisible={snowLayerVisible}
         onSnowLayerToggle={() => setSnowLayerVisible((v) => !v)}
+        locationName={location?.name ?? null}
+        isGeolocation={location?.isFromGeolocation ?? false}
+        onLocationClick={() => setLocationModalOpen(true)}
+      />
+
+      <LocationModal
+        isOpen={locationModalOpen}
+        onClose={() => setLocationModalOpen(false)}
       />
 
       <PrioritySettingsPanel

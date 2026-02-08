@@ -5,7 +5,7 @@ import { ForecastDayProvider } from '@/lib/contexts/forecast-day-context';
 import { ResortSearchProvider } from '@/lib/contexts/resort-search-context';
 
 describe('MapCommandBar', () => {
-  function renderBar(onSettingsOpen = vi.fn(), onSnowLayerToggle = vi.fn()) {
+  function renderBar(onSettingsOpen = vi.fn(), onSnowLayerToggle = vi.fn(), onLocationClick = vi.fn()) {
     return render(
       <ForecastDayProvider>
         <ResortSearchProvider>
@@ -13,6 +13,9 @@ describe('MapCommandBar', () => {
             onSettingsOpen={onSettingsOpen}
             snowLayerVisible={false}
             onSnowLayerToggle={onSnowLayerToggle}
+            locationName={null}
+            isGeolocation={false}
+            onLocationClick={onLocationClick}
           />
         </ResortSearchProvider>
       </ForecastDayProvider>
@@ -21,9 +24,9 @@ describe('MapCommandBar', () => {
 
   it('renders 7 day pill buttons', () => {
     renderBar();
-    // 7 day buttons + 1 snow toggle + 1 settings button = 9
+    // 7 day buttons + 1 location button + 1 snow toggle + 1 settings button = 10
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(9);
+    expect(buttons).toHaveLength(10);
   });
 
   it('renders a search input', () => {

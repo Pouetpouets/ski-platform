@@ -29,6 +29,7 @@ interface SkiMapProps {
   onMapLoad?: () => void;
   onUserLocationChange?: (coords: { latitude: number; longitude: number } | null) => void;
   onResortClick?: (resort: ResortWithConditions) => void;
+  onGeolocationDenied?: () => void;
 }
 
 /**
@@ -74,6 +75,7 @@ export function SkiMap({
   onMapLoad,
   onUserLocationChange,
   onResortClick,
+  onGeolocationDenied,
 }: SkiMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -85,8 +87,10 @@ export function SkiMap({
   // Store callbacks in refs to avoid re-initializing the map when they change
   const onMapLoadRef = useRef(onMapLoad);
   const onUserLocationChangeRef = useRef(onUserLocationChange);
+  const onGeolocationDeniedRef = useRef(onGeolocationDenied);
   onMapLoadRef.current = onMapLoad;
   onUserLocationChangeRef.current = onUserLocationChange;
+  onGeolocationDeniedRef.current = onGeolocationDenied;
 
   // Store resorts in ref for use in map load callback
   const resortsRef = useRef(resorts);
@@ -148,6 +152,7 @@ export function SkiMap({
       // Handle geolocation errors gracefully
       geolocateControl.on('error', () => {
         onUserLocationChangeRef.current?.(null);
+        onGeolocationDeniedRef.current?.();
       });
 
       map.on('load', () => {
