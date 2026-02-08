@@ -34,18 +34,19 @@ export function getScoreColorHex(score: number): string {
 // SCORING FACTOR NAMES
 // =============================================================================
 
-export const FACTOR_NAMES = ['snow', 'crowd', 'weather', 'price', 'distance', 'parking'] as const;
+// Note: crowd and parking removed - no reliable data source (always defaults to 'moderate'/'available')
+export const FACTOR_NAMES = ['snow', 'weather', 'price', 'distance'] as const;
 export type FactorName = (typeof FACTOR_NAMES)[number];
 
 // =============================================================================
 // PRIORITY-BASED WEIGHT DISTRIBUTION
 // =============================================================================
 
-/** Weight distribution by priority rank (1st to 6th) */
-export const PRIORITY_WEIGHT_DISTRIBUTION = [0.30, 0.25, 0.20, 0.12, 0.08, 0.05] as const;
+/** Weight distribution by priority rank (1st to 4th) */
+export const PRIORITY_WEIGHT_DISTRIBUTION = [0.35, 0.30, 0.20, 0.15] as const;
 
 /** Default priority order */
-export const DEFAULT_PRIORITY_ORDER: FactorName[] = ['snow', 'crowd', 'weather', 'price', 'distance', 'parking'];
+export const DEFAULT_PRIORITY_ORDER: FactorName[] = ['snow', 'weather', 'price', 'distance'];
 
 /**
  * Convert a priority order into weights.
@@ -68,29 +69,23 @@ export const DEFAULT_WEIGHTS: Record<FactorName, number> = priorityOrderToWeight
 
 export const FACTOR_LABELS: Record<FactorName, string> = {
   snow: 'Snow',
-  crowd: 'Crowd',
   weather: 'Weather',
   price: 'Price',
   distance: 'Distance',
-  parking: 'Parking',
 };
 
 export const FACTOR_EMOJI: Record<FactorName, string> = {
   snow: '❄️',
-  crowd: '👥',
   weather: '☀️',
   price: '🎟️',
   distance: '📍',
-  parking: '🅿️',
 };
 
 export const FACTOR_DESCRIPTIONS: Record<FactorName, string> = {
   snow: 'Base depth & fresh snow',
-  crowd: 'Expected crowd level',
   weather: 'Weather conditions',
   price: 'Lift ticket pricing',
   distance: 'Distance from you',
-  parking: 'Parking availability',
 };
 
 // =============================================================================
@@ -100,16 +95,22 @@ export const FACTOR_DESCRIPTIONS: Record<FactorName, string> = {
 /**
  * Snow quality score based on base depth and fresh snow.
  * Base depth contributes 70%, fresh snow contributes 30%.
+ * Returns neutral score (50) if no data available.
  */
-export function scoreSnow(snowDepthBase: number | null, freshSnow24h: number): number {
+export function scoreSnow(snowDepthBase: number | null, freshSnow24h: number | null): number {
+  // If no snow data at all, return neutral score
+  if (snowDepthBase === null && (freshSnow24h === null || freshSnow24h === 0)) {
+    return 50; // neutral - don't penalize missing data
+  }
+
   // Base depth score (0-100): linear scale, 150cm+ = max
-  let depthScore = 0;
+  let depthScore = 50; // neutral default if missing
   if (snowDepthBase !== null) {
     depthScore = Math.min(100, (snowDepthBase / 150) * 100);
   }
 
   // Fresh snow score (0-100): 30cm+ = max
-  const freshScore = Math.min(100, (freshSnow24h / 30) * 100);
+  const freshScore = freshSnow24h !== null ? Math.min(100, (freshSnow24h / 30) * 100) : 0;
 
   return Math.round(depthScore * 0.7 + freshScore * 0.3);
 }
@@ -194,11 +195,9 @@ export function scoreParking(
 
 export interface FactorScores {
   snow: number;
-  crowd: number;
   weather: number;
   price: number;
   distance: number;
-  parking: number;
 }
 
 // =============================================================================
@@ -207,6 +206,7 @@ export interface FactorScores {
 
 /**
  * Calculate all individual factor scores for a resort.
+ * Note: crowd and parking removed due to lack of reliable data sources.
  */
 export function calculateFactorScores(
   conditions: ResortConditions,
@@ -215,11 +215,9 @@ export function calculateFactorScores(
 ): FactorScores {
   return {
     snow: scoreSnow(conditions.snow_depth_base, conditions.fresh_snow_24h),
-    crowd: scoreCrowd(conditions.crowd_level),
     weather: scoreWeather(weatherOverride ? weatherOverride.weatherCondition : conditions.weather_condition),
     price: scorePrice(conditions.adult_ticket_price),
     distance: scoreDistance(distanceKm),
-    parking: scoreParking(conditions.parking_status, conditions.parking_price),
   };
 }
 

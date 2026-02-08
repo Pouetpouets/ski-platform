@@ -20,7 +20,7 @@ function PrioritiesDisplay() {
       <div data-testid="first-weight">{weights[priorityOrder[0]]}</div>
       <button
         data-testid="reorder"
-        onClick={() => setPriorityOrder(['price', 'distance', 'snow', 'crowd', 'weather', 'parking'])}
+        onClick={() => setPriorityOrder(['price', 'distance', 'snow', 'weather'])}
       >
         Reorder
       </button>
@@ -56,7 +56,7 @@ describe('PrioritiesContext', () => {
   it('provides correct weight for first priority', () => {
     renderWithProvider();
 
-    expect(screen.getByTestId('first-weight').textContent).toBe('0.3');
+    expect(screen.getByTestId('first-weight').textContent).toBe('0.35');
   });
 
   it('throws error when used outside provider', () => {
@@ -79,7 +79,7 @@ describe('localStorage persistence', () => {
     await user.click(screen.getByTestId('reorder'));
 
     const stored = localStorage.getItem(STORAGE_KEY);
-    expect(stored).toBe(JSON.stringify(['price', 'distance', 'snow', 'crowd', 'weather', 'parking']));
+    expect(stored).toBe(JSON.stringify(['price', 'distance', 'snow', 'weather']));
   });
 
   it('uses correct storage key', async () => {
@@ -93,7 +93,7 @@ describe('localStorage persistence', () => {
   });
 
   it('loads saved priorities from localStorage on mount', async () => {
-    const customOrder: FactorName[] = ['parking', 'price', 'distance', 'weather', 'crowd', 'snow'];
+    const customOrder: FactorName[] = ['distance', 'price', 'weather', 'snow'];
     localStorage.setItem(STORAGE_KEY, JSON.stringify(customOrder));
 
     renderWithProvider();
@@ -120,7 +120,7 @@ describe('localStorage persistence', () => {
   });
 
   it('uses default when localStorage has wrong number of items', async () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(['snow', 'crowd']));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(['snow', 'weather']));
 
     renderWithProvider();
     await act(async () => {});
@@ -129,7 +129,7 @@ describe('localStorage persistence', () => {
   });
 
   it('uses default when localStorage has duplicate items', async () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(['snow', 'snow', 'snow', 'snow', 'snow', 'snow']));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(['snow', 'snow', 'snow', 'snow']));
 
     renderWithProvider();
     await act(async () => {});
@@ -138,7 +138,7 @@ describe('localStorage persistence', () => {
   });
 
   it('uses default when localStorage has unknown factor names', async () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(['snow', 'crowd', 'weather', 'price', 'distance', 'unknown']));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(['snow', 'weather', 'price', 'unknown']));
 
     renderWithProvider();
     await act(async () => {});
@@ -153,7 +153,7 @@ describe('localStorage persistence', () => {
     // First reorder
     await user.click(screen.getByTestId('reorder'));
     expect(localStorage.getItem(STORAGE_KEY)).toBe(
-      JSON.stringify(['price', 'distance', 'snow', 'crowd', 'weather', 'parking'])
+      JSON.stringify(['price', 'distance', 'snow', 'weather'])
     );
 
     // Then reset

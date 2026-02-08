@@ -4,11 +4,9 @@ import {
   calculateFactorScores,
   combinedScore,
   scoreSnow,
-  scoreCrowd,
   scoreWeather,
   scorePrice,
   scoreDistance,
-  scoreParking,
   getScoreColor,
   getScoreColorHex,
   SCORE_THRESHOLDS,
@@ -73,8 +71,9 @@ describe('scoreSnow', () => {
     expect(scoreSnow(150, 30)).toBe(100);
   });
 
-  it('returns 0 for null base depth and 0 fresh', () => {
-    expect(scoreSnow(null, 0)).toBe(0);
+  it('returns neutral score (50) for null base depth and null/0 fresh', () => {
+    expect(scoreSnow(null, 0)).toBe(50);
+    expect(scoreSnow(null, null)).toBe(50);
   });
 
   it('scales linearly with base depth', () => {
@@ -82,21 +81,21 @@ describe('scoreSnow', () => {
     expect(scoreSnow(75, 0)).toBe(35);
   });
 
-  it('includes fresh snow contribution', () => {
-    // 0 depth + 15cm fresh: 0 * 0.7 + (15/30 * 100) * 0.3 = 15
-    expect(scoreSnow(null, 15)).toBe(15);
+  it('includes fresh snow contribution when base is null but fresh snow exists', () => {
+    // null depth (neutral 50) * 0.7 + 15cm fresh (50) * 0.3 = 35 + 15 = 50
+    expect(scoreSnow(null, 15)).toBe(50);
   });
 
   it('caps at 100', () => {
     expect(scoreSnow(200, 50)).toBe(100);
   });
-});
 
-describe('scoreCrowd', () => {
-  it('returns 100 for low', () => { expect(scoreCrowd('low')).toBe(100); });
-  it('returns 70 for moderate', () => { expect(scoreCrowd('moderate')).toBe(70); });
-  it('returns 40 for high', () => { expect(scoreCrowd('high')).toBe(40); });
-  it('returns 20 for very_high', () => { expect(scoreCrowd('very_high')).toBe(20); });
+  it('combines base depth and fresh snow correctly', () => {
+    // 100cm base: 100/150 * 100 * 0.7 = 46.67
+    // 20cm fresh: 20/30 * 100 * 0.3 = 20
+    // Total: ~67
+    expect(scoreSnow(100, 20)).toBe(67);
+  });
 });
 
 describe('scoreWeather', () => {
@@ -153,55 +152,36 @@ describe('scoreDistance', () => {
   });
 });
 
-describe('scoreParking', () => {
-  it('returns 100 for available + free', () => {
-    expect(scoreParking('available', 0)).toBe(100);
-    expect(scoreParking('available', null)).toBe(100);
-  });
-
-  it('returns 80 for available + paid', () => {
-    expect(scoreParking('available', 15)).toBe(80);
-  });
-
-  it('returns 60 for limited', () => {
-    expect(scoreParking('limited', 20)).toBe(60);
-  });
-
-  it('returns 20 for full', () => {
-    expect(scoreParking('full', 25)).toBe(20);
-  });
-});
-
 // =============================================================================
 // COMBINED SCORE TESTS
 // =============================================================================
 
 describe('combinedScore', () => {
   it('returns average of all factors with equal weights', () => {
-    const factors = { snow: 100, crowd: 100, weather: 100, price: 100, distance: 100, parking: 100 };
+    const factors = { snow: 100, weather: 100, price: 100, distance: 100 };
     expect(combinedScore(factors)).toBe(100);
   });
 
   it('returns 0 when all factors are 0', () => {
-    const factors = { snow: 0, crowd: 0, weather: 0, price: 0, distance: 0, parking: 0 };
+    const factors = { snow: 0, weather: 0, price: 0, distance: 0 };
     expect(combinedScore(factors)).toBe(0);
   });
 
   it('computes weighted average correctly with equal weights', () => {
-    const factors = { snow: 100, crowd: 0, weather: 100, price: 0, distance: 100, parking: 0 };
-    const equalWeights = { snow: 1/6, crowd: 1/6, weather: 1/6, price: 1/6, distance: 1/6, parking: 1/6 } as Record<FactorName, number>;
+    const factors = { snow: 100, weather: 0, price: 100, distance: 0 };
+    const equalWeights = { snow: 0.25, weather: 0.25, price: 0.25, distance: 0.25 } as Record<FactorName, number>;
     expect(combinedScore(factors, equalWeights)).toBe(50);
   });
 
   it('computes weighted average with priority weights', () => {
-    const factors = { snow: 100, crowd: 0, weather: 100, price: 0, distance: 100, parking: 0 };
-    // Default priority weights: snow=0.30, crowd=0.25, weather=0.20, price=0.12, distance=0.08, parking=0.05
-    // 100*0.30 + 0 + 100*0.20 + 0 + 100*0.08 + 0 = 58
-    expect(combinedScore(factors)).toBe(58);
+    const factors = { snow: 100, weather: 0, price: 100, distance: 0 };
+    // Default priority weights: snow=0.35, weather=0.30, price=0.20, distance=0.15
+    // 100*0.35 + 0 + 100*0.20 + 0 = 55
+    expect(combinedScore(factors)).toBe(55);
   });
 
   it('clamps to 0-100', () => {
-    const factors = { snow: 100, crowd: 100, weather: 100, price: 100, distance: 100, parking: 100 };
+    const factors = { snow: 100, weather: 100, price: 100, distance: 100 };
     expect(combinedScore(factors)).toBeLessThanOrEqual(100);
     expect(combinedScore(factors)).toBeGreaterThanOrEqual(0);
   });
@@ -232,14 +212,12 @@ const baseConditions: ResortConditions = {
 };
 
 describe('calculateFactorScores', () => {
-  it('returns all 6 factor scores', () => {
+  it('returns all 4 factor scores', () => {
     const factors = calculateFactorScores(baseConditions, 100);
     expect(factors).toHaveProperty('snow');
-    expect(factors).toHaveProperty('crowd');
     expect(factors).toHaveProperty('weather');
     expect(factors).toHaveProperty('price');
     expect(factors).toHaveProperty('distance');
-    expect(factors).toHaveProperty('parking');
   });
 
   it('all scores are between 0 and 100', () => {
@@ -270,11 +248,8 @@ describe('calculatePerfectDayScore', () => {
       ...baseConditions,
       snow_depth_base: 150,
       fresh_snow_24h: 30,
-      crowd_level: 'low',
       weather_condition: 'sunny',
       adult_ticket_price: 30,
-      parking_status: 'available',
-      parking_price: 0,
     };
 
     const result = calculatePerfectDayScore(excellent, 0);
@@ -286,15 +261,8 @@ describe('calculatePerfectDayScore', () => {
       ...baseConditions,
       snow_depth_base: 10,
       fresh_snow_24h: 0,
-      slopes_open_km: 5,
-      slopes_total_km: 100,
-      lifts_open: 2,
-      lifts_total: 50,
-      crowd_level: 'very_high',
       weather_condition: 'storm',
       adult_ticket_price: 70,
-      parking_status: 'full',
-      parking_price: 25,
     };
 
     const result = calculatePerfectDayScore(poor, 400);
@@ -307,15 +275,9 @@ describe('calculatePerfectDayScore', () => {
     expect(nearScore).toBeGreaterThan(farScore);
   });
 
-  it('score varies with crowd level', () => {
-    const lowCrowd = calculatePerfectDayScore({ ...baseConditions, crowd_level: 'low' }).score;
-    const highCrowd = calculatePerfectDayScore({ ...baseConditions, crowd_level: 'very_high' }).score;
-    expect(lowCrowd).toBeGreaterThan(highCrowd);
-  });
-
   it('accepts custom weights', () => {
     const snowOnlyWeights = {
-      snow: 1, crowd: 0, weather: 0, price: 0, distance: 0, parking: 0,
+      snow: 1, weather: 0, price: 0, distance: 0,
     };
 
     const result = calculatePerfectDayScore(baseConditions, null, snowOnlyWeights);
@@ -324,8 +286,8 @@ describe('calculatePerfectDayScore', () => {
     expect(result.score).toBe(factors.snow);
   });
 
-  it('has 6 default factor names', () => {
-    expect(FACTOR_NAMES).toHaveLength(6);
+  it('has 4 default factor names', () => {
+    expect(FACTOR_NAMES).toHaveLength(4);
   });
 
   it('default weights sum to ~1', () => {
@@ -339,8 +301,8 @@ describe('calculatePerfectDayScore', () => {
 // =============================================================================
 
 describe('PRIORITY_WEIGHT_DISTRIBUTION', () => {
-  it('has 6 weight values', () => {
-    expect(PRIORITY_WEIGHT_DISTRIBUTION).toHaveLength(6);
+  it('has 4 weight values', () => {
+    expect(PRIORITY_WEIGHT_DISTRIBUTION).toHaveLength(4);
   });
 
   it('sums to 1', () => {
@@ -355,41 +317,37 @@ describe('PRIORITY_WEIGHT_DISTRIBUTION', () => {
   });
 
   it('matches expected distribution', () => {
-    expect(PRIORITY_WEIGHT_DISTRIBUTION[0]).toBe(0.30);
-    expect(PRIORITY_WEIGHT_DISTRIBUTION[1]).toBe(0.25);
+    expect(PRIORITY_WEIGHT_DISTRIBUTION[0]).toBe(0.35);
+    expect(PRIORITY_WEIGHT_DISTRIBUTION[1]).toBe(0.30);
     expect(PRIORITY_WEIGHT_DISTRIBUTION[2]).toBe(0.20);
-    expect(PRIORITY_WEIGHT_DISTRIBUTION[3]).toBe(0.12);
-    expect(PRIORITY_WEIGHT_DISTRIBUTION[4]).toBe(0.08);
-    expect(PRIORITY_WEIGHT_DISTRIBUTION[5]).toBe(0.05);
+    expect(PRIORITY_WEIGHT_DISTRIBUTION[3]).toBe(0.15);
   });
 });
 
 describe('priorityOrderToWeights', () => {
   it('assigns highest weight to first priority', () => {
-    const weights = priorityOrderToWeights(['price', 'distance', 'snow', 'crowd', 'weather', 'parking']);
-    expect(weights.price).toBe(0.30);
-    expect(weights.distance).toBe(0.25);
+    const weights = priorityOrderToWeights(['price', 'distance', 'snow', 'weather']);
+    expect(weights.price).toBe(0.35);
+    expect(weights.distance).toBe(0.30);
     expect(weights.snow).toBe(0.20);
   });
 
   it('default priority order gives snow the highest weight', () => {
-    expect(DEFAULT_WEIGHTS.snow).toBe(0.30);
-    expect(DEFAULT_WEIGHTS.crowd).toBe(0.25);
-    expect(DEFAULT_WEIGHTS.weather).toBe(0.20);
-    expect(DEFAULT_WEIGHTS.price).toBe(0.12);
-    expect(DEFAULT_WEIGHTS.distance).toBe(0.08);
-    expect(DEFAULT_WEIGHTS.parking).toBe(0.05);
+    expect(DEFAULT_WEIGHTS.snow).toBe(0.35);
+    expect(DEFAULT_WEIGHTS.weather).toBe(0.30);
+    expect(DEFAULT_WEIGHTS.price).toBe(0.20);
+    expect(DEFAULT_WEIGHTS.distance).toBe(0.15);
   });
 
   it('reordering priorities changes score outcome', () => {
     const conditions = baseConditions;
 
-    // Snow-first weights (default): snow gets 0.30
-    const snowFirstWeights = priorityOrderToWeights(['snow', 'crowd', 'weather', 'price', 'distance', 'parking']);
+    // Snow-first weights (default): snow gets 0.35
+    const snowFirstWeights = priorityOrderToWeights(['snow', 'weather', 'price', 'distance']);
     const snowFirstScore = calculatePerfectDayScore(conditions, null, snowFirstWeights).score;
 
-    // Price-first weights: price gets 0.30
-    const priceFirstWeights = priorityOrderToWeights(['price', 'distance', 'parking', 'crowd', 'weather', 'snow']);
+    // Price-first weights: price gets 0.35
+    const priceFirstWeights = priorityOrderToWeights(['price', 'distance', 'weather', 'snow']);
     const priceFirstScore = calculatePerfectDayScore(conditions, null, priceFirstWeights).score;
 
     // Scores should differ when priorities change

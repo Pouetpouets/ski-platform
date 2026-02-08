@@ -39,7 +39,7 @@ describe('PrioritySettingsPanel', () => {
     expect(screen.queryByText('Your Priorities')).not.toBeInTheDocument();
   });
 
-  it('displays all 6 factors', () => {
+  it('displays all 4 factors', () => {
     renderPanel();
 
     for (const name of DEFAULT_PRIORITY_ORDER) {
@@ -47,13 +47,13 @@ describe('PrioritySettingsPanel', () => {
     }
   });
 
-  it('displays rank numbers 1-6', () => {
+  it('displays rank numbers 1-4', () => {
     renderPanel();
 
     const items = screen.getAllByTestId(/priority-item-/);
-    expect(items).toHaveLength(6);
+    expect(items).toHaveLength(4);
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 4; i++) {
       expect(within(items[i]).getByText(String(i + 1))).toBeInTheDocument();
     }
   });
@@ -70,7 +70,7 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     expect(screen.getByText('Base depth & fresh snow')).toBeInTheDocument();
-    expect(screen.getByText('Expected crowd level')).toBeInTheDocument();
+    expect(screen.getByText('Weather conditions')).toBeInTheDocument();
   });
 
   it('has drag handles for each factor', () => {
@@ -78,11 +78,9 @@ describe('PrioritySettingsPanel', () => {
 
     const factorDisplayNames: Record<string, string> = {
       snow: 'Snow',
-      crowd: 'Crowd',
       weather: 'Weather',
       price: 'Price',
       distance: 'Distance',
-      parking: 'Parking',
     };
 
     for (const name of DEFAULT_PRIORITY_ORDER) {
@@ -95,11 +93,9 @@ describe('PrioritySettingsPanel', () => {
 
     const factorDisplayNames: Record<string, string> = {
       snow: 'Snow',
-      crowd: 'Crowd',
       weather: 'Weather',
       price: 'Price',
       distance: 'Distance',
-      parking: 'Parking',
     };
 
     for (const name of DEFAULT_PRIORITY_ORDER) {
@@ -118,7 +114,7 @@ describe('PrioritySettingsPanel', () => {
   it('disables down button for last item', () => {
     renderPanel();
 
-    const downButton = screen.getByLabelText('Move Parking down');
+    const downButton = screen.getByLabelText('Move Distance down');
     expect(downButton).toBeDisabled();
   });
 
@@ -126,13 +122,13 @@ describe('PrioritySettingsPanel', () => {
     const user = userEvent.setup();
     renderPanel();
 
-    // Second factor is 'crowd' by default - move it up
-    const upButton = screen.getByLabelText('Move Crowd up');
+    // Second factor is 'weather' by default - move it up
+    const upButton = screen.getByLabelText('Move Weather up');
     await user.click(upButton);
 
-    // Now crowd should be first (rank 1)
+    // Now weather should be first (rank 1)
     const items = screen.getAllByTestId(/priority-item-/);
-    expect(items[0]).toHaveAttribute('data-testid', 'priority-item-crowd');
+    expect(items[0]).toHaveAttribute('data-testid', 'priority-item-weather');
     expect(items[1]).toHaveAttribute('data-testid', 'priority-item-snow');
   });
 
@@ -145,7 +141,7 @@ describe('PrioritySettingsPanel', () => {
     await user.click(downButton);
 
     const items = screen.getAllByTestId(/priority-item-/);
-    expect(items[0]).toHaveAttribute('data-testid', 'priority-item-crowd');
+    expect(items[0]).toHaveAttribute('data-testid', 'priority-item-weather');
     expect(items[1]).toHaveAttribute('data-testid', 'priority-item-snow');
   });
 
@@ -166,8 +162,8 @@ describe('PrioritySettingsPanel', () => {
     const user = userEvent.setup();
     renderPanel();
 
-    // Move crowd up to change order
-    await user.click(screen.getByLabelText('Move Crowd up'));
+    // Move weather up to change order
+    await user.click(screen.getByLabelText('Move Weather up'));
 
     const resetButton = screen.getByText('Reset to Default');
     expect(resetButton.closest('button')).not.toBeDisabled();
@@ -178,11 +174,11 @@ describe('PrioritySettingsPanel', () => {
     renderPanel();
 
     // Change order
-    await user.click(screen.getByLabelText('Move Crowd up'));
+    await user.click(screen.getByLabelText('Move Weather up'));
 
     // Verify changed
     let items = screen.getAllByTestId(/priority-item-/);
-    expect(items[0]).toHaveAttribute('data-testid', 'priority-item-crowd');
+    expect(items[0]).toHaveAttribute('data-testid', 'priority-item-weather');
 
     // Reset
     await user.click(screen.getByText('Reset to Default'));
@@ -190,22 +186,22 @@ describe('PrioritySettingsPanel', () => {
     // Verify back to default
     items = screen.getAllByTestId(/priority-item-/);
     expect(items[0]).toHaveAttribute('data-testid', 'priority-item-snow');
-    expect(items[1]).toHaveAttribute('data-testid', 'priority-item-crowd');
+    expect(items[1]).toHaveAttribute('data-testid', 'priority-item-weather');
   });
 
   it('weight percentages update when order changes', async () => {
     const user = userEvent.setup();
     renderPanel();
 
-    // Snow is first, should have 30%
+    // Snow is first, should have 35%
     const snowItem = screen.getByTestId('priority-item-snow');
-    expect(within(snowItem).getByText('30%')).toBeInTheDocument();
+    expect(within(snowItem).getByText('35%')).toBeInTheDocument();
 
     // Move snow down
     await user.click(screen.getByLabelText('Move Snow down'));
 
-    // Snow is now second, should have 25%
+    // Snow is now second, should have 30%
     const snowItemAfter = screen.getByTestId('priority-item-snow');
-    expect(within(snowItemAfter).getByText('25%')).toBeInTheDocument();
+    expect(within(snowItemAfter).getByText('30%')).toBeInTheDocument();
   });
 });
