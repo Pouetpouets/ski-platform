@@ -49,7 +49,6 @@ function createMarkerElement(
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    transition: transform 0.2s ease;
     z-index: ${score};
   `;
 
@@ -66,6 +65,7 @@ function createMarkerElement(
       align-items: center;
       justify-content: center;
       position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     ">
       <span class="marker-score" style="
         color: white;
@@ -102,14 +102,16 @@ function createMarkerElement(
 
   el.innerHTML = markerHtml;
 
-  // Hover effects
+  // Hover effects - scale only the marker circle, not the whole element
   el.addEventListener('mouseenter', () => {
-    el.style.transform = 'scale(1.15)';
+    const container = el.querySelector('.marker-container') as HTMLElement;
+    if (container) container.style.transform = 'scale(1.15)';
     el.style.zIndex = '9999';
   });
 
   el.addEventListener('mouseleave', () => {
-    el.style.transform = 'scale(1)';
+    const container = el.querySelector('.marker-container') as HTMLElement;
+    if (container) container.style.transform = 'scale(1)';
     el.style.zIndex = String(score);
   });
 
