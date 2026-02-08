@@ -26,6 +26,7 @@ interface SkiMapProps {
   selectedDate?: string;
   highlightedSlugs?: Set<string> | null;
   snowLayerVisible?: boolean;
+  flyToLocation?: { latitude: number; longitude: number } | null;
   onMapLoad?: () => void;
   onUserLocationChange?: (coords: { latitude: number; longitude: number } | null) => void;
   onResortClick?: (resort: ResortWithConditions) => void;
@@ -72,6 +73,7 @@ export function SkiMap({
   selectedDate,
   highlightedSlugs,
   snowLayerVisible = false,
+  flyToLocation,
   onMapLoad,
   onUserLocationChange,
   onResortClick,
@@ -273,6 +275,19 @@ export function SkiMap({
       // Source may not exist yet
     }
   }, [resorts, mapInstance]);
+
+  // Fly to manually selected location
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !isLoaded || !flyToLocation) return;
+
+    map.flyTo({
+      center: [flyToLocation.longitude, flyToLocation.latitude],
+      zoom: USER_LOCATION_ZOOM,
+      duration: 2000,
+      essential: true,
+    });
+  }, [flyToLocation, isLoaded]);
 
   if (!mapboxToken) {
     return (

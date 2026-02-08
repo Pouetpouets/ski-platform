@@ -41,6 +41,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
   const [settingsOpen, setSettingsOpen] = useState(true);
   const [snowLayerVisible, setSnowLayerVisible] = useState(true);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
+  const [flyToLocation, setFlyToLocation] = useState<{ latitude: number; longitude: number } | null>(null);
 
   // Derive userLocation coordinates for distance calculations
   const userLocation = useMemo(() => {
@@ -64,6 +65,10 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
       setLocationModalOpen(true);
     }
   }, [location]);
+
+  const handleLocationSelected = useCallback((coords: { latitude: number; longitude: number }) => {
+    setFlyToLocation(coords);
+  }, []);
 
   const handlePanelClose = useCallback(() => {
     setSelectedResort(null);
@@ -116,6 +121,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
         selectedDate={selectedDate}
         highlightedSlugs={highlightedSlugs}
         snowLayerVisible={snowLayerVisible}
+        flyToLocation={flyToLocation}
         onResortClick={handleResortClick}
         onUserLocationChange={handleUserLocationChange}
         onGeolocationDenied={handleGeolocationDenied}
@@ -133,6 +139,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
       <LocationModal
         isOpen={locationModalOpen}
         onClose={() => setLocationModalOpen(false)}
+        onLocationSelected={handleLocationSelected}
       />
 
       <PrioritySettingsPanel

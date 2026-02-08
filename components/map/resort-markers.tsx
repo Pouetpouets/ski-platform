@@ -18,7 +18,7 @@ interface ResortMarkersProps {
 
 /** Zoom thresholds for progressive detail */
 const ZOOM_SHOW_LABELS = 7;
-const ZOOM_HIDE_NUMBERS = 6;
+const ZOOM_SHOW_NUMBERS = 5;
 
 // Get score-based gradient colors (matching landing page style)
 function getScoreGradient(score: number): { bg: string; border: string } {
@@ -33,6 +33,12 @@ function getScoreGradient(score: number): { bg: string; border: string } {
   }
 }
 
+// Detect mobile device (evaluated lazily to avoid SSR issues)
+function isMobileDevice(): boolean {
+  if (typeof window === 'undefined') return false;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 // Create marker HTML element with score and optional name label
 function createMarkerElement(
   score: number,
@@ -41,7 +47,8 @@ function createMarkerElement(
   showNumber: boolean
 ): HTMLElement {
   const { bg, border } = getScoreGradient(score);
-  const size = showNumber ? 48 : 24;
+  // Larger minimum size on mobile for better touch targets
+  const size = showNumber ? 48 : (isMobileDevice() ? 32 : 24);
 
   const el = document.createElement('div');
   el.className = 'resort-marker';
@@ -123,7 +130,7 @@ function createMarkerElement(
 /** Update marker visibility based on zoom level */
 function updateMarkersForZoom(markers: HTMLElement[], zoom: number): void {
   const showLabels = zoom >= ZOOM_SHOW_LABELS;
-  const showNumbers = zoom >= ZOOM_HIDE_NUMBERS;
+  const showNumbers = zoom >= ZOOM_SHOW_NUMBERS;
 
   for (const el of markers) {
     const container = el.querySelector('.marker-container') as HTMLElement;
@@ -289,7 +296,7 @@ export function ResortMarkers({
 
       const currentZoom = map.getZoom();
       const showLabels = currentZoom >= ZOOM_SHOW_LABELS;
-      const showNumbers = currentZoom >= ZOOM_HIDE_NUMBERS;
+      const showNumbers = currentZoom >= ZOOM_SHOW_NUMBERS;
 
       // Create markers for each resort
       resorts.forEach((resort) => {
@@ -308,6 +315,10 @@ export function ResortMarkers({
         const marker = new mapboxglModule.Marker({ element: el })
           .setLngLat([resort.longitude, resort.latitude])
           .addTo(map);
+
+        // Ensure marker container has proper z-index for mobile visibility
+        const markerEl = marker.getElement();
+        markerEl.style.zIndex = String(score);
 
         // Click handler
         el.addEventListener('click', () => {

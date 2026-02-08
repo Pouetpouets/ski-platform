@@ -110,12 +110,24 @@
   background: white;
 }
 
+/* Mapbox Marker Container - ensure visibility above map layers */
+.mapboxgl-marker {
+  z-index: 1 !important;
+}
+
 /* Resort Markers - Mobile touch targets */
 @media (max-width: 768px) {
+  .mapboxgl-marker {
+    /* Ensure markers are tappable on mobile */
+    pointer-events: auto !important;
+  }
+
   .resort-marker {
     touch-action: manipulation;
+    /* Ensure visibility on mobile */
+    pointer-events: auto !important;
   }
-  
+
   .resort-marker .marker-container {
     min-width: 44px !important;
     min-height: 44px !important;
@@ -125,6 +137,7 @@
 /* Smooth marker animations */
 .resort-marker {
   will-change: transform;
+  pointer-events: auto;
 }
 
 .resort-marker .marker-container {

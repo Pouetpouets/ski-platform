@@ -23,9 +23,10 @@ interface GeocodingFeature {
 interface LocationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onLocationSelected?: (coords: { latitude: number; longitude: number }) => void;
 }
 
-export function LocationModal({ isOpen, onClose }: LocationModalProps) {
+export function LocationModal({ isOpen, onClose, onLocationSelected }: LocationModalProps) {
   const { setLocation } = useLocation();
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<GeocodingFeature[]>([]);
@@ -96,8 +97,9 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
     const [longitude, latitude] = feature.center;
     const name = feature.text;
     setLocation(latitude, longitude, name);
+    onLocationSelected?.({ latitude, longitude });
     onClose();
-  }, [setLocation, onClose]);
+  }, [setLocation, onLocationSelected, onClose]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (suggestions.length === 0) return;
