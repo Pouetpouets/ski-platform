@@ -11,7 +11,7 @@ function formatDayLabel(dateStr: string, index: number): string {
   if (index === 0) return 'Today';
   if (index === 1) return 'Tomorrow';
   const date = new Date(dateStr + 'T12:00:00'); // noon to avoid timezone issues
-  return date.toLocaleDateString(undefined, { weekday: 'short' });
+  return date.toLocaleDateString('en-US', { weekday: 'short' });
 }
 
 export function DayPicker() {
