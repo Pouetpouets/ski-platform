@@ -18,13 +18,13 @@ export function DayPicker() {
   const { selectedDate, setSelectedDate, availableDates } = useForecastDay();
 
   return (
-    <div className="flex gap-1.5 overflow-x-auto py-1 px-1">
+    <div className="flex gap-1 w-full">
       {availableDates.map((date, index) => (
         <Button
           key={date}
           variant={date === selectedDate ? 'default' : 'ghost'}
           size="sm"
-          className="shrink-0 text-xs h-8 px-3"
+          className="flex-1 text-xs h-8 px-1"
           onClick={() => setSelectedDate(date)}
           aria-label="Select forecast day"
         >
