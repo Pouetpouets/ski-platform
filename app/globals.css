@@ -112,32 +112,48 @@
 
 /* Mapbox Marker Container - ensure visibility above map layers */
 .mapboxgl-marker {
-  z-index: 1 !important;
+  /* Use auto instead of fixed value to allow dynamic z-index from JS */
+  z-index: auto;
+  /* Force GPU compositing on mobile to prevent disappearing markers */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 /* Resort Markers - Mobile touch targets */
 @media (max-width: 768px) {
   .mapboxgl-marker {
-    /* Ensure markers are tappable on mobile */
+    /* Ensure markers are tappable and visible on mobile */
     pointer-events: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .resort-marker {
     touch-action: manipulation;
     /* Ensure visibility on mobile */
     pointer-events: auto !important;
+    visibility: visible !important;
   }
 
   .resort-marker .marker-container {
     min-width: 44px !important;
     min-height: 44px !important;
+    /* Force visibility */
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }
 
-/* Smooth marker animations */
+/* Smooth marker animations - avoid will-change on mobile (causes Safari issues) */
 .resort-marker {
-  will-change: transform;
   pointer-events: auto;
+}
+
+/* Only use will-change on desktop where it's beneficial */
+@media (min-width: 769px) {
+  .resort-marker {
+    will-change: transform;
+  }
 }
 
 .resort-marker .marker-container {

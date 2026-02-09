@@ -316,9 +316,12 @@ export function ResortMarkers({
           .setLngLat([resort.longitude, resort.latitude])
           .addTo(map);
 
-        // Ensure marker container has proper z-index for mobile visibility
+        // Ensure marker container has proper z-index and visibility for mobile
         const markerEl = marker.getElement();
         markerEl.style.zIndex = String(score);
+        // Force visibility on mobile Safari (prevents disappearing markers)
+        markerEl.style.visibility = 'visible';
+        markerEl.style.opacity = '1';
 
         // Click handler
         el.addEventListener('click', () => {
@@ -367,14 +370,21 @@ export function ResortMarkers({
         const elements = markersRef.current.map((m) => m.getElement());
         updateMarkersForZoom(elements, map.getZoom());
       };
-      
+
       map.on('zoom', onZoom);
       zoomListenerRef.current = onZoom;
 
-      // Store cleanup for zoom listener
-      return () => {
-        map.off('zoom', onZoom);
-      };
+      // Force repaint on mobile Safari after markers are created
+      // This fixes a known issue where markers may not appear until interaction
+      if (isMobileDevice()) {
+        requestAnimationFrame(() => {
+          markersRef.current.forEach((marker) => {
+            const el = marker.getElement();
+            // Trigger a reflow by reading offsetHeight
+            void el.offsetHeight;
+          });
+        });
+      }
     });
 
     return () => {
