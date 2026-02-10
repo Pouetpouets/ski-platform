@@ -332,8 +332,15 @@ export function SkiMap({
 
       {/* Loading indicator */}
       {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background/80">
+        <div className="absolute inset-0 z-[10000] flex items-center justify-center bg-background/80">
           <div className="animate-pulse text-muted-foreground">Loading map...</div>
+        </div>
+      )}
+
+      {/* No resorts indicator */}
+      {isLoaded && resorts.length === 0 && (
+        <div className="absolute bottom-4 left-4 right-4 z-[10000] bg-amber-50 border border-amber-200 rounded-lg p-3 text-amber-800 text-sm">
+          Aucune station disponible. Vérifiez votre connexion.
         </div>
       )}
     </div>

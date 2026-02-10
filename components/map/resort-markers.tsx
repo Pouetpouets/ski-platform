@@ -288,7 +288,8 @@ export function ResortMarkers({
     if (!map) return;
 
     // Dynamically import mapbox-gl for popup creation
-    import('mapbox-gl').then((mapboxglModule) => {
+    import('mapbox-gl')
+      .then((mapboxglModule) => {
       // Clear existing markers
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
@@ -322,6 +323,14 @@ export function ResortMarkers({
         // Force visibility on mobile Safari (prevents disappearing markers)
         markerEl.style.visibility = 'visible';
         markerEl.style.opacity = '1';
+
+        // Force mobile marker visibility with inline styles as ultimate fallback
+        if (isMobileDevice()) {
+          markerEl.setAttribute('style',
+            markerEl.getAttribute('style') +
+            '; visibility: visible !important; opacity: 1 !important; display: flex !important;'
+          );
+        }
 
         // Click handler
         el.addEventListener('click', () => {
@@ -385,7 +394,10 @@ export function ResortMarkers({
           });
         });
       }
-    });
+    })
+      .catch((err) => {
+        console.error('[ResortMarkers] Failed to load mapbox-gl:', err);
+      });
 
     return () => {
       // Cleanup markers on unmount
