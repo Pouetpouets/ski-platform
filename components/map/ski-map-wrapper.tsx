@@ -38,7 +38,7 @@ function SkiMapContent({ resorts }: SkiMapWrapperProps) {
   const { searchQuery } = useResortSearch();
   const { location, setGeolocation } = useLocation();
   const [selectedResort, setSelectedResort] = useState<ResortWithConditions | null>(null);
-  const [settingsOpen, setSettingsOpen] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [snowLayerVisible, setSnowLayerVisible] = useState(true);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [flyToLocation, setFlyToLocation] = useState<{ latitude: number; longitude: number } | null>(null);
